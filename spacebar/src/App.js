@@ -28,16 +28,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        {/* <AppBar color="primary">
-          <Toolbar variant="dense">
-            <Button color="inherit" href="/">
-              Home
-            </Button>
-            <Button color="inherit" href="/board">
-              Board
-            </Button>
-          </Toolbar>
-        </AppBar> */}
         <Layout>
           <Switch>
             <Route path="/" exact component={HomePage} />
