@@ -1,8 +1,8 @@
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import BoardPage from "./pages/BoardPage";
-import HomePage from "./pages/HomePage";
-import Layout from "./components/Layout.js";
+import BoardPage from "./pages/BoardPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import Layout from "./components/Layout.jsx";
 
 const theme = createMuiTheme({
   palette: {

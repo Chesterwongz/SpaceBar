@@ -1,5 +1,5 @@
 import { makeStyles, Typography, Card, Container } from "@material-ui/core";
-import Item from "../components/Item.js";
+import Item from "../components/Item";
 const useStyles = makeStyles({
   btn: {},
 });
