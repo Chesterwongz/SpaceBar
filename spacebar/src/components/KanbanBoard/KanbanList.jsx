@@ -32,12 +32,7 @@ export default function KanbanList({ list }) {
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {list.items.map((item, index) => (
-                <ItemCard
-                  className={classes.item}
-                  key={item.id}
-                  item={item}
-                  index={index}
-                />
+                <ItemCard key={item.id} item={item} index={index} />
               ))}
               <div className={classes.item}>{provided.placeholder}</div>
             </div>

@@ -15,15 +15,26 @@ export default function BoardPage() {
     const draggingCard = sourceList.items.filter(
       (item) => item.id === draggableId
     )[0];
-
+    sourceList.items.splice(source.index, 1);
+    destinationList.items.splice(destination.index, 0, draggingCard);
     if (source.droppableId === destination.droppableId) {
-      sourceList.items.splice(source.index, 1);
-      destinationList.items.splice(destination.index, 0, draggingCard);
+      // drag and drop in same list
       const newState = {
         ...data,
         lists: {
           ...data.lists,
           [sourceList.id]: destinationList,
+        },
+      };
+      setData(newState);
+    } else {
+      // drag and drop in different list
+      const newState = {
+        ...data,
+        lists: {
+          ...data.lists,
+          [sourceList.id]: sourceList,
+          [destinationList.id]: destinationList,
         },
       };
       setData(newState);
