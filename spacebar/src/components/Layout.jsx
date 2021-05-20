@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   page: {
-    width: "100%",
     padding: theme.spacing(2),
   },
   drawer: {
@@ -53,7 +52,7 @@ export default function Layout({ children }) {
     {
       text: "DrawingBoard",
       icon: <SubjectOutlined color="primary" />,
-      path: "/",
+      path: "/drawingboard",
     },
     {
       text: "Board",
@@ -89,7 +88,9 @@ export default function Layout({ children }) {
               button
               key={item.text}
               onClick={() => history.push(item.path)}
-              className={location.pathname === item.path ? classes.active : null}
+              className={
+                location.pathname === item.path ? classes.active : null
+              }
             >
               <ListItemText>{item.text}</ListItemText>
               <ListItemIcon>{item.icon}</ListItemIcon>

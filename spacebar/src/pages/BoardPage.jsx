@@ -1,12 +1,12 @@
 import { makeStyles, Typography, Card, Container } from "@material-ui/core";
-import Item from "../components/Item";
+import ItemCard from "../components/ItemCard";
 const useStyles = makeStyles({
   btn: {},
 });
 export default function BoardPage() {
   return (
     <Container>
-      <Item />
+      <header>KanbanBoard</header>
     </Container>
   );
 }
