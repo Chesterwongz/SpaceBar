@@ -4,6 +4,10 @@ import BoardPage from "./pages/BoardPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
+import SignInPage from "./pages/SignInPage"
+import {useState, useEffect} from 'react'; 
+import {onAuthStateChange} from "./FireStore"; 
+import {CurrentUserContext} from "./Context";
 
 const theme = createMuiTheme({
   palette: {
@@ -26,16 +30,26 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null); 
+  useEffect(() => {
+      const unsubscribe = onAuthStateChange(setCurrentUser); 
+      return () => {
+        unsubscribe(); 
+      }; 
+  }, [])
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Layout>
-          <Switch>
-            <Route path="/" exact component={HomePage} />
-            <Route path="/board" component={BoardPage} />
-            <Route path="/drawingboard" component={DrawingBoardPage} />
-          </Switch>
-        </Layout>
+        <CurrentUserContext.Provider value = {currentUser}>
+          <Layout>
+            <Switch>
+              <Route path="/" exact component={HomePage} />
+              <Route path="/board" component={BoardPage} />
+              <Route path="/drawingboard" component={DrawingBoardPage} />
+              <Route exact path="/signin" component={SignInPage} />
+            </Switch>
+          </Layout>
+        </CurrentUserContext.Provider>
       </Router>
     </ThemeProvider>
   );
