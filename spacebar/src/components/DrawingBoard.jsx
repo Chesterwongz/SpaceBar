@@ -1,7 +1,7 @@
 import { Container } from "@material-ui/core";
 import React from "react";
 import Masonry from "react-masonry-css";
-import ItemCard from "./ItemCard.jsx";
+import Note from "./Note.jsx";
 
 export default function DrawingBoard() {
   const items = [
@@ -43,7 +43,7 @@ export default function DrawingBoard() {
       >
         {items.map((item) => (
           <div key={item.id}>
-            <ItemCard item={item} />
+            <Note item={item} />
           </div>
         ))}
       </Masonry>

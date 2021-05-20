@@ -1,7 +1,7 @@
 import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
-import ItemCard from "../ItemCard.jsx";
+import ItemCard from "./ItemCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
