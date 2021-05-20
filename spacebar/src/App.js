@@ -2,6 +2,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BoardPage from "./pages/BoardPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
 
 const theme = createMuiTheme({
@@ -32,6 +33,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={HomePage} />
             <Route path="/board" component={BoardPage} />
+            <Route path="/drawingboard" component={DrawingBoardPage} />
           </Switch>
         </Layout>
       </Router>
