@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import Masonry from "react-masonry-css";
 import { Container } from "@material-ui/core";
+import React from "react";
+import Masonry from "react-masonry-css";
 import ItemCard from "./ItemCard.jsx";
 
 export default function DrawingBoard() {

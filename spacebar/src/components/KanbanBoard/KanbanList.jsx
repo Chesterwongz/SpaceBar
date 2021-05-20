@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Paper, Typography, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
+import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
+import React from "react";
+import { Droppable } from "react-beautiful-dnd";
 import ItemCard from "../ItemCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,53 +16,35 @@ const useStyles = makeStyles((theme) => ({
   item: {
     margin: theme.spacing(1, 0),
   },
-  addCard: {
+  addItem: {
     width: "100%",
   },
 }));
 
-export default function KanbanList() {
-  const items = [
-    {
-      id: 1,
-      title: "Task 1",
-    },
-    {
-      id: 2,
-      title: "Task 2",
-    },
-    {
-      id: 3,
-      title: "Task 3",
-    },
-    {
-      id: 4,
-      title: "Task 4",
-    },
-    {
-      id: 5,
-      title: "Task 5",
-    },
-  ]; // placeholders
-
+export default function KanbanList({ list }) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div>
       <Paper className={classes.paper}>
-        <Typography variant="h6">Todo</Typography>
-        {items.map((item) => (
-          <div className={classes.item}>
-            <ItemCard item={item} />
-          </div>
-        ))}
-        <Button className={classes.addCard}>+ Add Card</Button>
-      </Paper>
-      <Paper className={classes.paper}>
-        <Typography variant="h6">Doing</Typography>
-      </Paper>
-      <Paper className={classes.paper}>
-        <Typography variant="h6">Done</Typography>
+        <Typography variant="h6">{list.title}</Typography>
+        <Droppable droppableId={list.id}>
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {list.items.map((item, index) => (
+                <ItemCard
+                  className={classes.item}
+                  key={item.id}
+                  item={item}
+                  index={index}
+                />
+              ))}
+              <div className={classes.item}>{provided.placeholder}</div>
+            </div>
+          )}
+        </Droppable>
+
+        <Button className={classes.addItem}>+ Add Item</Button>
       </Paper>
     </div>
   );
