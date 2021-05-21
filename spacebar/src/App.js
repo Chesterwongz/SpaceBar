@@ -31,7 +31,6 @@ const theme = createMuiTheme({
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null); 
-  console.log(currentUser);
   useEffect(() => {
       const unsubscribe = onAuthStateChange(setCurrentUser); 
       return () => {

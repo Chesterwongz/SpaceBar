@@ -19,10 +19,14 @@ const firebaseConfig = {
   const provider = new firebase.auth.GoogleAuthProvider(); 
   provider.setCustomParameters({prompt: 'select_account'}); 
 
+  export default firebase; 
+  export const auth = firebase.auth();
+  export const db = firebase.firestore(); 
+
   //create user document in firestore and return user reference object if user is signed in 
   export const createUserDocument = async(userAuth, additionalData) => {
     if (userAuth) { //user is signed in 
-        const userRef = firestore.doc(`users/${userAuth.uid}`);
+        const userRef = db.doc(`users/${userAuth.uid}`);
         const snapshot = await userRef.get(); 
 
         if (!snapshot.exists) { // user is not yet saved into firestore 
@@ -45,10 +49,6 @@ const firebaseConfig = {
         return; 
     }
   }
-
-  export default firebase; 
-  export const auth = firebase.auth(); 
-  export const firestore = firebase.firestore(); 
 
   export var uiConfig = {
     signInSuccessUrl: '/',
