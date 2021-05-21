@@ -14,7 +14,7 @@ import { SubjectOutlined } from "@material-ui/icons";
 import React, {useContext} from "react";
 import { useHistory, useLocation } from "react-router";
 import {auth} from "../FireStore"; 
-import {CurrentUserContext} from "../Context";
+import {CurrentUserContext} from "../utils/Context";
 
 const drawerWidth = 240;
 

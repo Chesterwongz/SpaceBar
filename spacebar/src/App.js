@@ -7,7 +7,7 @@ import Layout from "./components/Layout.jsx";
 import SignInPage from "./pages/SignInPage"
 import {useState, useEffect} from 'react'; 
 import {onAuthStateChange} from "./FireStore"; 
-import {CurrentUserContext} from "./Context";
+import {CurrentUserContext} from "./utils/Context";
 
 const theme = createMuiTheme({
   palette: {
@@ -31,6 +31,7 @@ const theme = createMuiTheme({
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null); 
+  console.log(currentUser);
   useEffect(() => {
       const unsubscribe = onAuthStateChange(setCurrentUser); 
       return () => {
@@ -41,14 +42,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <CurrentUserContext.Provider value = {currentUser}>
+        <Switch>
+        <Route exact path="/signin" component={SignInPage} />
           <Layout>
-            <Switch>
-              <Route path="/" exact component={HomePage} />
+          <Route path="/" exact component={HomePage} />
               <Route path="/board" component={BoardPage} />
               <Route path="/drawingboard" component={DrawingBoardPage} />
-              <Route exact path="/signin" component={SignInPage} />
-            </Switch>
           </Layout>
+          </Switch>
         </CurrentUserContext.Provider>
       </Router>
     </ThemeProvider>
