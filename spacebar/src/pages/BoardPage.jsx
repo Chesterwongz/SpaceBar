@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import store from "../utils/store.js";
-import KanbanList from "../components/KanbanList.jsx";
+import KanbanList from "../components/KanbanList";
 
 export default function BoardPage() {
   const [data, setData] = useState(store);
