@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardHeader, IconButton, makeStyles } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Form from "./Form";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -9,18 +10,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Note({ item }) {
+export default function Note({ item, form }) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
-      <CardHeader
-        action={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={item.title}
-      />
+      {form ? (
+        <Form />
+      ) : (
+        <CardHeader
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={item.title}
+        />
+      )}
     </Card>
   );
 }

@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function KanbanList({ list }) {
   const classes = useStyles();
-
   return (
     <div>
       <Paper className={classes.paper}>

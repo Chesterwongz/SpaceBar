@@ -2,35 +2,33 @@ import React, { useState, useEffect, useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import store from "../utils/store.js";
 import KanbanList from "../components/KanbanList.jsx";
-import {db} from "../FireStore"; 
-import {CurrentUserContext} from "../utils/Context";
+import { db } from "../FireStore";
+import { CurrentUserContext } from "../utils/Context";
 
 export default function BoardPage() {
-
   //New database code
-  const [boarditems, setboarditems] = useState([]); 
-  const currentUser = useContext(CurrentUserContext); 
-
+  const [boarditems, setboarditems] = useState([]);
+  const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
-    const items = []; 
+    const items = [];
     if (currentUser) {
       db.collection("boarditems")
-      .where("userID", "==", currentUser.id)
-      .get()
-      .then(query => {
-        query.forEach(doc => {
-          items.push({
-            id: doc.id, 
-            ...doc.data()
-          })
-        })
-        setboarditems(items);
-      })
+        .where("userID", "==", currentUser.id)
+        .get()
+        .then((query) => {
+          query.forEach((doc) => {
+            items.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+          setboarditems(items);
+        });
     }
-  }, [currentUser])
+  }, [currentUser]);
   //******************* */
-  
+
   const [data, setData] = useState(store);
 
   const onDragEnd = (result) => {
@@ -68,7 +66,6 @@ export default function BoardPage() {
       setData(newState);
     }
   };
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div style={{ display: "flex" }}>
