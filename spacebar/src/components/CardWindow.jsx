@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -15,7 +18,14 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    width: "30%",
+    height: "30%"
   },
+  delete: {
+    width: "80%", 
+    display: "flex", 
+    justifyContent: "space-between"
+  }
 }));
 
 export default function CardWindow() {
@@ -30,11 +40,15 @@ export default function CardWindow() {
     setOpen(false);
   };
 
+  const handleDelete = () => {
+    
+  }
+
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        react-transition-group
-      </button>
+    <IconButton onClick={handleOpen}>
+      <MoreVertIcon/>
+    </IconButton>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -49,10 +63,12 @@ export default function CardWindow() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">Transition modal</h2>
-            <p id="transition-modal-description">
-              react-transition-group animates me.
-            </p>
+            <div className = {classes.delete}>
+            <h2 id="transition-modal-title">Delete</h2>
+            <IconButton onClick={handleDelete}>
+              <DeleteIcon/>
+            </IconButton>
+            </div> 
           </div>
         </Fade>
       </Modal>

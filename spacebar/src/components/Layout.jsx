@@ -11,10 +11,10 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { useHistory, useLocation } from "react-router";
-import {auth} from "../FireStore"; 
-import {CurrentUserContext} from "../utils/Context";
+import { auth } from "../FireStore";
+import { CurrentUserContext } from "../utils/Context";
 
 const drawerWidth = 240;
 
@@ -62,7 +62,7 @@ export default function Layout({ children }) {
       path: "/board",
     },
   ];
-  const currentUser = useContext(CurrentUserContext); 
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <div className={classes.root}>
@@ -71,21 +71,15 @@ export default function Layout({ children }) {
           <Typography className={classes.title} variant="h6">
             SPACEBAR
           </Typography>
-          <Button color="inherit" href="/">
+          <Button color="inherit" href="#">
             Team
           </Button>
           <Button color="inherit" href="/board">
             Account
           </Button>
-          {currentUser? (
-            <Button color="inherit" href="/signin" onClick = {() => auth.signOut()}>
+          <Button color="inherit" href="/" onClick={() => auth.signOut()}>
             Sign Out
           </Button>
-          ) : (
-            <Button color="inherit" href="/signin">
-            Sign In
-          </Button>
-          )}
         </Toolbar>
       </AppBar>
       <Drawer

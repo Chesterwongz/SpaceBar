@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardHeader, IconButton, makeStyles } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Form from "./Form";
+import CardWindow from "./CardWindow"; 
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -19,9 +20,7 @@ export default function Note({ item, form }) {
       ) : (
         <CardHeader
           action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
+            <CardWindow/>
           }
           title={item.title}
         />

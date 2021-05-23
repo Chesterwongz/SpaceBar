@@ -37,7 +37,7 @@ export default function DrawingBoard() {
           setLoading(false);
         });
     }
-  }, [currentUser, drawingboarditems]);
+  }, [currentUser]);
 
   const breakpoints = {
     default: 3,
@@ -55,7 +55,7 @@ export default function DrawingBoard() {
             columnClassName="my-masonry-grid_column"
           >
             {drawingboarditems.map((item) => (
-              <div key={item.id}>
+              <div>
                 <Note item={item} />
               </div>
             ))}
