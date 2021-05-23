@@ -27,7 +27,7 @@ export default function KanbanList({ list }) {
   const classes = useStyles();
 
   const itemsRef = db.collection("boarditems");
-  const query = itemsRef.where("bucket", "==", list.id); // query items in the list, I want to change "bucket" into 'status' once firebase is back up
+  const query = itemsRef.where("bucket", "==", list.id); // query items in the list. How do i get relative ordering tho?
   const [items, loading, error] = useCollectionData(query, { idField: "id" });
   const handleOnClick = () => {
     console.log(items);
