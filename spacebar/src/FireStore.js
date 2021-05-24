@@ -82,3 +82,28 @@ const firebaseConfig = {
       }
     })
   }
+
+const drawingboarditemsCollection = 'drawingboarditems';
+
+export function getDrawingBoardItems(userID) {
+  return db.collection(drawingboarditemsCollection)
+    .where("userID", "==", userID)
+    .get()
+    .then((query) => {
+      const items = []; 
+      query.forEach(doc => {
+        items.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      return items; 
+    });
+}
+
+export function addDrawingBoardItem(userID, title) {
+  return db.collection(drawingboarditemsCollection).add({
+    title,
+    userID,
+  });
+}

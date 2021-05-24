@@ -3,8 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Masonry from "react-masonry-css";
 import Note from "./Note.jsx";
-import { db } from "../FireStore";
-import { useState, useEffect, useContext } from "react";
+import { getDrawingBoardItems, addDrawingBoardItem } from "../FireStore";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { CurrentUserContext } from "../utils/Context";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -20,49 +20,30 @@ export default function DrawingBoard() {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
+    // add the logic to get notes by 
+    const getNotes = useCallback(() => {  
+      if (currentUser) {
+        setLoading(true);  
+        getDrawingBoardItems(currentUser.id)
+          .then(items => {
+            setdrawingboarditems(items);
+            setLoading(false);
+          })
+          .finally(() => {
+            setLoading(false);
+          })
+      }
+    }, [currentUser]);
+
   // create the submit handler
   const handleSubmit = value => {
-    db.collection("drawingboarditems").add({
-      title: value,
-      userID: currentUser.id,
-    });
-    
-    if (currentUser) {
-      const items = [];
-      db.collection("drawingboarditems")
-        .where("userID", "==", currentUser.id)
-        .get()
-        .then((query) => {
-          query.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              ...doc.data(),
-            });
-          });
-          setdrawingboarditems(items);
-          setLoading(false);
-        });
-    }
+    addDrawingBoardItem(currentUser.id, value)
+      .then(getNotes); // after adding a note update the items
   }
 
   useEffect(() => {
-    if (currentUser) {
-      const items = [];
-      db.collection("drawingboarditems")
-        .where("userID", "==", currentUser.id)
-        .get()
-        .then((query) => {
-          query.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              ...doc.data(),
-            });
-          });
-          setdrawingboarditems(items);
-          setLoading(false);
-        });
-    }
-  }, [currentUser]);
+    getNotes();
+  }, [getNotes]);
 
   const breakpoints = {
     default: 3,
