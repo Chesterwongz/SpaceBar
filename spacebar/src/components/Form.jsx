@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Form() {
+export default function Form({ onSubmit }) {
   const classes = useStyles();
   const [value, setValue] = React.useState("");
   const currentUser = useContext(CurrentUserContext);
@@ -27,10 +27,7 @@ export default function Form() {
   const handleSubmit = (event) => {
     if (value) {
       event.preventDefault();
-      db.collection("drawingboarditems").add({
-        title: value,
-        userID: currentUser.id,
-      });
+      onSubmit(value);
       setValue("");
     }
   };

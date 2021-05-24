@@ -11,12 +11,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Note({ item, form }) {
+export default function Note({ item, form, onSubmit  }) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
       {form ? (
-        <Form />
+        <Form onSubmit={onSubmit}/>
       ) : (
         <CardHeader
           action={

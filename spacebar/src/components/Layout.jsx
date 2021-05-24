@@ -11,10 +11,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
-import React, { useContext } from "react";
 import { useHistory, useLocation } from "react-router";
 import { auth } from "../FireStore";
-import { CurrentUserContext } from "../utils/Context";
 
 const drawerWidth = 240;
 
@@ -62,7 +60,6 @@ export default function Layout({ children }) {
       path: "/board",
     },
   ];
-  const currentUser = useContext(CurrentUserContext);
 
   return (
     <div className={classes.root}>

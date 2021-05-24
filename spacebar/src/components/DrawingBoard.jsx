@@ -20,6 +20,31 @@ export default function DrawingBoard() {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
+  // create the submit handler
+  const handleSubmit = value => {
+    db.collection("drawingboarditems").add({
+      title: value,
+      userID: currentUser.id,
+    });
+    
+    if (currentUser) {
+      const items = [];
+      db.collection("drawingboarditems")
+        .where("userID", "==", currentUser.id)
+        .get()
+        .then((query) => {
+          query.forEach((doc) => {
+            items.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+          setdrawingboarditems(items);
+          setLoading(false);
+        });
+    }
+  }
+
   useEffect(() => {
     if (currentUser) {
       const items = [];
@@ -59,7 +84,7 @@ export default function DrawingBoard() {
                 <Note item={item} />
               </div>
             ))}
-            <Note form />
+            <Note form onSubmit={handleSubmit}/>
           </Masonry>
         </Container>
       ) : (
