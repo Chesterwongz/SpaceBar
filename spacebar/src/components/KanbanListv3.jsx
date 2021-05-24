@@ -3,7 +3,7 @@ import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import { Droppable } from "react-beautiful-dnd";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../FireStore.js";
-import ItemCard from "./ItemCardv2.jsx";
+import ItemCard from "./ItemCardv3.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {

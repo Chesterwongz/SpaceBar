@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
-import KanbanList from "../components/KanbanListv2.jsx";
+import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
+import KanbanList from "../components/KanbanListv3.jsx";
 import { db } from "../FireStore";
 
 const lists = [
@@ -20,6 +20,12 @@ const lists = [
 ];
 
 export default function BoardPage() {
+  // const [items, setItems] = useState([]);
+
+  const itemsRef = db.collection("boarditems");
+  const query = itemsRef.get();
+  const [items] = useCollectionDataOnce(query);
+
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     console.log("dest", destination, "src", source, draggableId);

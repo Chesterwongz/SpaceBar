@@ -1,6 +1,6 @@
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import BoardPage from "./pages/BoardPagev2.jsx";
+import BoardPage from "./pages/BoardPagev3.jsx";
 import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
 import SignInPage from "./pages/SignInPage";
