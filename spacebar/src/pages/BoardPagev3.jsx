@@ -28,7 +28,14 @@ export default function BoardPage() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log("dest", destination, "src", source, draggableId);
+    console.log(
+      "destination",
+      destination,
+      "source",
+      source,
+      "draggableId",
+      draggableId
+    );
 
     if (!destination) return;
 
