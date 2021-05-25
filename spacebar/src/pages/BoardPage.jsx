@@ -8,21 +8,30 @@ export default function BoardPage() {
   const boardRef = db.collection("kanbanboard");
   //New database code
   const [loading, setLoading] = useState(true);
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState({});
+  const [listIds, setListIds] = useState([]);
   useEffect(() => {
-    const boardLists = [];
     boardRef
       .get()
       .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          boardLists.push(doc.data());
-        });
+        const boardListIds = [];
+        const boardLists = querySnapshot.docs
+          .map((doc) => {
+            boardListIds.push(doc.id);
+            return doc.data();
+          })
+          .reduce((rest, item) => {
+            return {
+              ...rest,
+              [item.id]: item,
+            };
+          }, {});
+        setLists(boardLists);
+        setListIds(boardListIds);
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);
       });
-    setLists(boardLists);
     setLoading(false);
   }, []);
 
@@ -67,8 +76,9 @@ export default function BoardPage() {
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div style={{ display: "flex" }}>
-            {lists &&
-              lists.map((list, index) => {
+            {listIds &&
+              listIds.map((listId, index) => {
+                const list = lists[listId];
                 return <KanbanList key={list.id} list={list} index={index} />;
               })}
           </div>
