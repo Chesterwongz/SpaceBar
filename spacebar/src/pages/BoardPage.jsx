@@ -11,33 +11,28 @@ export default function BoardPage() {
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
   useEffect(() => {
-    boardRef
-      .get()
-      .then((querySnapshot) => {
-        const boardListIds = [];
-        const boardLists = querySnapshot.docs
-          .map((doc) => {
-            boardListIds.push(doc.id);
-            return doc.data();
-          })
-          .reduce((rest, item) => {
-            return {
-              ...rest,
-              [item.id]: item,
-            };
-          }, {});
-        setLists(boardLists);
-        setListIds(boardListIds);
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
+    boardRef.onSnapshot((querySnapshot) => {
+      const boardListIds = [];
+      const boardLists = querySnapshot.docs
+        .map((doc) => {
+          boardListIds.push(doc.id);
+          return doc.data();
+        })
+        .reduce((rest, item) => {
+          return {
+            ...rest,
+            [item.id]: item, // item.id needs to be equal to doc.id!!!
+          };
+        }, {});
+      setLists(boardLists);
+      setListIds(boardListIds);
+    });
     setLoading(false);
   }, []);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log("dest", destination, "src", source, draggableId);
+    // console.log("dest", destination, "src", source, draggableId);
     if (!destination) return;
 
     const sourceList = lists[source.droppableId];
@@ -47,26 +42,14 @@ export default function BoardPage() {
     )[0];
     sourceList.items.splice(source.index, 1);
     destinationList.items.splice(destination.index, 0, draggingCard);
-    if (source.droppableId === destination.droppableId) {
-      // drag and drop in same list
-      const newState = {
-        ...lists,
-        [sourceList.id]: destinationList,
-      };
-      setLists(newState);
-    } else {
-      // drag and drop in different list
-      const newState = {
-        ...lists,
-        [sourceList.id]: sourceList,
-        [destinationList.id]: destinationList,
-      };
-      setLists(newState);
-    }
-    boardRef.doc(source.droppableId).update({ items: sourceList.items });
-    boardRef
-      .doc(destination.droppableId)
-      .update({ items: destinationList.items });
+
+    // update databse
+    const batch = db.batch();
+    const srcRef = boardRef.doc(source.droppableId);
+    batch.update(srcRef, { items: sourceList.items });
+    const destRef = boardRef.doc(destination.droppableId);
+    batch.update(destRef, { items: destinationList.items });
+    batch.commit();
   };
   return (
     <>
