@@ -63,7 +63,7 @@ export default function Layout({ children }) {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} elevation="0">
+      <AppBar className={classes.appbar} elevation={0}>
         <Toolbar variant="regular">
           <Typography className={classes.title} variant="h6">
             SPACEBAR

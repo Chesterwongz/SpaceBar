@@ -2,6 +2,8 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Card, CardHeader, IconButton, makeStyles } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { db } from "../FireStore";
+import firebase from "firebase";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -10,9 +12,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ItemCard({ item, index }) {
+export default function ItemCard({ item, listId, index }) {
   const classes = useStyles();
-
+  const handleMoreMenuClick = () => {
+    // Supposed to open a more menu, but now its just a delete.
+    // I'm thinking of placing all the db functions in one place.
+    // I wonder if importing db and firebase whereever I need it is standard practice. It seems wrong
+    db.collection("kanbanboard")
+      .doc(listId)
+      .update({
+        items: firebase.firestore.FieldValue.arrayRemove(item),
+      });
+  };
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided) => (
@@ -24,7 +35,7 @@ export default function ItemCard({ item, index }) {
           <Card className={classes.card}>
             <CardHeader
               action={
-                <IconButton>
+                <IconButton onClick={handleMoreMenuClick}>
                   <MoreVertIcon />
                 </IconButton>
               }

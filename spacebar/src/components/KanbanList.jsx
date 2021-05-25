@@ -2,6 +2,7 @@ import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import ItemCard from "./ItemCard.jsx";
+import AddItemContainer from "./AddItemContainer.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function KanbanList({ list }) {
   const classes = useStyles();
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -31,14 +33,18 @@ export default function KanbanList({ list }) {
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {list.items.map((item, index) => (
-                <ItemCard key={item.id} item={item} index={index} />
+                <ItemCard
+                  key={item.id}
+                  item={item}
+                  listId={list.id}
+                  index={index}
+                />
               ))}
               <div className={classes.item}>{provided.placeholder}</div>
             </div>
           )}
         </Droppable>
-
-        <Button className={classes.addItem}>+ Add Item</Button>
+        <AddItemContainer listId={list.id} />
       </Paper>
     </div>
   );
