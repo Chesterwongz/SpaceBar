@@ -3,8 +3,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Masonry from "react-masonry-css";
 import Note from "./Note.jsx";
-import { db } from "../FireStore";
-import { useState, useEffect, useContext } from "react";
+import {
+  getDrawingBoardItems,
+  addDrawingBoardItem,
+  deleteDrawingBoardItem,
+} from "../FireStore";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { CurrentUserContext } from "../utils/Context";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -20,24 +24,30 @@ export default function DrawingBoard() {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
-  useEffect(() => {
+  const getNotes = useCallback(() => {
     if (currentUser) {
-      const items = [];
-      db.collection("drawingboarditems")
-        .where("userID", "==", currentUser.id)
-        .get()
-        .then((query) => {
-          query.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              ...doc.data(),
-            });
-          });
+      setLoading(true);
+      getDrawingBoardItems(currentUser.id)
+        .then((items) => {
           setdrawingboarditems(items);
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
   }, [currentUser]);
+
+  const handleDelete = (docID) => {
+    deleteDrawingBoardItem(docID).then(getNotes);
+  };
+
+  const handleSubmit = (value) => {
+    addDrawingBoardItem(currentUser.id, value).then(getNotes);
+  };
+
+  useEffect(() => {
+    getNotes();
+  }, [getNotes]);
 
   const breakpoints = {
     default: 3,
@@ -47,7 +57,7 @@ export default function DrawingBoard() {
 
   return (
     <>
-      {loading == false ? (
+      {loading === false ? (
         <Container>
           <Masonry
             breakpointCols={breakpoints}
@@ -55,11 +65,9 @@ export default function DrawingBoard() {
             columnClassName="my-masonry-grid_column"
           >
             {drawingboarditems.map((item) => (
-              <div>
-                <Note item={item} />
-              </div>
+              <Note key={item.id} item={item} onDelete={handleDelete} />
             ))}
-            <Note form />
+            <Note form onSubmit={handleSubmit} />
           </Masonry>
         </Container>
       ) : (
