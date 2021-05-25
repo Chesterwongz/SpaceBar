@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function KanbanList({ list }) {
   const classes = useStyles();
+
+  const handleClick = () => {};
+
   return (
     <div>
       <Paper className={classes.paper}>
@@ -38,7 +41,9 @@ export default function KanbanList({ list }) {
           )}
         </Droppable>
 
-        <Button className={classes.addItem}>+ Add Item</Button>
+        <Button className={classes.addItem} onClick={handleClick}>
+          + Add Item
+        </Button>
       </Paper>
     </div>
   );

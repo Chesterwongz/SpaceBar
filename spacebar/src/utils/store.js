@@ -27,16 +27,11 @@ const data = {
     },
     "list-3": {
       id: "list-3",
-      title: "Review",
-      items: [],
-    },
-    "list-4": {
-      id: "list-4",
       title: "Done",
       items: [],
     },
   },
-  listIds: ["list-1", "list-2", "list-3", "list-4"],
+  listIds: ["list-1", "list-2", "list-3"],
 };
 
 export default data;
