@@ -40,32 +40,33 @@ export default function BoardPage() {
     console.log("dest", destination, "src", source, draggableId);
     if (!destination) return;
 
-    // const sourceList = source.droppableId;
-    // const destinationList = destination.droppableId;
-    // const draggingCard = sourceList.items.splice(source.index, 1);
-    // destinationList.items.splice(destination.index, 0, draggingCard);
-    // if (source.droppableId === destination.droppableId) {
-    //   // drag and drop in same list
-    //   const newState = {
-    //     ...data,
-    //     lists: {
-    //       ...data.lists,
-    //       [sourceList.id]: destinationList,
-    //     },
-    //   };
-    //   setData(newState);
-    // } else {
-    //   // drag and drop in different list
-    //   const newState = {
-    //     ...data,
-    //     lists: {
-    //       ...data.lists,
-    //       [sourceList.id]: sourceList,
-    //       [destinationList.id]: destinationList,
-    //     },
-    //   };
-    //   setData(newState);
-    // }
+    const sourceList = lists[source.droppableId];
+    const destinationList = lists[destination.droppableId];
+    const draggingCard = sourceList.items.filter(
+      (item) => item.id === draggableId
+    )[0];
+    sourceList.items.splice(source.index, 1);
+    destinationList.items.splice(destination.index, 0, draggingCard);
+    if (source.droppableId === destination.droppableId) {
+      // drag and drop in same list
+      const newState = {
+        ...lists,
+        [sourceList.id]: destinationList,
+      };
+      setLists(newState);
+    } else {
+      // drag and drop in different list
+      const newState = {
+        ...lists,
+        [sourceList.id]: sourceList,
+        [destinationList.id]: destinationList,
+      };
+      setLists(newState);
+    }
+    boardRef.doc(source.droppableId).update({ items: sourceList.items });
+    boardRef
+      .doc(destination.droppableId)
+      .update({ items: destinationList.items });
   };
   return (
     <>
