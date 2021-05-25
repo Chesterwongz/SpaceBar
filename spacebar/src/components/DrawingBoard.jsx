@@ -3,7 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Masonry from "react-masonry-css";
 import Note from "./Note.jsx";
-import { getDrawingBoardItems, addDrawingBoardItem } from "../FireStore";
+import {
+  getDrawingBoardItems,
+  addDrawingBoardItem,
+  deleteDrawingBoardItem,
+} from "../FireStore";
 import { useState, useEffect, useContext, useCallback } from "react";
 import { CurrentUserContext } from "../utils/Context";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -20,26 +24,26 @@ export default function DrawingBoard() {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
-    // add the logic to get notes by 
-    const getNotes = useCallback(() => {  
-      if (currentUser) {
-        setLoading(true);  
-        getDrawingBoardItems(currentUser.id)
-          .then(items => {
-            setdrawingboarditems(items);
-            setLoading(false);
-          })
-          .finally(() => {
-            setLoading(false);
-          })
-      }
-    }, [currentUser]);
+  const getNotes = useCallback(() => {
+    if (currentUser) {
+      setLoading(true);
+      getDrawingBoardItems(currentUser.id)
+        .then((items) => {
+          setdrawingboarditems(items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [currentUser]);
 
-  // create the submit handler
-  const handleSubmit = value => {
-    addDrawingBoardItem(currentUser.id, value)
-      .then(getNotes); // after adding a note update the items
-  }
+  const handleDelete = (docID) => {
+    deleteDrawingBoardItem(docID).then(getNotes);
+  };
+
+  const handleSubmit = (value) => {
+    addDrawingBoardItem(currentUser.id, value).then(getNotes);
+  };
 
   useEffect(() => {
     getNotes();
@@ -53,7 +57,7 @@ export default function DrawingBoard() {
 
   return (
     <>
-      {loading == false ? (
+      {loading === false ? (
         <Container>
           <Masonry
             breakpointCols={breakpoints}
@@ -61,11 +65,9 @@ export default function DrawingBoard() {
             columnClassName="my-masonry-grid_column"
           >
             {drawingboarditems.map((item) => (
-              <div>
-                <Note item={item} />
-              </div>
+              <Note key={item.id} item={item} onDelete={handleDelete} />
             ))}
-            <Note form onSubmit={handleSubmit}/>
+            <Note form onSubmit={handleSubmit} />
           </Masonry>
         </Container>
       ) : (

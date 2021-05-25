@@ -1,8 +1,7 @@
 import React from "react";
-import { Card, CardHeader, IconButton, makeStyles } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { Card, CardHeader, makeStyles } from "@material-ui/core";
 import Form from "./Form";
-import CardWindow from "./CardWindow"; 
+import CardWindow from "./CardWindow";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -11,17 +10,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Note({ item, form, onSubmit  }) {
+export default function Note({ item, form, onSubmit, onDelete }) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
       {form ? (
-        <Form onSubmit={onSubmit}/>
+        <Form onSubmit={onSubmit} />
       ) : (
         <CardHeader
-          action={
-            <CardWindow/>
-          }
+          action={<CardWindow id={item.id} onDelete={onDelete} />}
           title={item.title}
         />
       )}

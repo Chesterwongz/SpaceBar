@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import IconButton from "@material-ui/core/IconButton";
-import { db } from "../FireStore";
-import { CurrentUserContext } from "../utils/Context";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -18,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Form({ onSubmit }) {
   const classes = useStyles();
   const [value, setValue] = React.useState("");
-  const currentUser = useContext(CurrentUserContext);
 
   const handleChange = (event) => {
     setValue(event.target.value);
