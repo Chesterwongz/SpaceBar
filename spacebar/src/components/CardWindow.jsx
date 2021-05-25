@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CardWindow({ id, onDelete }) {
+export default function CardWindow({ id, onDelete, title }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -64,6 +64,9 @@ export default function CardWindow({ id, onDelete }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
+          <div className={classes.delete}>
+              <h1 id="transition-modal-title">{title}</h1>
+            </div>
             <div className={classes.delete}>
               <h2 id="transition-modal-title">Delete</h2>
               <IconButton onClick={handleDelete}>
