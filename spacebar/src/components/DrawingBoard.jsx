@@ -3,12 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Masonry from "react-masonry-css";
 import Note from "./Note.jsx";
-import {
-  getDrawingBoardItems,
-  addDrawingBoardItem,
-  deleteDrawingBoardItem,
-} from "../FireStore";
-import { useState, useEffect, useContext, useCallback } from "react";
+import { db, addDrawingBoardItem, deleteDrawingBoardItem } from "../FireStore";
+import { useState, useEffect, useContext } from "react";
 import { CurrentUserContext } from "../utils/Context";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -23,31 +19,35 @@ export default function DrawingBoard() {
   const currentUser = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
-
-  const getNotes = useCallback(() => {
+  useEffect(() => {
     if (currentUser) {
-      setLoading(true);
-      getDrawingBoardItems(currentUser.id)
-        .then((items) => {
+      var unSubscribe = db
+        .collection("drawingboarditems")
+        .where("userID", "==", currentUser.id)
+        .onSnapshot((querySnapshot) => {
+          var items = [];
+          querySnapshot.forEach((doc) => {
+            items.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
           setdrawingboarditems(items);
-        })
-        .finally(() => {
           setLoading(false);
         });
+      return () => {
+        unSubscribe();
+      };
     }
   }, [currentUser]);
 
   const handleDelete = (docID) => {
-    deleteDrawingBoardItem(docID).then(getNotes);
+    deleteDrawingBoardItem(docID);
   };
 
   const handleSubmit = (value) => {
-    addDrawingBoardItem(currentUser.id, value).then(getNotes);
+    addDrawingBoardItem(currentUser.id, value);
   };
-
-  useEffect(() => {
-    getNotes();
-  }, [getNotes]);
 
   const breakpoints = {
     default: 3,
