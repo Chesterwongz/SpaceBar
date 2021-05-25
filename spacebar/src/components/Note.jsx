@@ -19,7 +19,7 @@ export default function Note({ item, form, onSubmit, onDelete }) {
       ) : (
         <CardHeader
           action={<CardWindow 
-          id={item.id} 
+          docID={item.id} 
           onDelete={onDelete} 
           title={item.title}
           />}
