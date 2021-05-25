@@ -1,13 +1,12 @@
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BoardPage from "./pages/BoardPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
 import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
-import SignInPage from "./pages/SignInPage"
-import {useState, useEffect} from 'react'; 
-import {onAuthStateChange} from "./FireStore"; 
-import {CurrentUserContext} from "./utils/Context";
+import SignInPage from "./pages/SignInPage";
+import { useState, useEffect } from "react";
+import { onAuthStateChange } from "./FireStore";
+import { CurrentUserContext } from "./utils/Context";
 
 const theme = createMuiTheme({
   palette: {
@@ -30,25 +29,23 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null); 
-  console.log(currentUser);
+  const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
-      const unsubscribe = onAuthStateChange(setCurrentUser); 
-      return () => {
-        unsubscribe(); 
-      }; 
-  }, [])
+    const unsubscribe = onAuthStateChange(setCurrentUser);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <CurrentUserContext.Provider value = {currentUser}>
-        <Switch>
-        <Route exact path="/signin" component={SignInPage} />
-          <Layout>
-          <Route path="/" exact component={HomePage} />
+        <CurrentUserContext.Provider value={currentUser}>
+          <Switch>
+            <Route exact path="/" component={SignInPage} />
+            <Layout>
               <Route path="/board" component={BoardPage} />
               <Route path="/drawingboard" component={DrawingBoardPage} />
-          </Layout>
+            </Layout>
           </Switch>
         </CurrentUserContext.Provider>
       </Router>
