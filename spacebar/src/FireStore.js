@@ -102,3 +102,14 @@ export function deleteDrawingBoardItem(docID) {
     console.log("Error when deleting document" + error); 
   })
 }
+
+export function updateDrawingBoardTitle(docID, newTitle) {
+  return db.collection(drawingboarditemsCollection)
+  .doc(docID)
+  .update({
+    title: newTitle
+  })
+  .catch((error) => {
+    console.log("Error updating drawing board title", error);
+  })
+}
