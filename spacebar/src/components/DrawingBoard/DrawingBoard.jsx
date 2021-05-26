@@ -11,6 +11,7 @@ import {
 import { useState, useEffect, useContext } from "react";
 import { CurrentUserContext } from "../../utils/Context";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,10 +24,13 @@ export default function DrawingBoard() {
   const currentUser = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
+  let { projectID } = useParams();
   useEffect(() => {
     if (currentUser) {
       var unSubscribe = db
-        .collection("drawingboarditems")
+        .collection("Projects")
+        .doc(projectID)
+        .collection("drawingboard")
         .where("userID", "==", currentUser.id)
         .onSnapshot((querySnapshot) => {
           var items = [];
@@ -46,11 +50,11 @@ export default function DrawingBoard() {
   }, [currentUser]);
 
   const handleDelete = (docID) => {
-    deleteDrawingBoardItem(docID);
+    deleteDrawingBoardItem(docID, projectID);
   };
 
   const handleSubmit = (value) => {
-    addDrawingBoardItem(currentUser.id, value);
+    addDrawingBoardItem(currentUser.id, value, projectID);
   };
 
   const breakpoints = {
