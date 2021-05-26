@@ -7,6 +7,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { updateDrawingBoardTitle } from "../FireStore";
 import red from "@material-ui/core/colors/red";
 import green from "@material-ui/core/colors/green";
+import {  useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -18,6 +19,7 @@ export default function EditableTitle({ title, docID }) {
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(title);
+  let {projectID} = useParams();
 
   const handleEditing = () => {
     setEditing(true);
@@ -29,7 +31,7 @@ export default function EditableTitle({ title, docID }) {
     setValue(event.target.value);
   };
   const handleSubmit = () => {
-    updateDrawingBoardTitle(docID, value);
+    updateDrawingBoardTitle(docID, value, projectID);
     cancelEditing();
   };
   return (

@@ -53,7 +53,7 @@ export const createUserDocument = async (userAuth, additionalData) => {
 };
 
 export var uiConfig = {
-  signInSuccessUrl: "/drawingboard",
+  signInSuccessUrl: "/home",
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -85,31 +85,39 @@ export function onAuthStateChange(callback) {
   });
 }
 
-const drawingboarditemsCollection = "drawingboarditems";
-
-export function addDrawingBoardItem(userID, title) {
-  return db.collection(drawingboarditemsCollection).add({
-    title,
-    userID,
-  });
+export function addDrawingBoardItem(userID, title, projectID) {
+  return db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("drawingboard")
+    .add({
+      title,
+      userID,
+    });
 }
 
-export function deleteDrawingBoardItem(docID) {
-  return db.collection(drawingboarditemsCollection)
-  .doc(docID)
-  .delete()
-  .catch((error) => {
-    console.log("Error when deleting document" + error); 
-  })
+export function deleteDrawingBoardItem(docID, projectID) {
+  return db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("drawingboard")
+    .doc(docID)
+    .delete()
+    .catch((error) => {
+      console.log("Error when deleting document" + error);
+    });
 }
 
-export function updateDrawingBoardTitle(docID, newTitle) {
-  return db.collection(drawingboarditemsCollection)
-  .doc(docID)
-  .update({
-    title: newTitle
-  })
-  .catch((error) => {
-    console.log("Error updating drawing board title", error);
-  })
+export function updateDrawingBoardTitle(docID, newTitle, projectID) {
+  return db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("drawingboard")
+    .doc(docID)
+    .update({
+      title: newTitle,
+    })
+    .catch((error) => {
+      console.log("Error updating drawing board title", error);
+    });
 }
