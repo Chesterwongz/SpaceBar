@@ -6,6 +6,7 @@ import Fade from "@material-ui/core/Fade";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditableTitle from "./EditableTitle";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     width: "30%",
     height: "30%",
+    overflow: "auto",
   },
   delete: {
     width: "80%",
@@ -28,9 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CardWindow({ id, onDelete, title }) {
+export default function CardWindow({ docID, onDelete, title }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(title);
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,11 +41,12 @@ export default function CardWindow({ id, onDelete, title }) {
 
   const handleClose = () => {
     setOpen(false);
+    setValue(title);
   };
 
   const handleDelete = (event) => {
     event.preventDefault();
-    onDelete(id);
+    onDelete(docID);
   };
 
   return (
@@ -64,9 +68,7 @@ export default function CardWindow({ id, onDelete, title }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-          <div className={classes.delete}>
-              <h1 id="transition-modal-title">{title}</h1>
-            </div>
+              <EditableTitle title={title} docID={docID}/>
             <div className={classes.delete}>
               <h2 id="transition-modal-title">Delete</h2>
               <IconButton onClick={handleDelete}>
