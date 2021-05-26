@@ -2,7 +2,7 @@ import { Button, IconButton, InputBase, Paper } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState } from "react";
-import { db } from "../FireStore";
+import { db } from "../../FireStore";
 import firebase from "firebase";
 import uuid from "react-uuid";
 
