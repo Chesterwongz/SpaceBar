@@ -1,6 +1,7 @@
 import {
   unstable_createMuiStrictModeTheme as createMuiTheme,
   ThemeProvider,
+  CssBaseline,
 } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BoardPage from "./pages/BoardPage.jsx";
@@ -42,6 +43,7 @@ function App() {
   }, []);
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <CurrentUserContext.Provider value={currentUser}>
           <Switch>

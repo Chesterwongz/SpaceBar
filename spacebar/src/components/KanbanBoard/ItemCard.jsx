@@ -2,7 +2,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Card, CardHeader, IconButton, makeStyles } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { db } from "../FireStore";
+import { db } from "../../FireStore";
 import firebase from "firebase";
 
 const useStyles = makeStyles((theme) => ({
