@@ -1,4 +1,7 @@
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import {
+  unstable_createMuiStrictModeTheme as createMuiTheme,
+  ThemeProvider,
+} from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BoardPage from "./pages/BoardPage.jsx";
 import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
@@ -56,3 +59,4 @@ function App() {
 }
 
 export default App;
+
