@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import KanbanList from "../components/KanbanList.jsx";
+import KanbanBoard from "../components/KanbanBoard";
 import { db } from "../FireStore";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -63,7 +63,7 @@ export default function BoardPage() {
             {listIds &&
               listIds.map((listId, index) => {
                 const list = lists[listId];
-                return <KanbanList key={list.id} list={list} index={index} />;
+                return <KanbanBoard key={list.id} list={list} index={index} />;
               })}
           </div>
         </DragDropContext>
