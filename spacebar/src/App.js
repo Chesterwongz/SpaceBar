@@ -14,6 +14,7 @@ import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
 import SignInPage from "./pages/SignInPage";
 import HomePage from "./pages/HomePage";
+import TeamPage from "./pages/TeamPage";
 import { useState, useEffect } from "react";
 import { onAuthStateChange } from "./FireStore";
 import { CurrentUserContext } from "./utils/Context";
@@ -58,6 +59,7 @@ function App() {
               <Layout>
                 <Switch>
                   <Route path="/:projectID/board" component={BoardPage} />
+                  <Route path="/:projectID/team" component={TeamPage} />
                   <Route
                     path="/:projectID/drawingboard"
                     component={DrawingBoardPage}

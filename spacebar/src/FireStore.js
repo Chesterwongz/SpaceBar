@@ -121,3 +121,11 @@ export function updateDrawingBoardTitle(docID, newTitle, projectID) {
       console.log("Error updating drawing board title", error);
     });
 }
+
+export function getProjectInfo(projectref) {
+ const docRef =  db.collection("Projects")
+  .doc(projectref)
+  docRef.get().then((doc)=> {
+    return doc.data().projectInfo;
+  })
+}
