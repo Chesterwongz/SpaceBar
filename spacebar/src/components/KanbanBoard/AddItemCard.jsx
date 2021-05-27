@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { db } from "../../FireStore";
 import firebase from "firebase";
 import uuid from "react-uuid";
+import { useParams } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   input: {
@@ -21,12 +22,16 @@ const useStyle = makeStyles((theme) => ({
     margin: theme.spacing(1, 0, 0),
   },
 }));
+
 export default function AddItemCard({ setOpen, listId }) {
+  const { projectID } = useParams();
   const classes = useStyle();
   const [title, setTitle] = useState("");
+  const projectRef = db.collection("Projects").doc(projectID);
 
   const addMoreCard = (title, listId) => {
-    db.collection("kanbanboard")
+    projectRef
+      .collection("kanbanboard")
       .doc(listId)
       .update({
         items: firebase.firestore.FieldValue.arrayUnion({

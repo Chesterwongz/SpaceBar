@@ -26,7 +26,7 @@ export default function HomePage() {
       <button>Add project</button>
       <div>
         <h2>Projects</h2>
-        <Link to="/drawingboard/project-1">{projectname}</Link>
+        <Link to="/project-1/board">{projectname}</Link>
       </div>
     </div>
   );
