@@ -13,6 +13,7 @@ import {
 import { SubjectOutlined } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router";
 import { auth } from "../FireStore";
+import { useParams } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Layout({ children }) {
+  const { projectID } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
@@ -52,12 +54,12 @@ export default function Layout({ children }) {
     {
       text: "DrawingBoard",
       icon: <SubjectOutlined color="primary" />,
-      path: "/drawingboard",
+      path: `/${projectID}/drawingboard`,
     },
     {
       text: "Board",
       icon: <SubjectOutlined color="primary" />,
-      path: "/board",
+      path: `/${projectID}/board`,
     },
   ];
 
@@ -68,12 +70,8 @@ export default function Layout({ children }) {
           <Typography className={classes.title} variant="h6">
             SPACEBAR
           </Typography>
-          <Button color="inherit" href="#">
-            Team
-          </Button>
-          <Button color="inherit" href="/board">
-            Account
-          </Button>
+          <Button color="inherit">Team</Button>
+          <Button color="inherit">Account</Button>
           <Button color="inherit" href="/" onClick={() => auth.signOut()}>
             Sign Out
           </Button>
