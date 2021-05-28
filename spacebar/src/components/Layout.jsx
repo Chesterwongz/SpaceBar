@@ -4,16 +4,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  AppBar,
-  Toolbar,
-  Button,
-  Typography,
   makeStyles,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router";
-import { auth } from "../FireStore";
 import { useParams } from "react-router-dom";
+import Appbar from "./Appbar";
 
 const drawerWidth = 240;
 
@@ -61,22 +57,16 @@ export default function Layout({ children }) {
       icon: <SubjectOutlined color="primary" />,
       path: `/${projectID}/board`,
     },
+    {
+      text: "Team",
+      icon: <SubjectOutlined color="primary" />,
+      path: `/${projectID}/team`,
+    },
   ];
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} elevation={0}>
-        <Toolbar variant="regular">
-          <Typography className={classes.title} variant="h6">
-            SPACEBAR
-          </Typography>
-          <Button color="inherit">Team</Button>
-          <Button color="inherit">Account</Button>
-          <Button color="inherit" href="/" onClick={() => auth.signOut()}>
-            Sign Out
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Appbar />
       <Drawer
         className={classes.drawer}
         variant="permanent"

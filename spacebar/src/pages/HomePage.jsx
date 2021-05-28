@@ -2,11 +2,32 @@ import React from "react";
 import { db } from "../FireStore";
 import { useState, useEffect, useContext } from "react";
 import { CurrentUserContext } from "../utils/Context";
-import { Link } from "react-router-dom";
+import Appbar from "../components/Appbar";
+import { makeStyles } from "@material-ui/core";
+import FolderIcon from "@material-ui/icons/Folder";
+import MediaCard from "../components/MediaCard";
+
+const useStyles = makeStyles((theme) => ({
+  projects: {
+    marginTop: 80,
+    marginLeft: 80,
+  },
+  header: {
+    display: "flex",
+    alignItems: "center",
+  },
+  icon: {
+    fontSize: 35,
+    color: "#80ced6",
+    marginRight: 10,
+    marginLeft: 30,
+  },
+}));
 
 export default function HomePage() {
   const currentUser = useContext(CurrentUserContext);
   const [projects, setProjects] = useState([]);
+  const classes = useStyles();
   // useEffect(() => {
   //   var unSubscribe = db
   //     .collection("Projects")
@@ -32,17 +53,16 @@ export default function HomePage() {
   }, [currentUser]);
   return (
     <div>
-      Homepage
-      <button>Add project</button>
       <div>
-        <h2>Projects</h2>
-        {projects.map((project, index) => {
-          const link = `/${project}/board`;
-          return (
-            <Link to={link} key={index}>
-              {project}
-            </Link>
-          );
+        <Appbar />
+      </div>
+      <div className={classes.projects}>
+        <div className={classes.header}>
+          <FolderIcon className={classes.icon} />
+          <h1>Projects</h1>
+        </div>
+        {projects.map((projectref, index) => {
+          return <MediaCard projectref={projectref} key={index} />;
         })}
       </div>
     </div>
