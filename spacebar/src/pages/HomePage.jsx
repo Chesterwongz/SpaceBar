@@ -5,12 +5,12 @@ import { CurrentUserContext } from "../utils/Context";
 import Appbar from "../components/Appbar";
 import { makeStyles } from "@material-ui/core";
 import FolderIcon from "@material-ui/icons/Folder";
-import MediaCard from "../components/Card";
+import MediaCard from "../components/MediaCard";
 
 const useStyles = makeStyles((theme) => ({
   projects: {
     marginTop: 80,
-    marginLeft:80
+    marginLeft: 80,
   },
   header: {
     display: "flex",

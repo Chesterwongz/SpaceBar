@@ -7,8 +7,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PeopleIcon from "@material-ui/icons/People";
 import { CurrentUserContext } from "../utils/Context";
-import Alert from "@material-ui/lab/Alert";
-import MemberList from "../components/MemberList"; 
+import { Alert } from "@material-ui/lab";
+import MemberList from "../components/MemberList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: "50ch",
     },
-    marginTop: 30
+    marginTop: 30,
   },
   button: {
     margin: theme.spacing(1),
@@ -47,7 +47,7 @@ export default function TeamPage() {
       .get()
       .then((querySnapshot) => {
         const size = querySnapshot.size;
-        if (size == 0) {
+        if (size === 0) {
           // email does not exist
           return false;
         } else {
@@ -58,9 +58,9 @@ export default function TeamPage() {
 
   const checkFormError = () => {
     //check if the value is not your own email. and value is in database
-    if (value == "") {
+    if (value === "") {
       setErrorMessage("Please enter a value");
-    } else if (value == currentUserEmail) {
+    } else if (value === currentUserEmail) {
       setErrorMessage("You cannot add yourself");
     } else {
       checkEmailInDatabase(value).then((emailExists) => {
@@ -99,7 +99,7 @@ export default function TeamPage() {
 
   return (
     <div>
-    <MemberList projectID={projectID}/>
+      <MemberList projectID={projectID} />
       <form
         className={classes.root}
         noValidate
@@ -123,7 +123,7 @@ export default function TeamPage() {
       >
         Add member
       </Button>
-      {errorMessage != "" ? (
+      {errorMessage !== "" ? (
         <Alert
           severity="error"
           onClose={() => {
