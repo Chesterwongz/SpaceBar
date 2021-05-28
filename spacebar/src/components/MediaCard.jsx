@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { db } from "../FireStore";
 import { useState, useEffect } from "react";
-import Rocket from "../images/rocket.jpg"
+import Rocket from "../images/rocket.jpg";
 
 const useStyles = makeStyles({
   root: {
@@ -30,17 +30,14 @@ export default function MediaCard({ projectref }) {
       .doc(projectref)
       .get()
       .then((doc) => {
+        console.log(doc.data());
         setProjectInfo(doc.data().projectInfo);
       });
   }, []);
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={Rocket}
-          title="Spaceship"
-        />
+        <CardMedia className={classes.media} image={Rocket} title="Spaceship" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {projectInfo.title}
