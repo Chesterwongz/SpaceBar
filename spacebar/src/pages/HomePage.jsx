@@ -32,19 +32,6 @@ export default function HomePage() {
   const currentUser = useContext(CurrentUserContext);
   const [projects, setProjects] = useState([]);
   const classes = useStyles();
-  // useEffect(() => {
-  //   var unSubscribe = db
-  //     .collection("Projects")
-  //     .doc("project-1")
-  //     .collection("projectinfo")
-  //     .doc("1OoS5xRD3l6Ih6RIDY5M")
-  //     .onSnapshot((doc) => {
-  //       setProject(doc.data().projectname);
-  //     });
-  //   return () => {
-  //     unSubscribe();
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -55,6 +42,7 @@ export default function HomePage() {
         });
     }
   }, [currentUser]);
+
   return (
     <div>
       <Appbar />
