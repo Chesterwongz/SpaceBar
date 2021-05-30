@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 10,
     marginLeft: 30,
   },
+  projectCards: {
+    display: "flex",
+    justifyContent: "space-evenly",
+  },
 }));
 
 export default function HomePage() {
@@ -61,9 +65,11 @@ export default function HomePage() {
           <FolderIcon className={classes.icon} />
           <h1>Projects</h1>
         </div>
-        {projects.map((projectref, index) => {
-          return <MediaCard projectref={projectref} key={index} />;
-        })}
+        <div className={classes.projectCards}>
+          {projects.map((projectRef, index) => {
+            return <MediaCard projectRef={projectRef} key={index} />;
+          })}
+        </div>
       </div>
     </div>
   );

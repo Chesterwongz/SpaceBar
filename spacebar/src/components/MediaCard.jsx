@@ -13,21 +13,21 @@ import Rocket from "../images/rocket.jpg";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 310,
+    width: 310,
   },
   media: {
     height: 160,
   },
 });
 
-export default function MediaCard({ projectref }) {
+export default function MediaCard({ projectRef }) {
   const classes = useStyles();
   const [projectInfo, setProjectInfo] = useState({});
-  const link = `/${projectref}/board`;
+  const link = `/${projectRef}/board`;
 
   useEffect(() => {
     db.collection("Projects")
-      .doc(projectref)
+      .doc(projectRef)
       .get()
       .then((doc) => {
         console.log(doc.data());
@@ -36,7 +36,7 @@ export default function MediaCard({ projectref }) {
   }, []);
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea href={link}>
         <CardMedia className={classes.media} image={Rocket} title="Spaceship" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
