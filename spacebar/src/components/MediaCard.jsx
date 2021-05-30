@@ -32,6 +32,9 @@ export default function MediaCard({ projectRef }) {
       .then((doc) => {
         console.log(doc.data());
         setProjectInfo(doc.data().projectInfo);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
   return (
