@@ -1,0 +1,48 @@
+[debug] [2021-05-30T13:55:58.304Z] ----------------------------------------------------------------------
+[debug] [2021-05-30T13:55:58.306Z] Command:       /usr/bin/node /home/e0544043/.yarn/bin/firebase deploy
+[debug] [2021-05-30T13:55:58.306Z] CLI Version:   9.12.0
+[debug] [2021-05-30T13:55:58.306Z] Platform:      linux
+[debug] [2021-05-30T13:55:58.306Z] Node Version:  v12.22.1
+[debug] [2021-05-30T13:55:58.313Z] Time:          Sun May 30 2021 21:55:58 GMT+0800 (Singapore Standard Time)
+[debug] [2021-05-30T13:55:58.313Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-30T13:55:58.324Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-30T13:55:58.324Z] > authorizing via signed-in user (rhyeantan@gmail.com)
+[debug] [2021-05-30T13:55:58.324Z] [iam] checking project spacebar-1a6ff for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2021-05-30T13:55:58.327Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-05-30T13:55:58.328Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-05-30T13:55:58.781Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","date":"Sun, 30 May 2021 13:55:59 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-30T13:55:58.795Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/spacebar-1a6ff:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]}
+[debug] [2021-05-30T13:55:59.867Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 30 May 2021 13:56:00 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1008","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-30T13:55:59.869Z] > refreshing access token with scopes: []
+[debug] [2021-05-30T13:55:59.869Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-05-30T13:55:59.922Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","date":"Sun, 30 May 2021 13:56:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-30T13:55:59.939Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff [none]
+[debug] [2021-05-30T13:56:00.248Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff 200
+[debug] [2021-05-30T13:56:00.248Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff {"projectId":"spacebar-1a6ff","projectNumber":"763570786151","displayName":"spacebar","name":"projects/spacebar-1a6ff","resources":{"hostingSite":"spacebar-1a6ff","realtimeDatabaseInstance":"spacebar-1a6ff-default-rtdb","storageBucket":"spacebar-1a6ff.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2021-05-30T13:56:00.249Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff [none]
+[debug] [2021-05-30T13:56:00.545Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff 200
+[debug] [2021-05-30T13:56:00.545Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/spacebar-1a6ff {"projectId":"spacebar-1a6ff","projectNumber":"763570786151","displayName":"spacebar","name":"projects/spacebar-1a6ff","resources":{"hostingSite":"spacebar-1a6ff","realtimeDatabaseInstance":"spacebar-1a6ff-default-rtdb","storageBucket":"spacebar-1a6ff.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'spacebar-1a6ff'...
+[info] 
+[info] i  deploying database, hosting 
+[info] i  database: checking rules syntax... 
+[debug] [2021-05-30T13:56:00.563Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-05-30T13:56:00.563Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-05-30T13:56:00.631Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Sun, 30 May 2021 13:56:01 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-30T13:56:00.680Z] >>> HTTP REQUEST GET https://firebasedatabase.googleapis.com/v1beta/projects/spacebar-1a6ff/locations/-/instances/spacebar-1a6ff-default-rtdb  
+ 
+[debug] [2021-05-30T13:56:01.126Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 30 May 2021 13:56:01 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-30T13:56:01.132Z] >>> HTTP REQUEST PUT https://spacebar-1a6ff-default-rtdb.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": false,
+    ".write": false
+  }
+}
