@@ -1,7 +1,7 @@
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
-import AddItemContainer from "./AddItemContainer.jsx";
+import InputContainer from "../InputContainer";
 import ItemCard from "./ItemCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +44,7 @@ export default function KanbanList({ list }) {
             </div>
           )}
         </Droppable>
-        <AddItemContainer listId={list.id} />
+        <InputContainer listId={list.id} type="card" />
       </Paper>
     </div>
   );

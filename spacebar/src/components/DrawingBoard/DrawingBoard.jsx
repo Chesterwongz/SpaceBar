@@ -47,7 +47,7 @@ export default function DrawingBoard() {
         unSubscribe();
       };
     }
-  }, [currentUser]);
+  }, [currentUser, projectID]);
 
   const handleDelete = (docID) => {
     deleteDrawingBoardItem(docID, projectID);

@@ -3,12 +3,12 @@ import { db } from "../FireStore";
 import { useState, useEffect, useContext } from "react";
 import { CurrentUserContext } from "../utils/Context";
 import Appbar from "../components/Appbar";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
 import MediaCard from "../components/MediaCard";
-
+import InputContainer from "../components/InputContainer";
 const useStyles = makeStyles((theme) => ({
-  projects: {
+  root: {
     marginTop: 80,
     marginLeft: 80,
   },
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 10,
     marginLeft: 30,
   },
-  projectCards: {
+  projects: {
     display: "flex",
     justifyContent: "space-evenly",
   },
@@ -57,18 +57,17 @@ export default function HomePage() {
   }, [currentUser]);
   return (
     <div>
-      <div>
-        <Appbar />
-      </div>
-      <div className={classes.projects}>
+      <Appbar />
+      <div className={classes.root}>
         <div className={classes.header}>
           <FolderIcon className={classes.icon} />
           <h1>Projects</h1>
         </div>
-        <div className={classes.projectCards}>
-          {projects.map((projectRef, index) => {
-            return <MediaCard projectRef={projectRef} key={index} />;
+        <div className={classes.projects}>
+          {projects.map((project, index) => {
+            return <MediaCard projectref={project} key={index} />;
           })}
+          <InputContainer type="project" />
         </div>
       </div>
     </div>
