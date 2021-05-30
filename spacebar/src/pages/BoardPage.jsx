@@ -1,38 +1,37 @@
-import React, { useEffect, useState, useContext } from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
 import { db } from "../FireStore";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { CurrentUserContext } from "../utils/Context";
-import { useParams } from "react-router-dom";
 
 export default function BoardPage() {
   const { projectID } = useParams();
-  const projectRef = db.collection("Projects").doc(projectID);
-  const currentUser = useContext(CurrentUserContext);
-  const boardRef = projectRef.collection("kanbanboard");
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
   useEffect(() => {
-    boardRef.onSnapshot((querySnapshot) => {
-      const boardListIds = [];
-      const boardLists = querySnapshot.docs
-        .map((doc) => {
-          boardListIds.push(doc.id);
-          return doc.data();
-        })
-        .reduce((rest, item) => {
-          return {
-            ...rest,
-            [item.id]: item, // item.id needs to be equal to doc.id!!!
-          };
-        }, {});
-      setLists(boardLists);
-      setListIds(boardListIds);
-    });
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("kanbanboard")
+      .onSnapshot((querySnapshot) => {
+        const boardListIds = [];
+        const boardLists = querySnapshot.docs
+          .map((doc) => {
+            boardListIds.push(doc.id);
+            return doc.data();
+          })
+          .reduce((rest, item) => {
+            return {
+              ...rest,
+              [item.id]: item, // item.id needs to be equal to doc.id!!!
+            };
+          }, {});
+        setLists(boardLists);
+        setListIds(boardListIds);
+      });
     setLoading(false);
-  }, []);
+  }, [projectID]);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -49,6 +48,8 @@ export default function BoardPage() {
 
     // update databse
     const batch = db.batch();
+    const projectRef = db.collection("Projects").doc(projectID);
+    const boardRef = projectRef.collection("kanbanboard");
     const srcRef = boardRef.doc(source.droppableId);
     batch.update(srcRef, { items: sourceList.items });
     const destRef = boardRef.doc(destination.droppableId);
