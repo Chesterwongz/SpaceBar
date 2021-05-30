@@ -57,17 +57,17 @@ export default function InputCard({ setOpen, listId, type }) {
     });
     const lists = [
       {
-        id: `${uuid()}`,
+        id: `list-1`,
         title: "Todo",
         items: [],
       },
       {
-        id: `${uuid()}`,
+        id: `list-2`,
         title: "Doing",
         items: [],
       },
       {
-        id: `${uuid()}`,
+        id: `list-3`,
         title: "Done",
         items: [],
       },
