@@ -1,10 +1,8 @@
-# spacebar
+# Orbital Apollo II Project Management Website
 
 ![banner](spacebar/public/logo.png)
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
-Orbital Apollo II Project Management Website
 
 Due to the COVID-19, workers who never thought of working from home have now found themselves in the new reality of remote work. This paradigm shift can be especially jarring for teams accustomed to the traditional methods of project management. The looming question on the minds of project managers as they navigate this new normal has become, “How can I still meet project goals with my team now working remotely?” Although working as a team remotely can be challenging, it certainly is not impossible. Furthermore, managing a team online need not be difficult at all as most (if not all) project management tasks can be done in the comfort of one’s home!
 
