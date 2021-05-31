@@ -31,7 +31,6 @@ export default function DrawingBoard() {
         .collection("Projects")
         .doc(projectID)
         .collection("drawingboard")
-        .where("userID", "==", currentUser.id)
         .onSnapshot((querySnapshot) => {
           var items = [];
           querySnapshot.forEach((doc) => {

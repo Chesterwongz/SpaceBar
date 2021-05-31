@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-evenly",
   },
+  InputContainer: {
+    marginLeft: 50,
+  },
 }));
 
 export default function HomePage() {
@@ -50,12 +53,14 @@ export default function HomePage() {
         <div className={classes.header}>
           <FolderIcon className={classes.icon} />
           <h1>Projects</h1>
+          <div className={classes.InputContainer}>
+            <InputContainer type="project" />
+          </div>
         </div>
         <div className={classes.projects}>
           {projects.map((project, index) => {
             return <MediaCard projectRef={project} key={index} />;
           })}
-          <InputContainer type="project" />
         </div>
       </div>
     </div>
