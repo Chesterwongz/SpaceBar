@@ -34,7 +34,21 @@ To run this repository, git clone it to your local environment.
 
 ## Deployment
 
-[Firebase Hosting](https://firebase.google.com/docs/hosting/quickstart)
+1. Download the Firebase CLI by keying in: 
+  yarn global add firebase-tools 
+  export PATH="$(yarn global bin):$PATH" 
+2. Log into Firebase account by keying in:  
+  firebase login 
+3. Initialise settings by keying in:
+  firebase init hosting 
+  - Select Firebase project to connect to 
+  - Specify public root directory as "build" instead of public 
+  - When prompted whether to overwrite index.html file, type "N"
+  - When prompted whether to make a Single-page app, type "Y" 
+ 4. Build optimized React app by keying in: 
+  yarn run build 
+ 5. Deploy app by keying in: 
+  firebase deploy 
 
 ## Contributors
 
