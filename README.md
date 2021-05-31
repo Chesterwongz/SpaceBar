@@ -35,6 +35,7 @@ To run this repository, git clone it to your local environment.
 ## Deployment
 
 1. Download the Firebase CLI by keying in: 
+
   -yarn global add firebase-tools
   -export PATH="$(yarn global bin):$PATH" 
 2. Log into Firebase account by keying in:  
