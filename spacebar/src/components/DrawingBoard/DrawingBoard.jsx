@@ -17,6 +17,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
+  masonryGrid: {
+    display: "flex",
+    marginLeft: theme.spacing(-2.5) /* gutter size offset */,
+    width: "auto",
+  },
+  masonryGridColumn: {
+    paddingLeft: theme.spacing(2.5) /* gutter size */,
+    backgroundClip: "padding box",
+  },
 }));
 
 export default function DrawingBoard() {
@@ -68,8 +77,8 @@ export default function DrawingBoard() {
         <Container>
           <Masonry
             breakpointCols={breakpoints}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
+            className={classes.masonryGrid}
+            columnClassName={classes.masonryGridColumn}
           >
             {drawingboarditems.map((item) => (
               <Note key={item.id} item={item} onDelete={handleDelete} />

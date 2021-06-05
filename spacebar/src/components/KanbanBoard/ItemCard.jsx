@@ -44,6 +44,7 @@ export default function ItemCard({ item, listId, index }) {
                 </IconButton>
               }
               title={item.title}
+              titleTypographyProps={{ variant: "body1" }}
             />
           </Card>
         </div>
