@@ -123,9 +123,21 @@ export function updateDrawingBoardTitle(docID, newTitle, projectID) {
 }
 
 export function getProjectInfo(projectref) {
- const docRef =  db.collection("Projects")
-  .doc(projectref)
-  docRef.get().then((doc)=> {
+  const docRef = db.collection("Projects").doc(projectref);
+  docRef.get().then((doc) => {
     return doc.data().projectInfo;
-  })
+  });
+}
+
+export function addComment(projectID, docID, value, author) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("drawingboard")
+    .doc(docID)
+    .collection("comments")
+    .add({
+      comment: value,
+      created: Date.now(),
+      author: author,
+    });
 }

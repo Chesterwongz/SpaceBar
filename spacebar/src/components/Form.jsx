@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Form({ onSubmit }) {
+export default function Form({ onSubmit, placeHolder }) {
   const classes = useStyles();
   const [value, setValue] = React.useState("");
 
@@ -34,7 +34,7 @@ export default function Form({ onSubmit }) {
       <div>
         <TextField
           id="standard-textarea"
-          placeholder="Add item"
+          placeholder={`${placeHolder}`}
           multiline
           onChange={handleChange}
           value={value}
