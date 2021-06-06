@@ -67,7 +67,6 @@ export default function InputCard({ setOpen, listId, type }) {
         </Paper>
       </div>
       <div className={classes.confirm}>
-        {console.log(currentUser)}
         {currentUser && (
           <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
             {type === "card"
