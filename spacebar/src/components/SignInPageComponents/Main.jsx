@@ -20,16 +20,13 @@ const useStyles = makeStyles((theme) => ({
   image: {
     height: "400px",
     width: "400px",
-    transform: "translate(0, -50%)",
     "@media screen and (max-width: 768px)": {
       height: "300",
       width: "300px",
-      transform: "translate(0, 0)",
     },
     "@media screen and (max-width: 480px)": {
       height: "200px",
       width: "200px",
-      transform: "translate(0, 0)",
     },
   },
   content: {
@@ -38,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     padding: "8px 24px",
-    transform: "translate(0, -60%)",
-    "@media screen and (max-width: 768px)": {
-      transform: "translate(0, 0)",
-    },
   },
   header: {
     fontSize: "50px",
