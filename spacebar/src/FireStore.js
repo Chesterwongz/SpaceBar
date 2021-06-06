@@ -87,7 +87,7 @@ export function onAuthStateChange(callback) {
 }
 
 export function addProject(title, currentUser) {
-  const projectId = uuid();
+  const projectId = uuid(); // I want to avoid using uuid and just use firebase auto gen
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectId);
   batch.set(projectRef, {
