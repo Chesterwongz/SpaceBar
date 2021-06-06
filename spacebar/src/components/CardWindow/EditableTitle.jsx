@@ -4,7 +4,7 @@ import { IconButton, InputBase, Paper } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { updateDrawingBoardTitle } from "../../FireStore";
+import { updatePostTitle, updateTaskTitle } from "../../FireStore";
 import red from "@material-ui/core/colors/red";
 import green from "@material-ui/core/colors/green";
 import { useParams } from "react-router-dom";
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EditableTitle({ title, docID }) {
+export default function EditableTitle({ title, docID, type }) {
   const classes = useStyles();
   const inputArea = useRef();
   const buttonArea = useRef();
@@ -73,10 +73,12 @@ export default function EditableTitle({ title, docID }) {
     setValue(event.target.value);
   };
   const handleSubmit = () => {
-    // console.log(value);
-    console.log(initialValue);
     if (value !== initialValue) {
-      updateDrawingBoardTitle(docID, value, projectID);
+      if (type === "task") {
+        updateTaskTitle(docID, value, projectID);
+      } else if (type === "post") {
+        updatePostTitle(docID, value, projectID);
+      }
     }
     setEditing(false);
   };

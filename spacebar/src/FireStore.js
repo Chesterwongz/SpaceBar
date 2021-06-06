@@ -149,7 +149,7 @@ export function deleteDrawingBoardItem(docID, projectID) {
     });
 }
 
-export function updateDrawingBoardTitle(docID, newTitle, projectID) {
+export function updatePostTitle(docID, newTitle, projectID) {
   return db
     .collection("Projects")
     .doc(projectID)
@@ -208,4 +208,8 @@ export function addKanbanBoardItem(title, listId, projectID) {
         title: title,
       }),
     });
+}
+
+export function updateTaskTitle(listId, value, projectID) {
+  // TODO:
 }

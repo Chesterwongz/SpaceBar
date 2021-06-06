@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   description: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(0, 0, 2),
   },
   delete: {
     width: "80%",
@@ -58,7 +58,7 @@ export default function TaskWindow({ docID, title, open, onClose }) {
         <Fade in={open}>
           <Paper className={classes.paper}>
             <div>
-              <EditableTitle title={title} docID={docID} />
+              <EditableTitle title={title} docID={docID} type="task" />
               <TextField
                 className={classes.description}
                 id="outlined-textarea"

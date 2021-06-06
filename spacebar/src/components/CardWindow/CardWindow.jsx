@@ -67,7 +67,7 @@ export default function CardWindow({ docID, onDelete, title }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <EditableTitle title={title} docID={docID} />
+            <EditableTitle title={title} docID={docID} type="post" />
             <div className={classes.delete}>
               <h2 id="transition-modal-title">Delete</h2>
               <IconButton onClick={handleDelete}>
