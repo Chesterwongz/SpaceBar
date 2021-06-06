@@ -19,8 +19,7 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    width: "30%",
-    height: "30%",
+    width: "60%",
     overflow: "auto",
   },
   delete: {
@@ -68,7 +67,7 @@ export default function CardWindow({ docID, onDelete, title }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-              <EditableTitle title={title} docID={docID}/>
+            <EditableTitle title={title} docID={docID} />
             <div className={classes.delete}>
               <h2 id="transition-modal-title">Delete</h2>
               <IconButton onClick={handleDelete}>
