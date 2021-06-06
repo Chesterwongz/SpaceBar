@@ -83,6 +83,7 @@ export default function CardWindow({ docID, onDelete, title }) {
                 variant="contained"
                 className={classes.button}
                 startIcon={<DeleteIcon />}
+                onClick={handleDelete}
               >
                 Delete Item
               </Button>

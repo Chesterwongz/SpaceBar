@@ -1,12 +1,24 @@
-import React from 'react'; 
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from 'firebase';
-import {uiConfig} from '../FireStore';
+import React, { useState } from "react";
+import NavBar from "../components/SignInPageComponents/NavBar";
+import Main from "../components/SignInPageComponents/Main";
+import SideBar from "../components/SignInPageComponents/SideBar";
+import Features from "../components/SignInPageComponents/Features";
+import Signin from "../components/SignInPageComponents/Signin";
 
-const SignInPage = () => (
-    <div>
-        <StyledFirebaseAuth uiConfig = {uiConfig} firebaseAuth = {firebase.auth()}/>
-    </div>
-);
+export default function SignInPage() {
+  const [sideBarOpen, setSideBarOpen] = useState(false);
 
-export default SignInPage; 
+  const toggleSideBar = () => {
+    setSideBarOpen(!sideBarOpen);
+  };
+
+  return (
+    <>
+      <SideBar toggleSideBar={toggleSideBar} sideBarOpen={sideBarOpen} />
+      <NavBar toggleSideBar={toggleSideBar} />
+      <Main />
+      <Features />
+      <Signin />
+    </>
+  );
+}
