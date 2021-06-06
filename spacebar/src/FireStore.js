@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import uuid from "react-uuid";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBZVzhpyToko-9GU1uU-tj1pIWYKmwCxNY",
@@ -85,6 +86,46 @@ export function onAuthStateChange(callback) {
   });
 }
 
+export function addProject(title, currentUser) {
+  const projectId = uuid(); // I want to avoid using uuid and just use firebase auto gen
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectId);
+  batch.set(projectRef, {
+    projectInfo: { title: title },
+  });
+  const drawingBoardref = projectRef.collection("drawingboard").doc();
+  batch.set(drawingBoardref, {
+    title: "Be the first to initiate a discussion!",
+    userID: `${currentUser.id}`,
+  });
+  const lists = [
+    {
+      id: `list-1`,
+      title: "Todo",
+      items: [],
+    },
+    {
+      id: `list-2`,
+      title: "Doing",
+      items: [],
+    },
+    {
+      id: `list-3`,
+      title: "Done",
+      items: [],
+    },
+  ];
+  lists.forEach((doc) => {
+    const listRef = projectRef.collection("kanbanboard").doc(doc.id);
+    batch.set(listRef, doc);
+  });
+  const userRef = db.collection("users").doc(currentUser.id);
+  batch.update(userRef, {
+    projectRef: firebase.firestore.FieldValue.arrayUnion(projectId),
+  });
+  batch.commit();
+}
+
 export function addDrawingBoardItem(userID, title, projectID) {
   return db
     .collection("Projects")
@@ -139,5 +180,45 @@ export function addComment(projectID, docID, value, author) {
       comment: value,
       created: Date.now(),
       author: author,
+    });
+}
+
+export function updateKanbanBoardItems(
+  destination,
+  source,
+  sourceList,
+  destinationList,
+  projectID
+) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  const boardRef = projectRef.collection("kanbanboard");
+  const srcRef = boardRef.doc(source.droppableId);
+  batch.update(srcRef, { items: sourceList.items });
+  const destRef = boardRef.doc(destination.droppableId);
+  batch.update(destRef, { items: destinationList.items });
+  batch.commit();
+}
+
+export function deleteKanbanBoardItem(item, listId, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("kanbanboard")
+    .doc(listId)
+    .update({
+      items: firebase.firestore.FieldValue.arrayRemove(item),
+    });
+}
+
+export function addKanbanBoardItem(title, listId, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("kanbanboard")
+    .doc(listId)
+    .update({
+      items: firebase.firestore.FieldValue.arrayUnion({
+        id: `${uuid()}`,
+        title: title,
+      }),
     });
 }

@@ -37,6 +37,7 @@ export default function MediaCard({ projectRef }) {
         console.log(error);
       });
   }, []);
+
   return (
     <Card className={classes.root}>
       <CardActionArea href={link}>

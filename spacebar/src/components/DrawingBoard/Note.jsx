@@ -6,7 +6,7 @@ import CardWindow from "../CardWindow";
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: theme.palette.secondary.main,
-    margin: theme.spacing(1, 0),
+    margin: theme.spacing(1, 0, 2.5),
   },
 }));
 
@@ -26,6 +26,7 @@ export default function Note({ item, form, onSubmit, onDelete }) {
             />
           }
           title={item.title}
+          titleTypographyProps={{ variant: "body1" }}
         />
       )}
     </Card>

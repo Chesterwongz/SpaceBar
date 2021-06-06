@@ -17,36 +17,39 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
+  masonryGrid: {
+    display: "flex",
+    marginLeft: theme.spacing(-2.5) /* gutter size offset */,
+    width: "auto",
+  },
+  masonryGridColumn: {
+    paddingLeft: theme.spacing(2.5) /* gutter size */,
+    backgroundClip: "padding box",
+  },
 }));
 
 export default function DrawingBoard() {
-  const [drawingboarditems, setdrawingboarditems] = useState([]);
+  const [drawingBoardItems, setDrawingBoardItems] = useState([]);
   const currentUser = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
   let { projectID } = useParams();
   useEffect(() => {
-    if (currentUser) {
-      var unSubscribe = db
-        .collection("Projects")
-        .doc(projectID)
-        .collection("drawingboard")
-        .onSnapshot((querySnapshot) => {
-          var items = [];
-          querySnapshot.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              ...doc.data(),
-            });
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("drawingboard")
+      .onSnapshot((querySnapshot) => {
+        var items = [];
+        querySnapshot.forEach((doc) => {
+          items.push({
+            id: doc.id,
+            ...doc.data(),
           });
-          setdrawingboarditems(items);
-          setLoading(false);
         });
-      return () => {
-        unSubscribe();
-      };
-    }
-  }, [currentUser, projectID]);
+        setDrawingBoardItems(items);
+        setLoading(false);
+      });
+  }, [projectID]);
 
   const handleDelete = (docID) => {
     deleteDrawingBoardItem(docID, projectID);
@@ -68,10 +71,10 @@ export default function DrawingBoard() {
         <Container>
           <Masonry
             breakpointCols={breakpoints}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
+            className={classes.masonryGrid}
+            columnClassName={classes.masonryGridColumn}
           >
-            {drawingboarditems.map((item) => (
+            {drawingBoardItems.map((item) => (
               <Note key={item.id} item={item} onDelete={handleDelete} />
             ))}
             <Note form onSubmit={handleSubmit} />
