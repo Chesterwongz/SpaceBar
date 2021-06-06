@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
-import { db } from "../FireStore";
+import { db, updateKanbanBoardItems } from "../FireStore";
 
 export default function BoardPage() {
   const { projectID } = useParams();
@@ -29,8 +29,8 @@ export default function BoardPage() {
           }, {});
         setLists(boardLists);
         setListIds(boardListIds);
+        setLoading(false);
       });
-    setLoading(false);
   }, [projectID]);
 
   const onDragEnd = (result) => {
@@ -46,15 +46,13 @@ export default function BoardPage() {
     sourceList.items.splice(source.index, 1);
     destinationList.items.splice(destination.index, 0, draggingCard);
 
-    // update databse
-    const batch = db.batch();
-    const projectRef = db.collection("Projects").doc(projectID);
-    const boardRef = projectRef.collection("kanbanboard");
-    const srcRef = boardRef.doc(source.droppableId);
-    batch.update(srcRef, { items: sourceList.items });
-    const destRef = boardRef.doc(destination.droppableId);
-    batch.update(destRef, { items: destinationList.items });
-    batch.commit();
+    updateKanbanBoardItems(
+      destination,
+      source,
+      sourceList,
+      destinationList,
+      projectID
+    );
   };
   return (
     <>
