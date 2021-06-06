@@ -3,8 +3,6 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState, useContext } from "react";
 import { addProject, addKanbanBoardItem } from "../../FireStore";
-import firebase from "firebase";
-import uuid from "react-uuid";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
 
