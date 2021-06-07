@@ -32,7 +32,6 @@ const useStyles = makeStyles({
 });
 
 export default function MemberList({ projectID }) {
-    console.log('render')
   const classes = useStyles();
   const [members, setMembers] = useState([]);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, makeStyles } from "@material-ui/core";
-import Form from "./Form";
+import Form from "../Form";
 import CardWindow from "../CardWindow";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +15,7 @@ export default function Note({ item, form, onSubmit, onDelete }) {
   return (
     <Card className={classes.card}>
       {form ? (
-        <Form onSubmit={onSubmit} />
+        <Form onSubmit={onSubmit} placeHolder="Add item" />
       ) : (
         <CardHeader
           action={

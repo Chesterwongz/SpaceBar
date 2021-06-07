@@ -7,6 +7,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditableTitle from "./EditableTitle";
+import Comments from "./Comments";
+import Button from "@material-ui/core/Button";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -26,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
     display: "flex",
     justifyContent: "space-between",
+  },
+  button: {
+    backgroundColor: "#d9534f",
+    marginTop: "5px",
+    "&:hover": {
+      backgroundColor: "#F08080",
+    },
   },
 }));
 
@@ -67,12 +77,19 @@ export default function CardWindow({ docID, onDelete, title }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <EditableTitle title={title} docID={docID} type="post" />
+            <EditableTitle title={title} docID={docID} />
             <div className={classes.delete}>
-              <h2 id="transition-modal-title">Delete</h2>
-              <IconButton onClick={handleDelete}>
-                <DeleteIcon />
-              </IconButton>
+              <Button
+                variant="contained"
+                className={classes.button}
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete Item
+              </Button>
+            </div>
+            <div>
+              <Comments docID={docID} />
             </div>
           </div>
         </Fade>
