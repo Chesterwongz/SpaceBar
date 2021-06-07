@@ -170,6 +170,19 @@ export function getProjectInfo(projectref) {
   });
 }
 
+export function addComment(projectID, docID, value, author) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("drawingboard")
+    .doc(docID)
+    .collection("comments")
+    .add({
+      comment: value,
+      created: Date.now(),
+      author: author,
+    });
+}
+
 export function updateKanbanBoardItems(
   destination,
   source,
