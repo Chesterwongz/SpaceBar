@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import {
   Card,
@@ -8,7 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { deleteKanbanBoardItem } from "../../FireStore";
+import { db, deleteKanbanBoardItem } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import TaskWindow from "./TaskWindow";
 
@@ -22,10 +22,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ item, listId, index }) {
+export default function TaskCard({ taskId, listId, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
+  const [taskData, setTaskData] = useState({});
+
+  // TODO: find a way to stop the flicker
+  useEffect(() => {
+    console.log("mounted");
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("tasks")
+      .doc(taskId)
+      .onSnapshot((doc) => setTaskData(doc.data()));
+    return () => {
+      console.log("unmounted");
+      setTaskData({});
+    };
+  }, []);
 
   const handleCardClick = () => {
     setIsWindowOpen(true);
@@ -37,13 +52,12 @@ export default function TaskCard({ item, listId, index }) {
 
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
-    // I'm thinking of placing all the db functions in one place.
-    // I wonder if importing db and firebase whereever I need it is standard practice. It seems wrong
-    deleteKanbanBoardItem(item, listId, projectID);
+    deleteKanbanBoardItem(taskId, listId, projectID);
   };
+
   return (
     <>
-      <Draggable draggableId={item.id} index={index}>
+      <Draggable draggableId={taskId} index={index}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -57,7 +71,7 @@ export default function TaskCard({ item, listId, index }) {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={item.title}
+                title={taskData.title}
                 titleTypographyProps={{ variant: "body1" }}
               />
             </Card>
@@ -65,8 +79,8 @@ export default function TaskCard({ item, listId, index }) {
         )}
       </Draggable>
       <TaskWindow
-        docID={item.id}
-        title={item.title}
+        docID={taskId}
+        taskData={taskData}
         open={isWindowOpen}
         onClose={handleWindowClose}
       />

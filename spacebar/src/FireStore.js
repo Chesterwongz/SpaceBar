@@ -205,16 +205,16 @@ export function updateKanbanBoardItems(
   batch.commit();
 }
 
-export function deleteKanbanBoardItem(item, listId, projectID) {
+export function deleteKanbanBoardItem(taskId, listId, projectID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
   // Remove from task collection
-  const taskRef = projectRef.collection("tasks").doc(item.id);
+  const taskRef = projectRef.collection("tasks").doc(taskId);
   batch.delete(taskRef);
   // Remove from list array
   const listRef = projectRef.collection("kanbanboard").doc(listId);
   batch.update(listRef, {
-    items: firebase.firestore.FieldValue.arrayRemove(item),
+    items: firebase.firestore.FieldValue.arrayRemove(taskId),
   });
   batch.commit();
 }
@@ -253,14 +253,15 @@ export function addKanbanBoardItem(
     .collection("kanbanboard")
     .doc(listId);
   batch.update(listRef, {
-    items: firebase.firestore.FieldValue.arrayUnion({
-      id: taskRef.id,
-      title: title,
-    }),
+    items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
   });
   batch.commit();
 }
 
-export function updateTaskTitle(listId, value, projectID) {
-  // TODO:
+export function updateTaskTitle(taskId, title, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskId)
+    .update({ title: title });
 }

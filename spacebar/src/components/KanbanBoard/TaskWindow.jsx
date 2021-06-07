@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({ docID, title, open, onClose }) {
+export default function TaskWindow({ docID, taskData, open, onClose }) {
   const classes = useStyles();
 
   const handleDelete = (event) => {
@@ -56,7 +56,7 @@ export default function TaskWindow({ docID, title, open, onClose }) {
         <Fade in={open}>
           <Paper className={classes.paper}>
             <div>
-              <EditableTitle title={title} docID={docID} type="task" />
+              <EditableTitle title={taskData.title} docID={docID} type="task" />
               <TextField
                 className={classes.description}
                 id="outlined-textarea"

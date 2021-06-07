@@ -19,13 +19,13 @@ export default function BoardPage() {
         const boardListIds = [];
         const boardLists = querySnapshot.docs
           .map((doc) => {
-            boardListIds.push(doc.id);
+            boardListIds.push(doc.id); // array of lists in order of doc
             return doc.data();
           })
-          .reduce((rest, item) => {
+          .reduce((rest, list) => {
             return {
               ...rest,
-              [item.id]: item, // item.id needs to be equal to doc.id!!!
+              [list.id]: list, // item.id needs to be equal to doc.id!!!
             };
           }, {});
         setLists(boardLists);
@@ -41,11 +41,11 @@ export default function BoardPage() {
 
     const sourceList = lists[source.droppableId];
     const destinationList = lists[destination.droppableId];
-    const draggingCard = sourceList.items.filter(
-      (item) => item.id === draggableId
-    )[0];
+    // const draggingCard = sourceList.items.filter(
+    //   (taskId) => taskId === draggableId
+    // )[0];
     sourceList.items.splice(source.index, 1);
-    destinationList.items.splice(destination.index, 0, draggingCard);
+    destinationList.items.splice(destination.index, 0, draggableId);
 
     updateKanbanBoardItems(
       destination,

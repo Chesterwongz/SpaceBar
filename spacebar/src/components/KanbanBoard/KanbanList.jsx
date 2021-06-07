@@ -32,10 +32,10 @@ export default function KanbanList({ list }) {
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.items.map((item, index) => (
+              {list.items.map((taskId, index) => (
                 <TaskCard
-                  key={item.id}
-                  item={item}
+                  key={taskId}
+                  taskId={taskId}
                   listId={list.id}
                   index={index}
                 />
