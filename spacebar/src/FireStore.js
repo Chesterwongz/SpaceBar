@@ -188,10 +188,15 @@ export function updateKanbanBoardItems(
   source,
   sourceList,
   destinationList,
+  draggableId,
   projectID
 ) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
+  // Update task status
+  const taskRef = projectRef.collection("tasks").doc(draggableId);
+  batch.update(taskRef, { status: destinationList.title });
+  // Update kanbanboard state
   const boardRef = projectRef.collection("kanbanboard");
   const srcRef = boardRef.doc(source.droppableId);
   batch.update(srcRef, { items: sourceList.items });
@@ -201,26 +206,59 @@ export function updateKanbanBoardItems(
 }
 
 export function deleteKanbanBoardItem(item, listId, projectID) {
-  db.collection("Projects")
-    .doc(projectID)
-    .collection("kanbanboard")
-    .doc(listId)
-    .update({
-      items: firebase.firestore.FieldValue.arrayRemove(item),
-    });
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Remove from task collection
+  const taskRef = projectRef.collection("tasks").doc(item.id);
+  batch.delete(taskRef);
+  // Remove from list array
+  const listRef = projectRef.collection("kanbanboard").doc(listId);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(item),
+  });
+  batch.commit();
 }
 
-export function addKanbanBoardItem(title, listId, projectID) {
-  db.collection("Projects")
+export function addKanbanBoardItem(
+  title,
+  listId,
+  status,
+  currentUser,
+  projectID
+) {
+  const batch = db.batch();
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc();
+  // Add task to task collection
+  const newTask = {
+    assignee: "Unassigned",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdBy: `${currentUser.displayName}`,
+    description: "",
+    id: taskRef.id,
+    originalEstimate: 0,
+    priority: "Medium",
+    status: status,
+    timeLogged: 0,
+    title: title,
+  };
+  batch.set(taskRef, newTask);
+  // Add duplicate task to list array
+  const listRef = db
+    .collection("Projects")
     .doc(projectID)
     .collection("kanbanboard")
-    .doc(listId)
-    .update({
-      items: firebase.firestore.FieldValue.arrayUnion({
-        id: `${uuid()}`,
-        title: title,
-      }),
-    });
+    .doc(listId);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayUnion({
+      id: taskRef.id,
+      title: title,
+    }),
+  });
+  batch.commit();
 }
 
 export function updateTaskTitle(listId, value, projectID) {

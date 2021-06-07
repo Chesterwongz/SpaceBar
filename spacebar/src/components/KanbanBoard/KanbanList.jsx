@@ -44,7 +44,7 @@ export default function KanbanList({ list }) {
             </div>
           )}
         </Droppable>
-        <InputContainer listId={list.id} type="card" />
+        <InputContainer listId={list.id} listTitle={list.title} type="card" />
       </Paper>
     </div>
   );

@@ -22,7 +22,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listId, type }) {
+export default function InputCard({ setOpen, listId, listTitle, type }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -33,8 +33,9 @@ export default function InputCard({ setOpen, listId, type }) {
   };
 
   const handleBtnConfirm = () => {
+    !currentUser && console.log("Error! CurrentUser empty!", currentUser);
     if (type === "card") {
-      addKanbanBoardItem(title, listId, projectID);
+      addKanbanBoardItem(title, listId, listTitle, currentUser, projectID);
     } else if (type === "project") {
       console.log("Adding project", currentUser);
       addProject(title, currentUser);

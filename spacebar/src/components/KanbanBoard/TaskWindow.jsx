@@ -11,17 +11,15 @@ import EditableTitle from "../CardWindow/EditableTitle";
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
+    overflow: "auto",
     alignItems: "center",
     justifyContent: "center",
   },
   paper: {
     display: "flex",
-    backgroundColor: theme.palette.background.paper,
-    border: "0px solid #000",
-    boxShadow: theme.shadows[5],
+    margin: "auto",
     padding: theme.spacing(2, 4, 3),
     width: "60%",
-    overflow: "auto",
   },
   description: {
     margin: theme.spacing(0, 0, 2),

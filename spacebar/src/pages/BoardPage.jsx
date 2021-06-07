@@ -10,6 +10,7 @@ export default function BoardPage() {
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
+
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
@@ -35,7 +36,7 @@ export default function BoardPage() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    // console.log("dest", destination, "src", source, draggableId);
+
     if (!destination) return;
 
     const sourceList = lists[source.droppableId];
@@ -51,6 +52,7 @@ export default function BoardPage() {
       source,
       sourceList,
       destinationList,
+      draggableId,
       projectID
     );
   };
