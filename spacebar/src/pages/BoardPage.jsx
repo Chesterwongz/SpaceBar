@@ -77,7 +77,6 @@ export default function BoardPage() {
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div style={{ display: "flex" }}>
-            {console.log(tasks)}
             {listIds &&
               listIds.map((listId, index) => {
                 const list = lists[listId];
