@@ -22,25 +22,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ taskId, listId, index }) {
+export default function TaskCard({ task, listId, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
-  const [taskData, setTaskData] = useState({});
 
   // TODO: find a way to stop the flicker
-  useEffect(() => {
-    console.log("mounted");
-    db.collection("Projects")
-      .doc(projectID)
-      .collection("tasks")
-      .doc(taskId)
-      .onSnapshot((doc) => setTaskData(doc.data()));
-    return () => {
-      console.log("unmounted");
-      setTaskData({});
-    };
-  }, []);
 
   const handleCardClick = () => {
     setIsWindowOpen(true);
@@ -52,12 +39,12 @@ export default function TaskCard({ taskId, listId, index }) {
 
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
-    deleteKanbanBoardItem(taskId, listId, projectID);
+    deleteKanbanBoardItem(task, listId, projectID);
   };
 
   return (
     <>
-      <Draggable draggableId={taskId} index={index}>
+      <Draggable draggableId={task.id} index={index}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -71,19 +58,14 @@ export default function TaskCard({ taskId, listId, index }) {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={taskData.title}
+                title={task.title}
                 titleTypographyProps={{ variant: "body1" }}
               />
             </Card>
           </div>
         )}
       </Draggable>
-      <TaskWindow
-        docID={taskId}
-        taskData={taskData}
-        open={isWindowOpen}
-        onClose={handleWindowClose}
-      />
+      <TaskWindow task={task} open={isWindowOpen} onClose={handleWindowClose} />
     </>
   );
 }

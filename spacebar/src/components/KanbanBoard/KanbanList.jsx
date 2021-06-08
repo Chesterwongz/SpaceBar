@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({ list }) {
+export default function KanbanList({ list, tasks }) {
   const classes = useStyles();
 
   return (
@@ -32,14 +32,17 @@ export default function KanbanList({ list }) {
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.items.map((taskId, index) => (
-                <TaskCard
-                  key={taskId}
-                  taskId={taskId}
-                  listId={list.id}
-                  index={index}
-                />
-              ))}
+              {list.items.map(
+                (taskId, index) =>
+                  tasks[taskId] && (
+                    <TaskCard
+                      key={taskId}
+                      task={tasks[taskId]}
+                      listId={list.id}
+                      index={index}
+                    />
+                  )
+              )}
               <div className={classes.item}>{provided.placeholder}</div>
             </div>
           )}

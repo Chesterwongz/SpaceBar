@@ -7,31 +7,43 @@ import { db, updateKanbanBoardItems } from "../FireStore";
 
 export default function BoardPage() {
   const { projectID } = useParams();
+  const [tasks, setTasks] = useState({});
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
 
   useEffect(() => {
-    db.collection("Projects")
-      .doc(projectID)
-      .collection("kanbanboard")
-      .onSnapshot((querySnapshot) => {
-        const boardListIds = [];
-        const boardLists = querySnapshot.docs
-          .map((doc) => {
-            boardListIds.push(doc.id); // array of lists in order of doc
-            return doc.data();
-          })
-          .reduce((rest, list) => {
-            return {
-              ...rest,
-              [list.id]: list, // item.id needs to be equal to doc.id!!!
-            };
-          }, {});
-        setLists(boardLists);
-        setListIds(boardListIds);
-        setLoading(false);
-      });
+    const projectRef = db.collection("Projects").doc(projectID);
+    projectRef.collection("tasks").onSnapshot((querySnapshot) => {
+      const boardTasks = querySnapshot.docs
+        .map((doc) => {
+          return doc.data();
+        })
+        .reduce((rest, task) => {
+          return {
+            ...rest,
+            [task.id]: task,
+          };
+        }, {});
+      setTasks(boardTasks);
+    });
+    projectRef.collection("kanbanboard").onSnapshot((querySnapshot) => {
+      const boardListIds = [];
+      const boardLists = querySnapshot.docs
+        .map((doc) => {
+          boardListIds.push(doc.id); // array of lists in order of doc
+          return doc.data();
+        })
+        .reduce((rest, list) => {
+          return {
+            ...rest,
+            [list.id]: list, // item.id needs to be equal to doc.id!!!
+          };
+        }, {});
+      setLists(boardLists);
+      setListIds(boardListIds);
+      setLoading(false);
+    });
   }, [projectID]);
 
   const onDragEnd = (result) => {
@@ -65,10 +77,18 @@ export default function BoardPage() {
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div style={{ display: "flex" }}>
+            {console.log(tasks)}
             {listIds &&
               listIds.map((listId, index) => {
                 const list = lists[listId];
-                return <KanbanBoard key={list.id} list={list} index={index} />;
+                return (
+                  <KanbanBoard
+                    key={list.id}
+                    list={list}
+                    tasks={tasks}
+                    index={index}
+                  />
+                );
               })}
           </div>
         </DragDropContext>

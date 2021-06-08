@@ -205,16 +205,16 @@ export function updateKanbanBoardItems(
   batch.commit();
 }
 
-export function deleteKanbanBoardItem(taskId, listId, projectID) {
+export function deleteKanbanBoardItem(task, listId, projectID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
   // Remove from task collection
-  const taskRef = projectRef.collection("tasks").doc(taskId);
+  const taskRef = projectRef.collection("tasks").doc(task.id);
   batch.delete(taskRef);
   // Remove from list array
   const listRef = projectRef.collection("kanbanboard").doc(listId);
   batch.update(listRef, {
-    items: firebase.firestore.FieldValue.arrayRemove(taskId),
+    items: firebase.firestore.FieldValue.arrayRemove(task.id),
   });
   batch.commit();
 }
@@ -246,7 +246,7 @@ export function addKanbanBoardItem(
     title: title,
   };
   batch.set(taskRef, newTask);
-  // Add duplicate task to list array
+  // Add task key to list array
   const listRef = db
     .collection("Projects")
     .doc(projectID)
