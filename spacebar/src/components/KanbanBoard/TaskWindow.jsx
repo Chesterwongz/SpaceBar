@@ -4,7 +4,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { IconButton, Paper, TextField } from "@material-ui/core";
+import { IconButton, Paper, TextField, Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditableTitle from "../CardWindow/EditableTitle";
 
@@ -23,6 +23,14 @@ const useStyles = makeStyles((theme) => ({
   },
   description: {
     margin: theme.spacing(0, 0, 2),
+  },
+  leftFields: {
+    flexGrow: 4,
+  },
+  rightFields: {
+    display: "flex",
+    flexGrow: 1,
+    flexDirection: "column",
   },
   delete: {
     width: "80%",
@@ -55,7 +63,7 @@ export default function TaskWindow({ task, open, onClose }) {
       >
         <Fade in={open}>
           <Paper className={classes.paper}>
-            <div>
+            <div className={classes.leftFields}>
               <EditableTitle title={task.title} docID={task.id} type="task" />
               <TextField
                 className={classes.description}
@@ -68,7 +76,11 @@ export default function TaskWindow({ task, open, onClose }) {
               />
               <div>Comments:</div>
             </div>
-            <div>Label</div>
+            <div className={classes.rightFields}>
+              <Button>{task.status}</Button>
+              <Button>{task.assignee}</Button>
+              <Button>{task.priority}</Button>
+            </div>
           </Paper>
         </Fade>
       </Modal>
