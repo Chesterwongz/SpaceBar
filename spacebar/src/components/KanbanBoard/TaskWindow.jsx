@@ -4,7 +4,14 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { IconButton, Paper, TextField, Button } from "@material-ui/core";
+import {
+  Button,
+  Paper,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditableTitle from "../CardWindow/EditableTitle";
 
@@ -77,9 +84,20 @@ export default function TaskWindow({ task, open, onClose }) {
               <div>Comments:</div>
             </div>
             <div className={classes.rightFields}>
-              <Button>{task.status}</Button>
-              <Button>{task.assignee}</Button>
-              <Button>{task.priority}</Button>
+              <List>
+                <ListItem key={"status"} style={{ display: "flex" }}>
+                  <ListItemText>Status:</ListItemText>
+                  <Button>{task.status}</Button>
+                </ListItem>
+                <ListItem key={"assignee"}>
+                  <ListItemText>Assignee:</ListItemText>
+                  <Button>{task.assignee}</Button>
+                </ListItem>
+                <ListItem key={"priority"}>
+                  <ListItemText>Priority:</ListItemText>
+                  <Button>{task.priority}</Button>
+                </ListItem>
+              </List>
             </div>
           </Paper>
         </Fade>
