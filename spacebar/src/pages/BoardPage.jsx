@@ -4,15 +4,28 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
 import { db, updateKanbanBoardItems } from "../FireStore";
-
+var stringToColour = function (str) {
+  var hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  var colour = "#";
+  for (var i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 0xff;
+    colour += ("00" + value.toString(16)).substr(-2);
+  }
+  return colour;
+};
 export default function BoardPage() {
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
+  const [members, setMembers] = useState({});
 
   useEffect(() => {
+    // Get tasks
     const projectRef = db.collection("Projects").doc(projectID);
     projectRef.collection("tasks").onSnapshot((querySnapshot) => {
       const boardTasks = querySnapshot.docs
@@ -27,6 +40,7 @@ export default function BoardPage() {
         }, {});
       setTasks(boardTasks);
     });
+    // Get lists
     projectRef.collection("kanbanboard").onSnapshot((querySnapshot) => {
       const boardListIds = [];
       const boardLists = querySnapshot.docs
@@ -44,6 +58,25 @@ export default function BoardPage() {
       setListIds(boardListIds);
       setLoading(false);
     });
+    // Get board members
+    db.collection("users")
+      .where("projectRef", "array-contains", projectID)
+      .onSnapshot((querySnapshot) => {
+        const boardMembers = querySnapshot.docs
+          // .map((doc) => {
+          //   return { id: doc.id, value: doc.data().displayName };
+          // })
+          .reduce((rest, memberDoc) => {
+            return {
+              ...rest,
+              [memberDoc.id]: {
+                displayName: memberDoc.data().displayName,
+                backgroundColor: stringToColour(memberDoc.id),
+              },
+            };
+          }, {});
+        setMembers(boardMembers);
+      });
   }, [projectID]);
 
   const onDragEnd = (result) => {
@@ -85,6 +118,7 @@ export default function BoardPage() {
                     key={list.id}
                     list={list}
                     tasks={tasks}
+                    members={members}
                     index={index}
                   />
                 );

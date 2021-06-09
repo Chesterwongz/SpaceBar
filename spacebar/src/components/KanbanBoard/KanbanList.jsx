@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({ list, tasks }) {
+export default function KanbanList({ list, tasks, members }) {
   const classes = useStyles();
 
   return (
@@ -39,6 +39,7 @@ export default function KanbanList({ list, tasks }) {
                       key={taskId}
                       task={tasks[taskId]}
                       listId={list.id}
+                      members={members}
                       index={index}
                     />
                   )

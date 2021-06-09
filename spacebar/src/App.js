@@ -1,8 +1,4 @@
-import {
-  unstable_createMuiStrictModeTheme as createMuiTheme,
-  ThemeProvider,
-  CssBaseline,
-} from "@material-ui/core";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,27 +13,8 @@ import HomePage from "./pages/HomePage";
 import TeamPage from "./pages/TeamPage";
 import { useState, useEffect } from "react";
 import { onAuthStateChange } from "./FireStore";
+import theme from "./utils/theme";
 import { CurrentUserContext } from "./utils/Context";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: "#d5f4e6",
-      main: "#80ced6",
-      dark: "#618685",
-    },
-    secondary: {
-      main: "#fefbd8",
-    },
-  },
-  typography: {
-    fontFamily: "Quicksand",
-    fontWeightLight: "400",
-    fontWeightRegular: "500",
-    fontWeightMedium: "600",
-    fontWeigthBold: "700",
-  },
-});
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);

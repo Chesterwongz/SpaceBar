@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({ task, open, onClose }) {
+export default function TaskWindow({ task, members, open, onClose }) {
   const classes = useStyles();
 
   const handleDelete = (event) => {
@@ -91,7 +91,11 @@ export default function TaskWindow({ task, open, onClose }) {
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>
-                  <Button>{task.assignee}</Button>
+                  <Button>
+                    {members[task.assignee]
+                      ? members[task.assignee].displayName
+                      : "Unassigned"}
+                  </Button>
                 </ListItem>
                 <ListItem key={"priority"}>
                   <ListItemText>Priority:</ListItemText>
