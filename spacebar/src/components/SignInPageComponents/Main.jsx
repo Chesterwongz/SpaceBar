@@ -79,7 +79,7 @@ const Main = () => {
   return (
     <div className={classes.root} id="main">
       <div className={classes.content}>
-        <h1 className={classes.header}>SpaceBar </h1>
+        <h1 className={classes.header}>TEST </h1>
         <p className={classes.description}>
           SpaceBar is a project management site aimed at improving productivity
           and organizing tasks for users
