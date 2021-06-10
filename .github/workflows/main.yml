@@ -17,9 +17,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Build dependencies
-        run: 
-            cd spacebar 
-            yarn run build
+        run: |
+            echo cd spacebar 
+            echo yarn run build
       - name: Archive production artifact
         uses: actions/upload-artifact@main
         with:
