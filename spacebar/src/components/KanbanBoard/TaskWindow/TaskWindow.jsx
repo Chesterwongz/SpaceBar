@@ -10,7 +10,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, { useState } from "react";
 import EditableTitle from "../../CardWindow/EditableTitle";
 import TaskAssigneeButton from "./TaskAssigneeButton";
 import { IconButton } from "@material-ui/core";
@@ -56,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TaskWindow({ task, members, open, onClose }) {
   const classes = useStyles();
+  const [descValue, setDescValue] = useState("");
+
+  const handleDescChange = (event) => {
+    setDescValue(event.target.value);
+    event.preventDefault();
+  };
 
   const handleDelete = (event) => {
     event.preventDefault();
@@ -88,6 +94,9 @@ export default function TaskWindow({ task, members, open, onClose }) {
                 multiline
                 fullWidth
                 variant="outlined"
+                value={descValue}
+                onChange={handleDescChange}
+                InputLabelProps={{ shrink: true }}
               />
               <div>Comments:</div>
             </div>
