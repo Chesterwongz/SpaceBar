@@ -62,21 +62,16 @@ export default function BoardPage() {
     db.collection("users")
       .where("projectRef", "array-contains", projectID)
       .onSnapshot((querySnapshot) => {
-        const boardMembers = querySnapshot.docs
-          // .map((doc) => {
-          //   return { id: doc.id, value: doc.data().displayName };
-          // })
-          .reduce((rest, memberDoc) => {
-            return {
-              ...rest,
-              [memberDoc.id]: {
-                displayName: memberDoc.data().displayName,
-                backgroundColor: stringToColour(memberDoc.id),
-              },
-            };
-          }, {});
+        const boardMembers = querySnapshot.docs.reduce((rest, memberDoc) => {
+          return {
+            ...rest,
+            [memberDoc.id]: {
+              displayName: memberDoc.data().displayName,
+              backgroundColor: stringToColour(memberDoc.id),
+            },
+          };
+        }, {});
         setMembers(boardMembers);
-        console.log("here");
       });
   }, [projectID]);
 

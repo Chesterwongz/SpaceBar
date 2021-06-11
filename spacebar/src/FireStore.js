@@ -265,3 +265,10 @@ export function updateTaskTitle(taskId, title, projectID) {
     .doc(taskId)
     .update({ title: title });
 }
+export function updateTaskAssignee(taskId, newAssigneeId, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskId)
+    .update({ assignee: newAssigneeId });
+}
