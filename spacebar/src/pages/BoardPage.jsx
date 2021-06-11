@@ -87,7 +87,14 @@ export default function BoardPage() {
     // )[0];
     sourceList.items.splice(source.index, 1);
     destinationList.items.splice(destination.index, 0, draggableId);
-
+    console.log(
+      destination,
+      source,
+      sourceList,
+      destinationList,
+      draggableId,
+      projectID
+    );
     updateKanbanBoardItems(
       destination,
       source,

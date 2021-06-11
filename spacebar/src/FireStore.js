@@ -258,17 +258,33 @@ export function addKanbanBoardItem(
   batch.commit();
 }
 
-export function updateTaskTitle(taskId, title, projectID) {
-  db.collection("Projects")
-    .doc(projectID)
-    .collection("tasks")
-    .doc(taskId)
-    .update({ title: title });
+export function updateTaskDesc(taskId, desc, projectID) {
+  updateTaskField(taskId, "description", desc, projectID);
 }
-export function updateTaskAssignee(taskId, newAssigneeId, projectID) {
+export function updateTaskAssignee(taskId, assigneeId, projectID) {
+  updateTaskField(taskId, "assignee", assigneeId, projectID);
+}
+export function updateTaskPriority(taskId, priority, projectID) {
+  updateTaskField(taskId, "priority", priority, projectID);
+}
+export function updateTaskTitle(taskId, title, projectID) {
+  updateTaskField(taskId, "title", title, projectID);
+}
+function updateTaskField(taskId, field, value, projectID) {
+  if (
+    !(
+      field === "assignee" ||
+      field === "description" ||
+      field === "originalEstimate" ||
+      field === "priority" ||
+      field === "timeLogged" ||
+      field === "title"
+    )
+  )
+    return;
   db.collection("Projects")
     .doc(projectID)
     .collection("tasks")
     .doc(taskId)
-    .update({ assignee: newAssigneeId });
+    .update({ [field]: value });
 }

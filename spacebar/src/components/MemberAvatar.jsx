@@ -11,6 +11,19 @@ const getContrastYIQ = (hexcolor) => {
   const perceivedBrightness = (r * 299 + g * 587 + b * 114) / 1000;
   return perceivedBrightness >= BRIGHTNESS_THRESHOLD ? "black" : "white";
 };
+const isAssigned = (assignee) => {
+  return assignee && assignee.displayName;
+};
+const getInitials = (user) => {
+  if (!isAssigned(user)) return;
+  const names = user.displayName.split(" ");
+  let initials = names[0].substring(0, 1).toUpperCase();
+
+  if (names.length > 1) {
+    initials += names[names.length - 1].substring(0, 1).toUpperCase();
+  }
+  return initials;
+};
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(3),
@@ -25,20 +38,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MemberAvatar({ assignee }) {
-  const isAssigned = (assignee) => {
-    return assignee && assignee.displayName;
-  };
-  const getInitials = (user) => {
-    if (!isAssigned(user)) return;
-    const names = user.displayName.split(" ");
-    let initials = names[0].substring(0, 1).toUpperCase();
-
-    if (names.length > 1) {
-      initials += names[names.length - 1].substring(0, 1).toUpperCase();
-    }
-    return initials;
-  };
-
   const classes = useStyles(assignee || { backgroundColor: "" });
   const assigneeInitials = getInitials(assignee);
 

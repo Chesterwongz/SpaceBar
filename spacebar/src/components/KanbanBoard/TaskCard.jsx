@@ -1,22 +1,19 @@
 import {
-  Avatar,
   Card,
   CardActions,
   CardHeader,
   fade,
   IconButton,
   makeStyles,
-  Tooltip,
-  Typography,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import { deleteKanbanBoardItem } from "../../FireStore";
+import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
-import MemberAvatar from "../MemberAvatar";
 
 const useStyles = makeStyles((theme) => ({
   card: {

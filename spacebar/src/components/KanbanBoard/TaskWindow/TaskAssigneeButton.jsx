@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
@@ -8,9 +7,10 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
+import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import MemberAvatar from "../MemberAvatar";
-import { updateTaskAssignee } from "../../FireStore";
+import MemberAvatar from "../../MemberAvatar";
+import { updateTaskAssignee } from "../../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskFieldButton({ members, task }) {
+export default function TaskAssigneeButton({ members, task }) {
   const classes = useStyles();
   const { projectID } = useParams();
   const [open, setOpen] = useState(false);
@@ -65,8 +65,10 @@ export default function TaskFieldButton({ members, task }) {
         onClick={handleToggle}
       >
         <MemberAvatar assignee={assignee} />
-        &nbsp;
-        {displayName}
+        <Typography variant="button" noWrap>
+          &nbsp;
+          {displayName}
+        </Typography>
       </Button>
       <Popper
         className={classes.popout}

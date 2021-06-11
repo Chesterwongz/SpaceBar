@@ -11,19 +11,19 @@ import React from "react";
 
 const useStyles = makeStyles({
   highest: {
-    color: red[500],
+    color: red["A700"],
   },
   high: {
-    color: orange[500],
+    color: orange["A700"],
   },
   medium: {
-    color: amber[500],
+    color: amber["A700"],
   },
   low: {
-    color: lightGreen[500],
+    color: lightGreen["A700"],
   },
   lowest: {
-    color: green[500],
+    color: green["A700"],
   },
 });
 export default function PriorityIcon({ variant }) {

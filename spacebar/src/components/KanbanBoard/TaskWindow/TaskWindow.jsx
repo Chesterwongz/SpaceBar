@@ -11,8 +11,13 @@ import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
-import EditableTitle from "../CardWindow/EditableTitle";
-import TaskFieldButton from "./TaskFieldButton";
+import EditableTitle from "../../CardWindow/EditableTitle";
+import TaskAssigneeButton from "./TaskAssigneeButton";
+import { IconButton } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import TaskPriorityButton from "./TaskPriorityButton";
+import TaskStatusButton from "./TaskStatusButton";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -25,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     margin: "auto",
     padding: theme.spacing(2, 4, 3),
-    width: "60%",
+    width: "80%",
   },
   description: {
     margin: theme.spacing(0, 0, 2),
@@ -42,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
     display: "flex",
     justifyContent: "space-between",
+  },
+  taskWindowBar: {
+    display: "flex",
+    justifyContent: "flex-end",
   },
 }));
 
@@ -83,23 +92,25 @@ export default function TaskWindow({ task, members, open, onClose }) {
               <div>Comments:</div>
             </div>
             <div className={classes.rightFields}>
+              <div className={classes.taskWindowBar}>
+                <Tooltip title="Close" placement="top">
+                  <IconButton onClick={onClose}>
+                    <CloseIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
               <List>
                 <ListItem key={"status"} style={{ display: "flex" }}>
                   <ListItemText>Status:</ListItemText>
-                  <Button>{task.status}</Button>
+                  <TaskStatusButton task={task} />
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>
-                  <TaskFieldButton members={members} task={task} />
-                  {/* <Button>
-                    {members[task.assignee]
-                      ? members[task.assignee].displayName
-                      : "Unassigned"}
-                  </Button> */}
+                  <TaskAssigneeButton members={members} task={task} />
                 </ListItem>
                 <ListItem key={"priority"}>
                   <ListItemText>Priority:</ListItemText>
-                  <Button>{task.priority}</Button>
+                  <TaskPriorityButton task={task} />
                 </ListItem>
               </List>
             </div>
