@@ -101,7 +101,6 @@ export default function EditableTitle({ title, docID, type }) {
           onKeyPress={keyPress}
           onClick={handleEditing}
         />
-        {/* {console.log(value)} */}
       </Paper>
       <div ref={buttonArea}>
         {editing ? (

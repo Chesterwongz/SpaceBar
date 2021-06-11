@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import {
   Button,
-  Paper,
-  TextField,
   List,
   ListItem,
   ListItemText,
+  Paper,
+  TextField,
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Modal from "@material-ui/core/Modal";
+import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
 import EditableTitle from "../CardWindow/EditableTitle";
+import TaskFieldButton from "./TaskFieldButton";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -91,11 +90,12 @@ export default function TaskWindow({ task, members, open, onClose }) {
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>
-                  <Button>
+                  <TaskFieldButton members={members} task={task} />
+                  {/* <Button>
                     {members[task.assignee]
                       ? members[task.assignee].displayName
                       : "Unassigned"}
-                  </Button>
+                  </Button> */}
                 </ListItem>
                 <ListItem key={"priority"}>
                   <ListItemText>Priority:</ListItemText>
