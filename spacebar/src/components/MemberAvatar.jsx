@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(3),
     height: theme.spacing(3),
-    backgroundColor: (props) => (props ? props.backgroundColor : ""),
+    backgroundColor: (props) => props.backgroundColor,
   },
   avatarName: {
     fontSize: "0.7rem",
@@ -39,7 +39,7 @@ export default function MemberAvatar({ assignee }) {
     return initials;
   };
 
-  const classes = useStyles(assignee);
+  const classes = useStyles(assignee || { backgroundColor: "" });
   const assigneeInitials = getInitials(assignee);
 
   return (
