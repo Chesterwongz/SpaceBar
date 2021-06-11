@@ -1,7 +1,6 @@
 import firebase from "firebase";
-import "firebase/firestore";
 import "firebase/auth";
-import uuid from "react-uuid";
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBZVzhpyToko-9GU1uU-tj1pIWYKmwCxNY",
@@ -87,9 +86,8 @@ export function onAuthStateChange(callback) {
 }
 
 export function addProject(title, currentUser) {
-  const projectId = uuid(); // I want to avoid using uuid and just use firebase auto gen
   const batch = db.batch();
-  const projectRef = db.collection("Projects").doc(projectId);
+  const projectRef = db.collection("Projects").doc();
   batch.set(projectRef, {
     projectInfo: { title: title },
   });
@@ -121,7 +119,7 @@ export function addProject(title, currentUser) {
   });
   const userRef = db.collection("users").doc(currentUser.id);
   batch.update(userRef, {
-    projectRef: firebase.firestore.FieldValue.arrayUnion(projectId),
+    projectRef: firebase.firestore.FieldValue.arrayUnion(projectRef.id),
   });
   batch.commit();
 }
