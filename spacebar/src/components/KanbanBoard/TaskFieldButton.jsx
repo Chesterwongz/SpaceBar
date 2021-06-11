@@ -110,7 +110,12 @@ export default function TaskFieldButton({ members, task }) {
                     }
                   })}
                   {assignee && (
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem
+                      onClick={(event) => {
+                        updateTaskAssignee(task.id, "Unassigned", projectID);
+                        handleClose(event);
+                      }}
+                    >
                       <MemberAvatar assignee={undefined} />
                       &nbsp; Unassigned
                     </MenuItem>
