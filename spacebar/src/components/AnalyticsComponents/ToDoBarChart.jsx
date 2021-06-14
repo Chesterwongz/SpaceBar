@@ -10,17 +10,22 @@ const ToDoBarChart = () => {
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
-      .collection("kanbanboard")
-      .doc("list-1")
+      .collection("tasks")
+      .where("status", "==", "list-1")
       .get()
-      .then((doc) => {
-        setToDoItems(doc.data().items);
+      .then((querySnapshot) => {
+        const items = [];
+        querySnapshot.forEach((doc) => {
+          items.push(doc.data());
+        });
+        setToDoItems(items);
       });
   }, []);
+  console.log(toDoItems);
 
   const getItemTimes = (toDoItems) => {
     return toDoItems.map(
-      (item) => (Date.now() - item.dateCreated) / (1000 * 60 * 60)
+      (item) => (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
     );
   };
 

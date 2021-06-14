@@ -17,8 +17,8 @@ const CumulativeFlowChart = () => {
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
-      .collection("kanbanBacklog")
-      .orderBy("date")
+      .collection("cumulativeflow")
+      .orderBy("id")
       .get()
       .then((query) => {
         const data = [];
@@ -33,14 +33,14 @@ const CumulativeFlowChart = () => {
     const result = [];
     for (const i of data) {
       const obj = {};
-      const d = new Date(0);
-      d.setUTCMilliseconds(i.date);
-      obj["date"] = d.toString().slice(0, 15);
-      obj["toDo"] = i.toDo;
-      obj["doing"] = i.doing;
-      obj["done"] = i.done;
+      obj["date"] = i.id;
+
+      obj["Todo"] = i.statuses["list-1"];
+      obj["Doing"] = i.statuses["list-2"];
+      obj["Done"] = i.statuses["list-3"];
       result.push(obj);
     }
+    console.log(result);
     return result;
   };
   return (
@@ -56,9 +56,9 @@ const CumulativeFlowChart = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="toDo" stroke="#8884d8" />
-        <Line type="monotone" dataKey="doing" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="done" stroke="#80ced6" />
+        <Line type="monotone" dataKey="Todo" stroke="#8884d8" />
+        <Line type="monotone" dataKey="Doing" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="Done" stroke="#80ced6" />
       </LineChart>
     </div>
   );

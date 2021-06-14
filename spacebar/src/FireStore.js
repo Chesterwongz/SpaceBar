@@ -200,6 +200,22 @@ export function updateKanbanBoardItems(
   batch.update(srcRef, { items: sourceList.items });
   const destRef = boardRef.doc(destination.droppableId);
   batch.update(destRef, { items: destinationList.items });
+  //cumulative flow update
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .doc("210614");
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [sourceList.id]: firebase.firestore.FieldValue.increment(-1),
+        [destinationList.id]: firebase.firestore.FieldValue.increment(1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
 }
 
@@ -316,5 +332,20 @@ export function moveTask(task, srcList, destList, projectId) {
     .collection("tasks")
     .doc(task);
   batch.update(taskRef, { status: destList });
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("cumulativeflow")
+    .doc("14-06-21");
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [srcList]: firebase.firestore.FieldValue.increment(-1),
+        [destList]: firebase.firestore.FieldValue.increment(1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
 }
