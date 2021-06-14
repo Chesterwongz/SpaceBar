@@ -105,7 +105,7 @@ export default function TaskWindow({
                 onChange={handleDescChange}
                 InputLabelProps={{ shrink: true }}
               />
-              <TaskComments />
+              <TaskComments taskId={task.id} />
             </div>
             <div className={classes.rightFields}>
               <div className={classes.taskWindowBar}>
