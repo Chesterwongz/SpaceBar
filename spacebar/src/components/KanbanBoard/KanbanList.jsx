@@ -2,7 +2,7 @@ import { makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
-import ItemCard from "./ItemCard.jsx";
+import TaskCard from "./TaskCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({ list }) {
+export default function KanbanList({ list, lists, listIds, tasks, members }) {
   const classes = useStyles();
 
   return (
@@ -32,19 +32,25 @@ export default function KanbanList({ list }) {
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.items.map((item, index) => (
-                <ItemCard
-                  key={item.id}
-                  item={item}
-                  listId={list.id}
-                  index={index}
-                />
-              ))}
+              {list.items.map(
+                (taskId, index) =>
+                  tasks[taskId] && (
+                    <TaskCard
+                      key={taskId}
+                      task={tasks[taskId]}
+                      listId={list.id}
+                      lists={lists}
+                      listIds={listIds}
+                      members={members}
+                      index={index}
+                    />
+                  )
+              )}
               <div className={classes.item}>{provided.placeholder}</div>
             </div>
           )}
         </Droppable>
-        <InputContainer listId={list.id} type="card" />
+        <InputContainer listId={list.id} listTitle={list.title} type="card" />
       </Paper>
     </div>
   );

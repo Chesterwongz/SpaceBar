@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import Form from "../Form";
-import { addComment, db } from "../../FireStore";
-import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { CurrentUserContext } from "../../utils/Context";
 import { makeStyles } from "@material-ui/core/styles";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { addComment, db } from "../../FireStore";
+import { CurrentUserContext } from "../../utils/Context";
+import Form from "../Form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,8 +73,8 @@ const Comments = ({ docID }) => {
       <Form placeHolder="Comment here" onSubmit={handleSubmit} />
       {loading === false ? (
         <div>
-          {comments.map((commentObj) => (
-            <div className={classes.commentBox}>
+          {comments.map((commentObj, index) => (
+            <div className={classes.commentBox} key={index}>
               <p className={classes.comment}>{commentObj.comment}</p>
               <p className={classes.author}>Posted by: {commentObj.author}</p>
             </div>
