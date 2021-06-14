@@ -18,6 +18,7 @@ import TaskAssigneeButton from "./TaskAssigneeButton";
 import TaskComments from "./TaskComments";
 import TaskPriorityButton from "./TaskPriorityButton";
 import TaskStatusButton from "./TaskStatusButton";
+import TaskDescription from "./TaskDescription";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -63,12 +64,6 @@ export default function TaskWindow({
   onClose,
 }) {
   const classes = useStyles();
-  const [descValue, setDescValue] = useState("");
-
-  const handleDescChange = (event) => {
-    setDescValue(event.target.value);
-    event.preventDefault();
-  };
 
   const handleDelete = (event) => {
     event.preventDefault();
@@ -93,18 +88,7 @@ export default function TaskWindow({
           <Paper className={classes.paper}>
             <div className={classes.leftFields}>
               <EditableTitle title={task.title} docID={task.id} type="task" />
-              <TextField
-                className={classes.description}
-                id="outlined-textarea"
-                label="Description"
-                placeholder="Add a description..."
-                multiline
-                fullWidth
-                variant="outlined"
-                value={descValue}
-                onChange={handleDescChange}
-                InputLabelProps={{ shrink: true }}
-              />
+              <TaskDescription taskId={task.id} value={task.description} />
               <TaskComments taskId={task.id} />
             </div>
             <div className={classes.rightFields}>

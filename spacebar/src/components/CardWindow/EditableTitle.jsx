@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { makeStyles, fade } from "@material-ui/core/styles";
 import { IconButton, InputBase, Paper } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import EditIcon from "@material-ui/icons/Edit";
-import CancelIcon from "@material-ui/icons/Cancel";
-import { updatePostTitle, updateTaskTitle } from "../../FireStore";
-import red from "@material-ui/core/colors/red";
 import green from "@material-ui/core/colors/green";
+import red from "@material-ui/core/colors/red";
+import { fade, makeStyles } from "@material-ui/core/styles";
+import CancelIcon from "@material-ui/icons/Cancel";
+import EditIcon from "@material-ui/icons/Edit";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { updatePostTitle, updateTaskTitle } from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   title: {
