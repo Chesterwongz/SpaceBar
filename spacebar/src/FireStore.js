@@ -219,6 +219,8 @@ export function addKanbanBoardItem(title, listId, projectID) {
       items: firebase.firestore.FieldValue.arrayUnion({
         id: `${uuid()}`,
         title: title,
+        dateCreated: Date.now(), //Cannot use Firebase timestamp since it is an element of an array
+        //and not an actual document field
       }),
     });
 }
