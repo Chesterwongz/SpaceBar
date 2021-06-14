@@ -9,7 +9,7 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { updateTaskField } from "../../../FireStore";
+import { moveTask } from "../../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskStatusButton({ task }) {
-  const classes = useStyles();
+export default function TaskStatusButton({ task, lists, listIds }) {
   const { projectID } = useParams();
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const statusList = ["Todo", "Doing", "Done"]; // TODO: Shouldnt be hardcoded
+  const status = lists[task.status].title;
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -62,11 +62,10 @@ export default function TaskStatusButton({ task }) {
         aria-controls={open ? "menu-list-grow" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        disabled
       >
         <Typography variant="button" noWrap>
           &nbsp;
-          {task.status}
+          {status}
         </Typography>
       </Button>
       <Popper
@@ -92,13 +91,16 @@ export default function TaskStatusButton({ task }) {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {statusList.map((status, index) => {
-                    if (status !== task.status) {
+                  {listIds.map((listId, index) => {
+                    if (listId !== task.status) {
+                      const status = lists[listId].title;
                       return (
                         <MenuItem
                           key={index}
                           onClick={(event) => {
-                            // TODO: moveTask();
+                            const from = task.status;
+                            const to = listId;
+                            moveTask(task.id, from, to, projectID);
                             handleClose(event);
                           }}
                         >

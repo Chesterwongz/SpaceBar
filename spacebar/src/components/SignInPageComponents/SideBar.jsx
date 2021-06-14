@@ -1,7 +1,6 @@
-import React from "react";
-import CloseIcon from "@material-ui/icons/Close";
-import { Link as LinkScroll } from "react-scroll";
 import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { Link as LinkScroll } from "react-scroll";
 
 const useStyles = makeStyles((theme) => ({
   SideBarContainer: {

@@ -37,7 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ task, listId, members, index }) {
+export default function TaskCard({
+  task,
+  listId,
+  lists,
+  listIds,
+  members,
+  index,
+}) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -83,6 +90,8 @@ export default function TaskCard({ task, listId, members, index }) {
       </Draggable>
       <TaskWindow
         task={task}
+        lists={lists}
+        listIds={listIds}
         members={members}
         open={isWindowOpen}
         onClose={handleWindowClose}

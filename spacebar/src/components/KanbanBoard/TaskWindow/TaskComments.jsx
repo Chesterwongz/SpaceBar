@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import Form from "../Form";
-import { addComment, db } from "../../FireStore";
+import Form from "../../Form";
+import { addTaskComment, db } from "../../../FireStore";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { CurrentUserContext } from "../../utils/Context";
+import { CurrentUserContext } from "../../../utils/Context";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TaskComments = ({ docID }) => {
+const TaskComments = ({ taskId }) => {
   let { projectID } = useParams();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,15 +41,15 @@ const TaskComments = ({ docID }) => {
   const classes = useStyles();
 
   const handleSubmit = (value) => {
-    addComment(projectID, docID, value, currentUser.displayName);
+    addTaskComment(projectID, taskId, value, currentUser.displayName);
   };
 
   useEffect(() => {
     var unSubscribe = db
       .collection("Projects")
       .doc(projectID)
-      .collection("drawingboard")
-      .doc(docID)
+      .collection("tasks")
+      .doc(taskId)
       .collection("comments")
       .orderBy("created", "desc")
       .onSnapshot((querySnapshot) => {
@@ -73,8 +73,8 @@ const TaskComments = ({ docID }) => {
       <Form placeHolder="Comment here" onSubmit={handleSubmit} />
       {loading === false ? (
         <div>
-          {comments.map((commentObj) => (
-            <div className={classes.commentBox}>
+          {comments.map((commentObj, index) => (
+            <div className={classes.commentBox} key={index}>
               <p className={classes.comment}>{commentObj.comment}</p>
               <p className={classes.author}>Posted by: {commentObj.author}</p>
             </div>

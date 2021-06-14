@@ -1,21 +1,21 @@
 import {
-  Button,
+  IconButton,
   List,
   ListItem,
   ListItemText,
   Paper,
   TextField,
+  Tooltip,
 } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
 import React, { useState } from "react";
 import EditableTitle from "../../CardWindow/EditableTitle";
 import TaskAssigneeButton from "./TaskAssigneeButton";
-import { IconButton } from "@material-ui/core";
-import { Tooltip } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import TaskComments from "./TaskComments";
 import TaskPriorityButton from "./TaskPriorityButton";
 import TaskStatusButton from "./TaskStatusButton";
 
@@ -54,7 +54,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({ task, members, open, onClose }) {
+export default function TaskWindow({
+  task,
+  members,
+  lists,
+  listIds,
+  open,
+  onClose,
+}) {
   const classes = useStyles();
   const [descValue, setDescValue] = useState("");
 
@@ -98,7 +105,7 @@ export default function TaskWindow({ task, members, open, onClose }) {
                 onChange={handleDescChange}
                 InputLabelProps={{ shrink: true }}
               />
-              <div>Comments:</div>
+              <TaskComments />
             </div>
             <div className={classes.rightFields}>
               <div className={classes.taskWindowBar}>
@@ -111,7 +118,11 @@ export default function TaskWindow({ task, members, open, onClose }) {
               <List>
                 <ListItem key={"status"} style={{ display: "flex" }}>
                   <ListItemText>Status:</ListItemText>
-                  <TaskStatusButton task={task} />
+                  <TaskStatusButton
+                    task={task}
+                    lists={lists}
+                    listIds={listIds}
+                  />
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>

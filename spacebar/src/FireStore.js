@@ -193,7 +193,7 @@ export function updateKanbanBoardItems(
   const projectRef = db.collection("Projects").doc(projectID);
   // Update task status
   const taskRef = projectRef.collection("tasks").doc(draggableId);
-  batch.update(taskRef, { status: destinationList.title });
+  batch.update(taskRef, { status: destinationList.id });
   // Update kanbanboard state
   const boardRef = projectRef.collection("kanbanboard");
   const srcRef = boardRef.doc(source.droppableId);
@@ -217,13 +217,7 @@ export function deleteKanbanBoardItem(task, listId, projectID) {
   batch.commit();
 }
 
-export function addKanbanBoardItem(
-  title,
-  listId,
-  status,
-  currentUser,
-  projectID
-) {
+export function addKanbanBoardItem(title, listId, currentUser, projectID) {
   const batch = db.batch();
   const taskRef = db
     .collection("Projects")
@@ -239,7 +233,7 @@ export function addKanbanBoardItem(
     id: taskRef.id,
     originalEstimate: 0,
     priority: "Medium",
-    status: status,
+    status: listId,
     timeLogged: 0,
     title: title,
   };
@@ -255,7 +249,18 @@ export function addKanbanBoardItem(
   });
   batch.commit();
 }
-
+export function addTaskComment(projectID, taskId, value, author) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskId)
+    .collection("comments")
+    .add({
+      comment: value,
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+      author: author,
+    });
+}
 export function updateTaskDesc(taskId, desc, projectID) {
   updateTaskField(taskId, "description", desc, projectID);
 }
@@ -285,4 +290,31 @@ function updateTaskField(taskId, field, value, projectID) {
     .collection("tasks")
     .doc(taskId)
     .update({ [field]: value });
+}
+
+export function moveTask(task, srcList, destList, projectId) {
+  const batch = db.batch();
+  const srcRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("kanbanboard")
+    .doc(srcList);
+  batch.update(srcRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task),
+  });
+  const destRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("kanbanboard")
+    .doc(destList);
+  batch.update(destRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(task),
+  });
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("tasks")
+    .doc(task);
+  batch.update(taskRef, { status: destList });
+  batch.commit();
 }

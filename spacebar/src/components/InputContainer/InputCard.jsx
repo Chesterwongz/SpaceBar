@@ -35,7 +35,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
   const handleBtnConfirm = () => {
     !currentUser && console.log("Error! CurrentUser empty!", currentUser);
     if (type === "card") {
-      addKanbanBoardItem(title, listId, listTitle, currentUser, projectID);
+      addKanbanBoardItem(title, listId, currentUser, projectID);
     } else if (type === "project") {
       console.log("Adding project", currentUser);
       addProject(title, currentUser);

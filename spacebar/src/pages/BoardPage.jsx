@@ -15,7 +15,7 @@ const stringToColour = (str) => {
     colour += ("00" + value.toString(16)).substr(-2);
   }
   return colour;
-};
+}; // TODO: Move this somewhere else
 export default function BoardPage() {
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
@@ -77,24 +77,11 @@ export default function BoardPage() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-
     if (!destination) return;
-
     const sourceList = lists[source.droppableId];
     const destinationList = lists[destination.droppableId];
-    // const draggingCard = sourceList.items.filter(
-    //   (taskId) => taskId === draggableId
-    // )[0];
     sourceList.items.splice(source.index, 1);
     destinationList.items.splice(destination.index, 0, draggableId);
-    console.log(
-      destination,
-      source,
-      sourceList,
-      destinationList,
-      draggableId,
-      projectID
-    );
     updateKanbanBoardItems(
       destination,
       source,
@@ -104,6 +91,7 @@ export default function BoardPage() {
       projectID
     );
   };
+
   return (
     <>
       {loading ? (
@@ -120,6 +108,8 @@ export default function BoardPage() {
                   <KanbanBoard
                     key={list.id}
                     list={list}
+                    lists={lists}
+                    listIds={listIds}
                     tasks={tasks}
                     members={members}
                     index={index}

@@ -93,7 +93,7 @@ export default function TaskAssigneeButton({ members, task }) {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {Object.keys(members).map((memberId, index) => {
+                  {Object.keys(members).map((memberId) => {
                     if (memberId !== task.assignee) {
                       const member = members[memberId];
                       return (
