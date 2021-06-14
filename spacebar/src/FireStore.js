@@ -1,7 +1,6 @@
 import firebase from "firebase";
-import "firebase/firestore";
 import "firebase/auth";
-import uuid from "react-uuid";
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBZVzhpyToko-9GU1uU-tj1pIWYKmwCxNY",
@@ -87,9 +86,8 @@ export function onAuthStateChange(callback) {
 }
 
 export function addProject(title, currentUser) {
-  const projectId = uuid(); // I want to avoid using uuid and just use firebase auto gen
   const batch = db.batch();
-  const projectRef = db.collection("Projects").doc(projectId);
+  const projectRef = db.collection("Projects").doc();
   batch.set(projectRef, {
     projectInfo: { title: title },
   });
@@ -121,7 +119,7 @@ export function addProject(title, currentUser) {
   });
   const userRef = db.collection("users").doc(currentUser.id);
   batch.update(userRef, {
-    projectRef: firebase.firestore.FieldValue.arrayUnion(projectId),
+    projectRef: firebase.firestore.FieldValue.arrayUnion(projectRef.id),
   });
   batch.commit();
 }
@@ -149,7 +147,7 @@ export function deleteDrawingBoardItem(docID, projectID) {
     });
 }
 
-export function updateDrawingBoardTitle(docID, newTitle, projectID) {
+export function updatePostTitle(docID, newTitle, projectID) {
   return db
     .collection("Projects")
     .doc(projectID)
@@ -188,10 +186,15 @@ export function updateKanbanBoardItems(
   source,
   sourceList,
   destinationList,
+  draggableId,
   projectID
 ) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
+  // Update task status
+  const taskRef = projectRef.collection("tasks").doc(draggableId);
+  batch.update(taskRef, { status: destinationList.id });
+  // Update kanbanboard state
   const boardRef = projectRef.collection("kanbanboard");
   const srcRef = boardRef.doc(source.droppableId);
   batch.update(srcRef, { items: sourceList.items });
@@ -200,25 +203,118 @@ export function updateKanbanBoardItems(
   batch.commit();
 }
 
-export function deleteKanbanBoardItem(item, listId, projectID) {
-  db.collection("Projects")
-    .doc(projectID)
-    .collection("kanbanboard")
-    .doc(listId)
-    .update({
-      items: firebase.firestore.FieldValue.arrayRemove(item),
-    });
+export function deleteKanbanBoardItem(task, listId, projectID) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Remove from task collection
+  const taskRef = projectRef.collection("tasks").doc(task.id);
+  batch.delete(taskRef);
+  // Remove from list array
+  const listRef = projectRef.collection("kanbanboard").doc(listId);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task.id),
+  });
+  batch.commit();
 }
 
-export function addKanbanBoardItem(title, listId, projectID) {
-  db.collection("Projects")
+export function addKanbanBoardItem(title, listId, currentUser, projectID) {
+  const batch = db.batch();
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc();
+  // Add task to task collection
+  const newTask = {
+    assignee: "Unassigned",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdBy: `${currentUser.displayName}`,
+    description: "",
+    id: taskRef.id,
+    originalEstimate: 0,
+    priority: "Medium",
+    status: listId,
+    timeLogged: 0,
+    title: title,
+  };
+  batch.set(taskRef, newTask);
+  // Add task key to list array
+  const listRef = db
+    .collection("Projects")
     .doc(projectID)
     .collection("kanbanboard")
-    .doc(listId)
-    .update({
-      items: firebase.firestore.FieldValue.arrayUnion({
-        id: `${uuid()}`,
-        title: title,
-      }),
+    .doc(listId);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
+  });
+  batch.commit();
+}
+export function addTaskComment(projectID, taskId, value, author) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskId)
+    .collection("comments")
+    .add({
+      comment: value,
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+      author: author,
     });
+}
+export function updateTaskDesc(taskId, desc, projectID) {
+  updateTaskField(taskId, "description", desc, projectID);
+}
+export function updateTaskAssignee(taskId, assigneeId, projectID) {
+  updateTaskField(taskId, "assignee", assigneeId, projectID);
+}
+export function updateTaskPriority(taskId, priority, projectID) {
+  updateTaskField(taskId, "priority", priority, projectID);
+}
+export function updateTaskTitle(taskId, title, projectID) {
+  updateTaskField(taskId, "title", title, projectID);
+}
+function updateTaskField(taskId, field, value, projectID) {
+  if (
+    !(
+      field === "assignee" ||
+      field === "description" ||
+      field === "originalEstimate" ||
+      field === "priority" ||
+      field === "timeLogged" ||
+      field === "title"
+    )
+  )
+    return;
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskId)
+    .update({ [field]: value });
+}
+
+export function moveTask(task, srcList, destList, projectId) {
+  const batch = db.batch();
+  const srcRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("kanbanboard")
+    .doc(srcList);
+  batch.update(srcRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task),
+  });
+  const destRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("kanbanboard")
+    .doc(destList);
+  batch.update(destRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(task),
+  });
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("tasks")
+    .doc(task);
+  batch.update(taskRef, { status: destList });
+  batch.commit();
 }
