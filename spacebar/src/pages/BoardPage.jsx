@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
-import { db, updateKanbanBoardItems } from "../FireStore";
+import {
+  db,
+  updateKanbanBoardItems,
+  updateCumulativeFlowDate,
+} from "../FireStore";
 const stringToColour = (str) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -23,6 +27,11 @@ export default function BoardPage() {
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
   const [members, setMembers] = useState({});
+
+  //Cache kanban board data for cumulative flow diagram
+  useEffect(() => {
+    updateCumulativeFlowDate(projectID);
+  }, []);
 
   useEffect(() => {
     // Get tasks

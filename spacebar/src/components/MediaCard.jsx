@@ -30,13 +30,12 @@ export default function MediaCard({ projectRef }) {
       .doc(projectRef)
       .get()
       .then((doc) => {
-        console.log(doc.data());
         setProjectInfo(doc.data().projectInfo);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [projectRef]);
 
   return (
     <Card className={classes.root}>

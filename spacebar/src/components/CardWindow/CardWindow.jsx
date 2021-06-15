@@ -9,7 +9,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditableTitle from "./EditableTitle";
 import Comments from "./Comments";
 import Button from "@material-ui/core/Button";
-import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -43,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 export default function CardWindow({ docID, onDelete, title }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(title);
 
   const handleOpen = () => {
     setOpen(true);
@@ -51,7 +49,6 @@ export default function CardWindow({ docID, onDelete, title }) {
 
   const handleClose = () => {
     setOpen(false);
-    setValue(title);
   };
 
   const handleDelete = (event) => {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../FireStore";
 import {
@@ -15,6 +15,7 @@ const CumulativeFlowChart = () => {
   let { projectID } = useParams();
   const [kanbanData, setKanbanData] = useState([]);
   useEffect(() => {
+    //query
     db.collection("Projects")
       .doc(projectID)
       .collection("cumulativeflow")
@@ -27,20 +28,23 @@ const CumulativeFlowChart = () => {
         });
         setKanbanData(data);
       });
-  }, []);
+  }, [projectID]);
 
   const formatData = (data) => {
     const result = [];
     for (const i of data) {
       const obj = {};
-      obj["date"] = i.id;
+      const date = i.id.toString();
+      //Convert to dd/mm/yy
+      const formatedDate =
+        date.slice(4, 6) + "/" + date.slice(2, 4) + "/" + date.slice(0, 2);
+      obj["date"] = formatedDate;
 
       obj["Todo"] = i.statuses["list-1"];
       obj["Doing"] = i.statuses["list-2"];
       obj["Done"] = i.statuses["list-3"];
       result.push(obj);
     }
-    console.log(result);
     return result;
   };
   return (

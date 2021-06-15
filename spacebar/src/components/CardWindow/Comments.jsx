@@ -66,7 +66,7 @@ const Comments = ({ docID }) => {
     return () => {
       unSubscribe();
     };
-  }, []);
+  }, [docID, projectID]);
 
   return (
     <div className={classes.root}>

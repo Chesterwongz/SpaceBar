@@ -205,7 +205,7 @@ export function updateKanbanBoardItems(
     .collection("Projects")
     .doc(projectID)
     .collection("cumulativeflow")
-    .doc("210614");
+    .doc(formatDate(Date.now()));
   batch.set(
     cumulativeFlowRef,
     {
@@ -230,6 +230,21 @@ export function deleteKanbanBoardItem(task, listId, projectID) {
   batch.update(listRef, {
     items: firebase.firestore.FieldValue.arrayRemove(task.id),
   });
+  //Edit cumulative flow diagram by decrementing list by 1
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .doc(formatDate(Date.now()));
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [listId]: firebase.firestore.FieldValue.increment(-1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
 }
 
@@ -263,6 +278,21 @@ export function addKanbanBoardItem(title, listId, currentUser, projectID) {
   batch.update(listRef, {
     items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
   });
+  //Edit cumulative flow diagram by incrementing list by 1
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .doc(formatDate(Date.now()));
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [listId]: firebase.firestore.FieldValue.increment(1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
 }
 export function addTaskComment(projectID, taskId, value, author) {
@@ -332,11 +362,13 @@ export function moveTask(task, srcList, destList, projectId) {
     .collection("tasks")
     .doc(task);
   batch.update(taskRef, { status: destList });
+
+  //Edit cumulative flow diagram by editing source and destination list
   const cumulativeFlowRef = db
     .collection("Projects")
     .doc(projectId)
     .collection("cumulativeflow")
-    .doc("14-06-21");
+    .doc(formatDate(Date.now()));
   batch.set(
     cumulativeFlowRef,
     {
@@ -348,4 +380,59 @@ export function moveTask(task, srcList, destList, projectId) {
     { merge: true }
   );
   batch.commit();
+}
+
+//Convert date.now() to format in cumulativeflow database
+export function formatDate(date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear().toString().slice(2, 4);
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("");
+}
+
+//function that returns object containing status of kanban board
+export function getKanbanStatus(projectID) {
+  return db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("kanbanboard")
+    .get()
+    .then((querySnapshot) => {
+      const status = {};
+      querySnapshot.forEach((doc) => {
+        status[doc.data().id] = doc.data().items.length;
+      });
+      return status;
+    });
+}
+
+export function updateCumulativeFlowDate(projectID) {
+  //Check if it is a new day and new data update is needed
+  const dateToday = formatDate(Date.now());
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .where("id", "==", dateToday)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        // today is not yet recorded in database
+        //update new document
+        getKanbanStatus(projectID).then((status) => {
+          db.collection("Projects")
+            .doc(projectID)
+            .collection("cumulativeflow")
+            .doc(dateToday)
+            .set({
+              id: dateToday,
+              statuses: status,
+            });
+        });
+      }
+    });
 }

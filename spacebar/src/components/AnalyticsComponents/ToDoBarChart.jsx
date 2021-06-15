@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { db } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip } from "recharts";
@@ -8,7 +8,8 @@ const ToDoBarChart = () => {
   const [toDoItems, setToDoItems] = useState([]);
 
   useEffect(() => {
-    db.collection("Projects")
+    var unsubscribe = db
+      .collection("Projects")
       .doc(projectID)
       .collection("tasks")
       .where("status", "==", "list-1")
@@ -20,8 +21,8 @@ const ToDoBarChart = () => {
         });
         setToDoItems(items);
       });
-  }, []);
-  console.log(toDoItems);
+    return unsubscribe;
+  }, [projectID]);
 
   const getItemTimes = (toDoItems) => {
     return toDoItems.map(
