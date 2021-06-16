@@ -1,2 +1,2 @@
-import KanbanList from "./KanbanList.jsx";
-export default KanbanList;
+import KanbanBoard from "./KanbanBoard.jsx";
+export default KanbanBoard;

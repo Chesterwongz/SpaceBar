@@ -1,9 +1,8 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import React, { useEffect, useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import KanbanBoard from "../components/KanbanBoard/";
 import { useParams } from "react-router-dom";
-import KanbanBoard from "../components/KanbanBoard";
-import { db, updateKanbanBoardItems } from "../FireStore";
+import { db } from "../FireStore";
 const stringToColour = (str) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -19,47 +18,97 @@ const stringToColour = (str) => {
 export default function BoardPage() {
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [tasksLoading, setTasksLoading] = useState(true);
   const [lists, setLists] = useState({});
+  const [listsLoading, setListsLoading] = useState(true);
   const [listIds, setListIds] = useState([]);
   const [members, setMembers] = useState({});
+  const [membersLoading, setMembersLoading] = useState(true);
 
   useEffect(() => {
     // Get tasks
-    const projectRef = db.collection("Projects").doc(projectID);
-    projectRef.collection("tasks").onSnapshot((querySnapshot) => {
-      const boardTasks = querySnapshot.docs
-        .map((doc) => {
-          return doc.data();
-        })
-        .reduce((rest, task) => {
-          return {
-            ...rest,
-            [task.id]: task,
-          };
-        }, {});
-      setTasks(boardTasks);
-    });
+    let unsubscribe = db
+      .collection("Projects")
+      .doc(projectID)
+      .collection("tasks")
+      .onSnapshot((querySnapshot) => {
+        const boardTasks = querySnapshot.docs
+          .map((doc) => {
+            return doc.data();
+          })
+          .reduce((rest, task) => {
+            return {
+              ...rest,
+              [task.id]: task,
+            };
+          }, {});
+        setTasks(boardTasks);
+        setTasksLoading(false);
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  useEffect(() => {
     // Get lists
-    projectRef.collection("kanbanboard").onSnapshot((querySnapshot) => {
-      const boardListIds = [];
-      const boardLists = querySnapshot.docs
-        .map((doc) => {
-          boardListIds.push(doc.id); // array of lists in order of doc
-          return doc.data();
-        })
-        .reduce((rest, list) => {
-          return {
-            ...rest,
-            [list.id]: list, // item.id needs to be equal to doc.id!!!
-          };
-        }, {});
-      setLists(boardLists);
-      setListIds(boardListIds);
-      setLoading(false);
-    });
+    let unsubscribe = db
+      .collection("Projects")
+      .doc(projectID)
+      .collection("kanbanboard")
+      .onSnapshot((querySnapshot) => {
+        const boardListIds = [];
+        const boardLists = querySnapshot.docs
+          .map((doc) => {
+            boardListIds.push(doc.id); // array of lists in order of doc
+            return doc.data();
+          })
+          .reduce((rest, list) => {
+            return {
+              ...rest,
+              [list.id]: list, // item.id needs to be equal to doc.id!!!
+            };
+          }, {});
+        setLists(boardLists);
+        setListIds(boardListIds);
+        setListsLoading(false);
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  //   useEffect(() => {
+  //     // Get sprints
+  //     let unsubscribe = db
+  //       .collection("Projects")
+  //       .doc(projectID)
+  //       .collection("scrum")
+  //       .where("id", "!=", "backlog")
+  //       .orderBy("createdAt")
+  //       .onSnapshot((querySnapshot) => {
+  //         const boardListIds = [];
+  //         const boardLists = querySnapshot.docs
+  //           .map((doc) => {
+  //             boardListIds.push(doc.id); // array of lists in order of doc
+  //             return doc.data();
+  //           })
+  //           .reduce((rest, sprint) => {
+  //             return {
+  //               ...rest,
+  //               [sprint.id]: sprint, // sprint.id needs to be equal to doc.id!!!
+  //             };
+  //           }, {});
+  //         setLists(boardLists);
+  //         setListIds(boardListIds);
+  //         setLoading(false);
+  //       });
+  //     return () => {
+  //       unsubscribe();
+  //     };
+  //   }, []);
+  useEffect(() => {
     // Get board members
-    db.collection("users")
+    let unsubscribe = db
+      .collection("users")
       .where("projectRef", "array-contains", projectID)
       .onSnapshot((querySnapshot) => {
         const boardMembers = querySnapshot.docs.reduce((rest, memberDoc) => {
@@ -72,52 +121,24 @@ export default function BoardPage() {
           };
         }, {});
         setMembers(boardMembers);
+        setMembersLoading(false);
       });
-  }, [projectID]);
-
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-    if (!destination) return;
-    const sourceList = lists[source.droppableId];
-    const destinationList = lists[destination.droppableId];
-    sourceList.items.splice(source.index, 1);
-    destinationList.items.splice(destination.index, 0, draggableId);
-    updateKanbanBoardItems(
-      destination,
-      source,
-      sourceList,
-      destinationList,
-      draggableId,
-      projectID
-    );
-  };
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <>
-      {loading ? (
-        <div>
-          <CircularProgress />
-        </div>
+      {tasksLoading || listsLoading || membersLoading ? (
+        <CircularProgress />
       ) : (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div style={{ display: "flex" }}>
-            {listIds &&
-              listIds.map((listId, index) => {
-                const list = lists[listId];
-                return (
-                  <KanbanBoard
-                    key={list.id}
-                    list={list}
-                    lists={lists}
-                    listIds={listIds}
-                    tasks={tasks}
-                    members={members}
-                    index={index}
-                  />
-                );
-              })}
-          </div>
-        </DragDropContext>
+        <KanbanBoard
+          tasks={tasks}
+          lists={lists}
+          listIds={listIds}
+          members={members}
+        />
       )}
     </>
   );

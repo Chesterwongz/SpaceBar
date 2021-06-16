@@ -62,6 +62,7 @@ export default function TaskStatusButton({ task, lists, listIds }) {
         aria-controls={open ? "menu-list-grow" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
+        disabled
       >
         <Typography variant="button" noWrap>
           &nbsp;
