@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { onAuthStateChange } from "./FireStore";
 import theme from "./utils/theme";
 import { CurrentUserContext } from "./utils/Context";
+import ScrumBoard from "./components/ScrumBoard";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -35,7 +36,7 @@ function App() {
             <Route path="/:projectID">
               <Layout>
                 <Switch>
-                  <Route path="/:projectID/board" component={BoardPage} />
+                  <Route path="/:projectID/board" component={ScrumBoard} />
                   <Route path="/:projectID/team" component={TeamPage} />
                   <Route
                     path="/:projectID/drawingboard"

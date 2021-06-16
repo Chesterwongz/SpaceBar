@@ -54,14 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({
-  task,
-  members,
-  lists,
-  listIds,
-  open,
-  onClose,
-}) {
+export default function TaskWindow({ task, members, open, onClose }) {
   const classes = useStyles();
 
   const handleDelete = (event) => {

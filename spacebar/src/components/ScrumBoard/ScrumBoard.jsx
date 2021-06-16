@@ -1,10 +1,13 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
+import { db, dndScrumBoardTasks, addSprint } from "../../FireStore";
 import Backlog from "./Backlog";
-import { db } from "../../FireStore";
-import { makeStyles } from "@material-ui/styles";
+import Sprint from "./Sprint";
+import { Typography, Button } from "@material-ui/core";
+
 const stringToColour = (str) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -21,13 +24,20 @@ const stringToColour = (str) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    width: "80vw",
+  },
+  backlog: {
+    flex: "0 0 50%",
   },
   sprints: {
+    flex: "0 0 50%",
     display: "flex",
     flexDirection: "column",
   },
 }));
+
 export default function ScrumBoard() {
+  let count = 1;
   const classes = useStyles();
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
@@ -37,10 +47,8 @@ export default function ScrumBoard() {
   const [lists, setLists] = useState({});
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
-  const [backlogLoading, setBacklogLoading] = useState(true);
-
+  // Get tasks
   useEffect(() => {
-    // Get tasks
     let unsubscribe = db
       .collection("Projects")
       .doc(projectID)
@@ -63,43 +71,28 @@ export default function ScrumBoard() {
       unsubscribe();
     };
   }, []);
+  // Get lists
   useEffect(() => {
-    // Get backlog
     let unsubscribe = db
       .collection("Projects")
       .doc(projectID)
       .collection("scrum")
-      .doc("backlog")
-      .onSnapshot((doc) => {
-        setLists({ ...lists, [doc.id]: doc.data() });
-        setBacklogLoading(false);
-      });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-  useEffect(() => {
-    // Get sprints
-    let unsubscribe = db
-      .collection("Projects")
-      .doc(projectID)
-      .collection("scrum")
-      .where("id", "!=", "backlog")
-      .orderBy("createdAt")
+      .orderBy("title")
       .onSnapshot((querySnapshot) => {
         const scrumSprintIds = [];
-        const scrumSprints = querySnapshot.docs
+        const scrumLists = querySnapshot.docs
           .map((doc) => {
-            scrumSprintIds.push(doc.id); // array of lists in order of doc
+            if (doc.id !== "backlog") scrumSprintIds.push(doc.id);
+            // array of lists in order of doc
             return doc.data();
           })
-          .reduce((rest, sprint) => {
+          .reduce((rest, list) => {
             return {
               ...rest,
-              [sprint.id]: sprint, // sprint.id needs to be equal to doc.id!!!
+              [list.id]: list, // sprint.id needs to be equal to doc.id!!!
             };
           }, {});
-        setLists({ ...lists, ...scrumSprints });
+        setLists(scrumLists);
         setSprintIds(scrumSprintIds);
         setSprintsLoading(false);
       });
@@ -107,8 +100,8 @@ export default function ScrumBoard() {
       unsubscribe();
     };
   }, []);
+  // Get board members
   useEffect(() => {
-    // Get board members
     let unsubscribe = db
       .collection("users")
       .where("projectRef", "array-contains", projectID)
@@ -137,44 +130,53 @@ export default function ScrumBoard() {
     const destinationList = lists[destination.droppableId];
     sourceList.tasks.splice(source.index, 1);
     destinationList.tasks.splice(destination.index, 0, draggableId);
-    // console.log(
-    //   destination,
-    //   source,
-    //   sourceList,
-    //   destinationList,
-    //   draggableId,
-    //   projectID
-    // );
+    dndScrumBoardTasks(
+      destination,
+      source,
+      sourceList,
+      destinationList,
+      projectID
+    );
   };
-
+  const handleClick = () => {
+    addSprint(projectID, count);
+  };
   return (
     <>
-      {tasksLoading || sprintsLoading || backlogLoading || membersLoading ? (
-        <CircularProgress />
+      {tasksLoading || sprintsLoading || membersLoading ? (
+        <div className={classes.root}>
+          <CircularProgress />
+        </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div className={classes.root}>
-            <Backlog
-              key="backlog"
-              list={lists.backlog}
-              tasks={tasks}
-              members={members}
-            />
+            <div className={classes.backlog}>
+              <Backlog
+                key="backlog"
+                list={lists.backlog}
+                tasks={tasks}
+                members={members}
+              />
+            </div>
             <div className={classes.sprints}>
               {sprintIds.map((sprintId, index) => {
                 const sprint = lists[sprintId];
+                count++;
                 return (
-                  <KanbanBoard
-                    key={list.id}
-                    list={list}
-                    lists={lists}
-                    listIds={listIds}
-                    tasks={tasks}
-                    members={members}
-                    index={index}
-                  />
+                  sprint && (
+                    <Sprint
+                      key={sprint.id}
+                      list={sprint}
+                      tasks={tasks}
+                      members={members}
+                      index={index}
+                    />
+                  )
                 );
               })}
+              <Button fullWidth onClick={handleClick}>
+                <Typography>+ Add Sprint</Typography>
+              </Button>
             </div>
           </div>
         </DragDropContext>

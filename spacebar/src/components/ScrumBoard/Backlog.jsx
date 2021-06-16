@@ -5,11 +5,8 @@ import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
+  root: {},
   paper: {
-    width: "45%",
     backgroundColor: theme.palette.primary.main,
     padding: theme.spacing(1, 1, 1, 1),
     margin: theme.spacing(1),
@@ -26,7 +23,7 @@ export default function Backlog({ list, lists, listIds, tasks, members }) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.root}>
       <Paper className={classes.paper}>
         <Typography variant="h6">Backlog</Typography>
         <Droppable droppableId={"backlog"}>
@@ -34,10 +31,11 @@ export default function Backlog({ list, lists, listIds, tasks, members }) {
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {list.tasks.map(
                 (taskId, index) =>
-                  tasks.taskId && (
+                  tasks[taskId] && (
+                    // console.log("hi")
                     <TaskCard
                       key={taskId}
-                      task={tasks.taskId}
+                      task={tasks[taskId]}
                       listId={list.id}
                       members={members}
                       index={index}
@@ -48,7 +46,7 @@ export default function Backlog({ list, lists, listIds, tasks, members }) {
             </div>
           )}
         </Droppable>
-        {/* <InputContainer listId={list.id} listTitle={list.title} type="card" /> */}
+        <InputContainer listId={"backlog"} listTitle={"Backlog"} type="card" />
       </Paper>
     </div>
   );
