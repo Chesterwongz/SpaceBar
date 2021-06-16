@@ -1,8 +1,17 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import React, { useEffect, useState } from "react";
 import KanbanBoard from "../components/KanbanBoard/";
+import ScrumBoard from "../components/ScrumBoard/";
 import { useParams } from "react-router-dom";
 import { db } from "../FireStore";
+import { Tabs, Tab, AppBar, makeStyles } from "@material-ui/core";
+import SwipeableViews from "react-swipeable-views";
+const useStyles = makeStyles((theme) => ({
+  appBar: {},
+  indicator: {
+    color: theme.palette.primary.light,
+  },
+}));
 const stringToColour = (str) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -16,17 +25,21 @@ const stringToColour = (str) => {
   return colour;
 }; // TODO: Move this somewhere else
 export default function BoardPage() {
+  const classes = useStyles();
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
   const [tasksLoading, setTasksLoading] = useState(true);
+  const [sprintIds, setSprintIds] = useState([]);
+  const [sprintsLoading, setSprintsLoading] = useState(true);
   const [lists, setLists] = useState({});
-  const [listsLoading, setListsLoading] = useState(true);
-  const [listIds, setListIds] = useState([]);
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
-
+  const [selectedTab, setSelectedTab] = useState(1);
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+  // Get tasks
   useEffect(() => {
-    // Get tasks
     let unsubscribe = db
       .collection("Projects")
       .doc(projectID)
@@ -49,64 +62,37 @@ export default function BoardPage() {
       unsubscribe();
     };
   }, []);
+  // Get lists
   useEffect(() => {
-    // Get lists
     let unsubscribe = db
       .collection("Projects")
       .doc(projectID)
-      .collection("kanbanboard")
+      .collection("scrum")
+      .orderBy("title")
       .onSnapshot((querySnapshot) => {
-        const boardListIds = [];
-        const boardLists = querySnapshot.docs
+        const scrumSprintIds = [];
+        const scrumLists = querySnapshot.docs
           .map((doc) => {
-            boardListIds.push(doc.id); // array of lists in order of doc
+            if (doc.id !== "backlog") scrumSprintIds.push(doc.id);
+            // array of lists in order of doc
             return doc.data();
           })
           .reduce((rest, list) => {
             return {
               ...rest,
-              [list.id]: list, // item.id needs to be equal to doc.id!!!
+              [list.id]: list, // sprint.id needs to be equal to doc.id!!!
             };
           }, {});
-        setLists(boardLists);
-        setListIds(boardListIds);
-        setListsLoading(false);
+        setLists(scrumLists);
+        setSprintIds(scrumSprintIds);
+        setSprintsLoading(false);
       });
     return () => {
       unsubscribe();
     };
   }, []);
-  //   useEffect(() => {
-  //     // Get sprints
-  //     let unsubscribe = db
-  //       .collection("Projects")
-  //       .doc(projectID)
-  //       .collection("scrum")
-  //       .where("id", "!=", "backlog")
-  //       .orderBy("createdAt")
-  //       .onSnapshot((querySnapshot) => {
-  //         const boardListIds = [];
-  //         const boardLists = querySnapshot.docs
-  //           .map((doc) => {
-  //             boardListIds.push(doc.id); // array of lists in order of doc
-  //             return doc.data();
-  //           })
-  //           .reduce((rest, sprint) => {
-  //             return {
-  //               ...rest,
-  //               [sprint.id]: sprint, // sprint.id needs to be equal to doc.id!!!
-  //             };
-  //           }, {});
-  //         setLists(boardLists);
-  //         setListIds(boardListIds);
-  //         setLoading(false);
-  //       });
-  //     return () => {
-  //       unsubscribe();
-  //     };
-  //   }, []);
+  // Get board members
   useEffect(() => {
-    // Get board members
     let unsubscribe = db
       .collection("users")
       .where("projectRef", "array-contains", projectID)
@@ -130,15 +116,31 @@ export default function BoardPage() {
 
   return (
     <>
-      {tasksLoading || listsLoading || membersLoading ? (
+      {tasksLoading || sprintsLoading || membersLoading ? (
         <CircularProgress />
       ) : (
-        <KanbanBoard
-          tasks={tasks}
-          lists={lists}
-          listIds={listIds}
-          members={members}
-        />
+        <div>
+          <AppBar position="static" className={classes.appBar}>
+            <Tabs
+              TabIndicatorProps={classes.indicator}
+              value={selectedTab}
+              onChange={handleTabChange}
+              variant="fullWidth"
+            >
+              <Tab label="Backlog" />
+              <Tab label="Sprint" />
+            </Tabs>
+          </AppBar>
+          {selectedTab === 0 && (
+            <ScrumBoard
+              tasks={tasks}
+              sprintIds={sprintIds}
+              lists={lists}
+              members={members}
+            />
+          )}
+          {selectedTab === 1 && <div>Page 2</div>}
+        </div>
       )}
     </>
   );

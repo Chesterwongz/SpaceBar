@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     background: theme.palette.primary.light,
-    paddingTop: 64,
+    paddingTop: 40,
   },
   active: {
     background: theme.palette.primary.main,
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: theme.mixins.denseToolbar,
 }));
 
 export default function Layout({ children }) {

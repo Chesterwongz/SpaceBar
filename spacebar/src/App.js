@@ -36,7 +36,7 @@ function App() {
             <Route path="/:projectID">
               <Layout>
                 <Switch>
-                  <Route path="/:projectID/board" component={ScrumBoard} />
+                  <Route path="/:projectID/board" component={BoardPage} />
                   <Route path="/:projectID/team" component={TeamPage} />
                   <Route
                     path="/:projectID/drawingboard"

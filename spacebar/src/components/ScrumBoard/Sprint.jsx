@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
+  button: {
+    height: theme.spacing(4),
+  },
   paper: {
     backgroundColor: theme.palette.primary.main,
     padding: theme.spacing(1, 1, 1, 1),
@@ -44,7 +47,7 @@ export default function Sprint({ list, lists, listIds, tasks, members }) {
       <Paper className={classes.paper}>
         <div className={classes.title}>
           <Typography variant="h6">{list.title}</Typography>
-          <Button>Start Sprint</Button>
+          <Button className={classes.button}>Start Sprint</Button>
           <IconButton edge="end" size="small" onClick={handleDeleteSprint}>
             <DeleteForeverIcon />
           </IconButton>
