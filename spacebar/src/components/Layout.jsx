@@ -62,6 +62,11 @@ export default function Layout({ children }) {
       icon: <SubjectOutlined color="primary" />,
       path: `/${projectID}/team`,
     },
+    {
+      text: "Analytics",
+      icon: <SubjectOutlined color="primary" />,
+      path: `/${projectID}/analytics`,
+    },
   ];
 
   return (

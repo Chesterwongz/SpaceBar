@@ -1,21 +1,11 @@
+import { Fab, makeStyles, useTheme, Zoom } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import React, { useEffect, useState } from "react";
-import KanbanBoard from "../components/KanbanBoard/";
-import ScrumBoard from "../components/ScrumBoard/";
-import { useParams } from "react-router-dom";
-import { db } from "../FireStore";
-import {
-  Tabs,
-  Tab,
-  AppBar,
-  makeStyles,
-  Fab,
-  useTheme,
-} from "@material-ui/core";
-import SwipeableViews from "react-swipeable-views";
-import { Zoom } from "@material-ui/core";
 import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ScrumBoard from "../components/ScrumBoard/";
+import { db, updateCumulativeFlowDate } from "../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {},
@@ -82,6 +72,11 @@ export default function BoardPage() {
     },
   ];
   // Get tasks
+
+  //Cache kanban board data for cumulative flow diagram
+  useEffect(() => {
+    updateCumulativeFlowDate(projectID);
+  }, []);
   useEffect(() => {
     let unsubscribe = db
       .collection("Projects")

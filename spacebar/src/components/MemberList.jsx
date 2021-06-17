@@ -50,7 +50,7 @@ export default function MemberList({ projectID }) {
     return () => {
       unSubscribe();
     };
-  }, []);
+  }, [projectID]);
 
   return (
     <div>
