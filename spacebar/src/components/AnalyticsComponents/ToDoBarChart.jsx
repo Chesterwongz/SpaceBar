@@ -8,8 +8,7 @@ const ToDoBarChart = () => {
   const [toDoItems, setToDoItems] = useState([]);
 
   useEffect(() => {
-    var unsubscribe = db
-      .collection("Projects")
+    db.collection("Projects")
       .doc(projectID)
       .collection("tasks")
       .where("status", "==", "list-1")
@@ -21,7 +20,6 @@ const ToDoBarChart = () => {
         });
         setToDoItems(items);
       });
-    return unsubscribe;
   }, [projectID]);
 
   const getItemTimes = (toDoItems) => {

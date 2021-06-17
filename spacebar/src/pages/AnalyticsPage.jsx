@@ -16,7 +16,7 @@ const AnalyticsPage = () => {
         <CumulativeFlowChart />
       </div>
       <div>
-        <h3>Kanban Pie Chart</h3>
+        <h3>Priority breakdown of unresolved tasks</h3>
         <KanbanPieChart />
       </div>
     </div>
