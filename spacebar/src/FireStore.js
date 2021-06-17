@@ -403,10 +403,22 @@ export function addSprint(projectId, count) {
   sprintRef.set(newSprint);
 }
 
-export function deleteSprint(sprintId, projectId) {
-  db.collection("Projects")
+export function deleteSprint(sprintId, taskArr, projectId) {
+  const batch = db.batch();
+  const sprintRef = db
+    .collection("Projects")
     .doc(projectId)
     .collection("scrum")
-    .doc(sprintId)
-    .delete();
+    .doc(sprintId);
+  batch.delete(sprintRef);
+
+  const destRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("scrum")
+    .doc("backlog");
+  batch.update(destRef, {
+    tasks: firebase.firestore.FieldValue.arrayUnion(...taskArr),
+  });
+  batch.commit();
 }

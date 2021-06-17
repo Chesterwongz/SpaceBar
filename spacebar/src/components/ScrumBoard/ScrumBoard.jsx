@@ -36,7 +36,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ScrumBoard({ tasks, sprintIds, lists, members }) {
+export default function ScrumBoard({
+  tasks,
+  sprintIds,
+  lists,
+  members,
+  isSprintStarted,
+  setIsSprintStarted,
+}) {
   let count = 1;
   const classes = useStyles();
   const { projectID } = useParams();
@@ -81,6 +88,8 @@ export default function ScrumBoard({ tasks, sprintIds, lists, members }) {
                   list={sprint}
                   tasks={tasks}
                   members={members}
+                  isSprintStarted={isSprintStarted}
+                  setIsSprintStarted={setIsSprintStarted}
                   index={index}
                 />
               )

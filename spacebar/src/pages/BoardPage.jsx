@@ -4,10 +4,26 @@ import KanbanBoard from "../components/KanbanBoard/";
 import ScrumBoard from "../components/ScrumBoard/";
 import { useParams } from "react-router-dom";
 import { db } from "../FireStore";
-import { Tabs, Tab, AppBar, makeStyles } from "@material-ui/core";
+import {
+  Tabs,
+  Tab,
+  AppBar,
+  makeStyles,
+  Fab,
+  useTheme,
+} from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
+import { Zoom } from "@material-ui/core";
+import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
+
 const useStyles = makeStyles((theme) => ({
   appBar: {},
+  fab: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
   indicator: {
     color: theme.palette.primary.light,
   },
@@ -26,6 +42,7 @@ const stringToColour = (str) => {
 }; // TODO: Move this somewhere else
 export default function BoardPage() {
   const classes = useStyles();
+  const theme = useTheme();
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
   const [tasksLoading, setTasksLoading] = useState(true);
@@ -35,9 +52,35 @@ export default function BoardPage() {
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
+  const [isSprintStarted, setIsSprintStarted] = useState(false);
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
   };
+  const handleGoToBacklog = () => {
+    setSelectedTab(0);
+  };
+  const handleGoToSprint = () => {
+    setSelectedTab(1);
+  };
+  const fabs = [
+    {
+      color: "primary",
+      className: classes.fab,
+      icon: <ArrowRightIcon />,
+      onClick: handleGoToSprint,
+      children: "Go To Sprint",
+      variant: "extended",
+    },
+    {
+      color: "primary",
+      className: classes.fab,
+      icon: <ArrowLeftIcon />,
+      onClick: handleGoToBacklog,
+      children: "Go To Backlog",
+      variant: "extended",
+    },
+  ];
   // Get tasks
   useEffect(() => {
     let unsubscribe = db
@@ -120,26 +163,44 @@ export default function BoardPage() {
         <CircularProgress />
       ) : (
         <div>
-          <AppBar position="static" className={classes.appBar}>
-            <Tabs
-              TabIndicatorProps={classes.indicator}
-              value={selectedTab}
-              onChange={handleTabChange}
-              variant="fullWidth"
-            >
-              <Tab label="Backlog" />
-              <Tab label="Sprint" />
-            </Tabs>
-          </AppBar>
           {selectedTab === 0 && (
             <ScrumBoard
               tasks={tasks}
               sprintIds={sprintIds}
               lists={lists}
               members={members}
+              isSprintStarted={isSprintStarted}
+              setIsSprintStarted={setIsSprintStarted}
             />
           )}
-          {selectedTab === 1 && <div>Page 2</div>}
+          {selectedTab === 1 && (
+            <div>
+              <p>Page 2</p>
+            </div>
+          )}
+          {fabs.map((fab, index) => (
+            <Zoom
+              key={index}
+              in={selectedTab === index}
+              timeout={transitionDuration}
+              style={{
+                transitionDelay: `${
+                  selectedTab === index ? transitionDuration.exit : 0
+                }ms`,
+              }}
+              unmountOnExit
+            >
+              <Fab
+                className={fab.className}
+                color={fab.color}
+                variant={fab.variant}
+                onClick={fab.onClick}
+              >
+                {fab.icon}
+                {fab.children}
+              </Fab>
+            </Zoom>
+          ))}
         </div>
       )}
     </>

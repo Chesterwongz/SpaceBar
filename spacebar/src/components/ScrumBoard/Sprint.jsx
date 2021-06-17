@@ -6,7 +6,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
@@ -34,20 +34,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sprint({ list, lists, listIds, tasks, members }) {
+export default function Sprint({
+  list,
+  lists,
+  listIds,
+  tasks,
+  members,
+  isSprintStarted,
+  setIsSprintStarted,
+}) {
   const classes = useStyles();
   const { projectID } = useParams();
-
+  const [isCurrent, setIsCurrent] = useState(false);
   const handleDeleteSprint = () => {
-    deleteSprint(list.id, projectID);
+    deleteSprint(list.id, list.tasks, projectID);
   };
-
+  const handleStartSprint = () => {
+    setIsCurrent(true);
+    setIsSprintStarted(true);
+  };
+  const handleCompleteSprint = () => {
+    setIsSprintStarted(false);
+    setIsCurrent(false);
+  };
   return (
     <div>
       <Paper className={classes.paper}>
         <div className={classes.title}>
           <Typography variant="h6">{list.title}</Typography>
-          <Button className={classes.button}>Start Sprint</Button>
+          {isCurrent ? (
+            <Button className={classes.button} onClick={handleCompleteSprint}>
+              Complete Sprint
+            </Button>
+          ) : (
+            <Button
+              className={classes.button}
+              onClick={handleStartSprint}
+              disabled={isSprintStarted}
+            >
+              Start Sprint
+            </Button>
+          )}
           <IconButton edge="end" size="small" onClick={handleDeleteSprint}>
             <DeleteForeverIcon />
           </IconButton>
