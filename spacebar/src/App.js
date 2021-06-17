@@ -11,6 +11,7 @@ import Layout from "./components/Layout.jsx";
 import SignInPage from "./pages/SignInPage";
 import HomePage from "./pages/HomePage";
 import TeamPage from "./pages/TeamPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
 import { useState, useEffect } from "react";
 import { onAuthStateChange } from "./FireStore";
 import theme from "./utils/theme";
@@ -40,6 +41,10 @@ function App() {
                   <Route
                     path="/:projectID/drawingboard"
                     component={DrawingBoardPage}
+                  />
+                  <Route
+                    path="/:projectID/analytics"
+                    component={AnalyticsPage}
                   />
                   <Redirect from="/:projectID" to="/:projectID/board" />
                 </Switch>
