@@ -484,6 +484,16 @@ export function deleteSprint(sprintId, taskArr, projectId) {
     tasks: firebase.firestore.FieldValue.arrayUnion(...taskArr),
   });
   batch.commit();
+}
+
+export function setSprint(sprintId, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc("backlog")
+    .update({ currentSprint: sprintId });
+}
+
 //Convert date.now() to format in cumulativeflow database
 export function formatDate(date) {
   var d = new Date(date),

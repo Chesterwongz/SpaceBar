@@ -22,7 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({ list, lists, listIds, tasks, members }) {
+export default function KanbanList({
+  list,
+  lists,
+  listIds,
+  tasks,
+  members,
+  scrum,
+}) {
   const classes = useStyles();
 
   return (
@@ -50,7 +57,9 @@ export default function KanbanList({ list, lists, listIds, tasks, members }) {
             </div>
           )}
         </Droppable>
-        <InputContainer listId={list.id} listTitle={list.title} type="card" />
+        {!scrum && (
+          <InputContainer listId={list.id} listTitle={list.title} type="card" />
+        )}
       </Paper>
     </div>
   );

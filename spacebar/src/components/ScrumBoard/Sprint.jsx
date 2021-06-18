@@ -11,7 +11,7 @@ import { Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import { deleteSprint } from "../../FireStore";
+import { deleteSprint, setSprint } from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -50,10 +50,12 @@ export default function Sprint({
     deleteSprint(list.id, list.tasks, projectID);
   };
   const handleStartSprint = () => {
+    setSprint(list.id, projectID);
     setIsCurrent(true);
     setIsSprintStarted(true);
   };
   const handleCompleteSprint = () => {
+    setSprint("", projectID);
     setIsSprintStarted(false);
     setIsCurrent(false);
   };

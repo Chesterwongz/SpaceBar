@@ -1,22 +1,21 @@
-import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
+  Redirect,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
-import BoardPage from "./pages/BoardPage.jsx";
-import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
 import Layout from "./components/Layout.jsx";
-import SignInPage from "./pages/SignInPage";
-import HomePage from "./pages/HomePage";
-import TeamPage from "./pages/TeamPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import { useState, useEffect } from "react";
 import { onAuthStateChange } from "./FireStore";
-import theme from "./utils/theme";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
+import HomePage from "./pages/HomePage";
+import ScrumBoardPage from "./pages/ScrumBoardPage.jsx";
+import SignInPage from "./pages/SignInPage";
+import TeamPage from "./pages/TeamPage";
 import { CurrentUserContext } from "./utils/Context";
-import ScrumBoard from "./components/ScrumBoard";
+import theme from "./utils/theme";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -37,7 +36,7 @@ function App() {
             <Route path="/:projectID">
               <Layout>
                 <Switch>
-                  <Route path="/:projectID/board" component={BoardPage} />
+                  <Route path="/:projectID/board" component={ScrumBoardPage} />
                   <Route path="/:projectID/team" component={TeamPage} />
                   <Route
                     path="/:projectID/drawingboard"
