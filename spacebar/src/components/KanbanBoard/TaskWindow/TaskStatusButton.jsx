@@ -9,7 +9,7 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { moveScrumTask } from "../../../FireStore";
+import { moveTask, moveScrumTask } from "../../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -106,13 +106,17 @@ export default function TaskStatusButton({ task, sprintID }) {
                           onClick={(event) => {
                             const from = task.status;
                             const to = listID;
-                            moveScrumTask(
-                              task.id,
-                              from,
-                              to,
-                              sprintID,
-                              projectID
-                            );
+                            if (sprintID) {
+                              moveScrumTask(
+                                task.id,
+                                from,
+                                to,
+                                sprintID,
+                                projectID
+                              );
+                            } else {
+                              moveTask(task.id, from, to, projectID);
+                            }
                             handleClose(event);
                           }}
                         >

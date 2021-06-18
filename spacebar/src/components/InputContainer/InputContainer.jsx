@@ -28,7 +28,13 @@ export default function InputContainer({ listId, listTitle, type }) {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
   return (
-    <div className={type === "card" ? classes.cardRoot : classes.projectRoot}>
+    <div
+      className={
+        type === "card" || type === "backlog"
+          ? classes.cardRoot
+          : classes.projectRoot
+      }
+    >
       <Collapse in={open}>
         <InputCard
           setOpen={setOpen}
@@ -39,12 +45,16 @@ export default function InputContainer({ listId, listTitle, type }) {
       </Collapse>
       <Collapse in={!open}>
         <Paper
-          className={type === "card" ? classes.addCard : classes.addProject}
+          className={
+            type === "card" || type === "backlog"
+              ? classes.addCard
+              : classes.addProject
+          }
           elevation={0}
           onClick={() => setOpen(!open)}
         >
           <Typography>
-            {type === "card"
+            {type === "card" || type === "backlog"
               ? "+ Add a Card"
               : type === "project"
               ? "+ Add a Project"

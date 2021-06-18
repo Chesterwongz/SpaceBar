@@ -10,8 +10,8 @@ import Layout from "./components/Layout.jsx";
 import { onAuthStateChange } from "./FireStore";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
+import BoardPage from "./pages/BoardPage.jsx";
 import HomePage from "./pages/HomePage";
-import ScrumBoardPage from "./pages/ScrumBoardPage.jsx";
 import SignInPage from "./pages/SignInPage";
 import TeamPage from "./pages/TeamPage";
 import { CurrentUserContext } from "./utils/Context";
@@ -36,7 +36,7 @@ function App() {
             <Route path="/:projectID">
               <Layout>
                 <Switch>
-                  <Route path="/:projectID/board" component={ScrumBoardPage} />
+                  <Route path="/:projectID/board" component={BoardPage} />
                   <Route path="/:projectID/team" component={TeamPage} />
                   <Route
                     path="/:projectID/drawingboard"

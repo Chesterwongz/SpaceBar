@@ -2,7 +2,11 @@ import { Button, IconButton, InputBase, Paper } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState, useContext } from "react";
-import { addProject, addScrumBoardTask } from "../../FireStore";
+import {
+  addProject,
+  addScrumBoardTask,
+  addKanbanBoardItem,
+} from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
 
@@ -35,11 +39,11 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
   const handleBtnConfirm = () => {
     !currentUser && console.log("Error! CurrentUser empty!", currentUser);
     if (type === "card") {
-      addScrumBoardTask(title, listId, currentUser, projectID);
-      // addKanbanBoardItem(title, listId, currentUser, projectID);
+      addKanbanBoardItem(title, listId, currentUser, projectID);
     } else if (type === "project") {
-      console.log("Adding project", currentUser);
       addProject(title, currentUser);
+    } else if (type === "backlog") {
+      addScrumBoardTask(title, listId, currentUser, projectID);
     }
     setTitle("");
     setOpen(false);
@@ -59,7 +63,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
             }}
             value={title}
             placeholder={
-              type === "card"
+              type === "card" || "backlog"
                 ? "Enter a title of this card.."
                 : type === "project"
                 ? "Enter project title..."
@@ -71,7 +75,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
       <div className={classes.confirm}>
         {currentUser && (
           <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
-            {type === "card"
+            {type === "card" || "backlog"
               ? "Add Card"
               : type === "project"
               ? "Add Project"

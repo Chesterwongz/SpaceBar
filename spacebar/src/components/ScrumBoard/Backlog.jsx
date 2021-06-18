@@ -45,7 +45,11 @@ export default function Backlog({ list, tasks, members }) {
             </div>
           )}
         </Droppable>
-        <InputContainer listId={"backlog"} listTitle={"Backlog"} type="card" />
+        <InputContainer
+          listId={"backlog"}
+          listTitle={"Backlog"}
+          type="backlog"
+        />
       </Paper>
     </div>
   );

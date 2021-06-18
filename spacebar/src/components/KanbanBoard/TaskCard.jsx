@@ -10,7 +10,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { deleteScrumBoardTask } from "../../FireStore";
+import { deleteScrumBoardTask, deleteKanbanBoardItem } from "../../FireStore";
 import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ task, sprintID, members, index }) {
+export default function TaskCard({ task, sprintID, listID, members, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -50,8 +50,11 @@ export default function TaskCard({ task, sprintID, members, index }) {
   };
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
-    deleteScrumBoardTask(task, sprintID, projectID);
-    // deleteKanbanBoardItem(task, listId, projectID);
+    if (sprintID) {
+      deleteScrumBoardTask(task, sprintID, projectID);
+    } else {
+      deleteKanbanBoardItem(task, listID, projectID);
+    }
   };
 
   return (

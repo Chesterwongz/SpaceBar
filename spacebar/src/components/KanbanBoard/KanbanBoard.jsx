@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import KanbanList from "./KanbanList.jsx";
 import { updateKanbanBoardItems } from "../../FireStore";
 
-export default function KanbanBoard({ tasks, lists, listIds, members }) {
+export default function KanbanBoard({ tasks, lists, listIDs, members }) {
   const { projectID } = useParams();
 
   const onDragEnd = (result) => {
@@ -27,15 +27,13 @@ export default function KanbanBoard({ tasks, lists, listIds, members }) {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div style={{ display: "flex" }}>
-        {listIds &&
-          listIds.map((listId, index) => {
+        {listIDs &&
+          listIDs.map((listId, index) => {
             const list = lists[listId];
             return (
               <KanbanList
                 key={list.id}
                 list={list}
-                lists={lists}
-                listIds={listIds}
                 tasks={tasks}
                 members={members}
                 index={index}
