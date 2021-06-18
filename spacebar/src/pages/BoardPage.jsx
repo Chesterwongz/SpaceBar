@@ -7,16 +7,12 @@ export default function BoardPage() {
   const { projectID } = useParams();
   const [isScrum, setIsScrum] = useState(null);
   useEffect(() => {
-    let unsubscribe = db
-      .collection("Projects")
+    db.collection("Projects")
       .doc(projectID)
       .get()
       .then((doc) => {
         setIsScrum(doc.data().isScrum);
       });
-    return () => {
-      unsubscribe();
-    };
   }, []);
   return <div>{isScrum ? <ScrumBoardPage /> : <KanbanBoardPage />}</div>;
 }
