@@ -18,7 +18,7 @@ import TaskAssigneeButton from "./TaskAssigneeButton";
 import TaskComments from "./TaskComments";
 import TaskDescription from "./TaskDescription";
 import TaskPriorityButton from "./TaskPriorityButton";
-
+import TaskStatusButton from "./TaskStatusButton";
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({ task, members, open, onClose }) {
+export default function TaskWindow({ task, members, sprintID, open, onClose }) {
   const classes = useStyles();
 
   const handleDelete = (event) => {
@@ -94,12 +94,7 @@ export default function TaskWindow({ task, members, open, onClose }) {
               <List>
                 <ListItem key={"status"} style={{ display: "flex" }}>
                   <ListItemText>Status:</ListItemText>
-                  <Button>Status</Button>
-                  {/* <TaskStatusButton
-                    task={task}
-                    lists={lists}
-                    listIds={listIds}
-                  /> */}
+                  <TaskStatusButton task={task} sprintID={sprintID} />
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>

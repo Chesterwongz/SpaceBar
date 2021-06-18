@@ -1,18 +1,17 @@
 import {
+  Button,
+  IconButton,
   makeStyles,
   Paper,
   Typography,
-  Button,
-  IconButton,
 } from "@material-ui/core";
-import { useParams } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { useParams } from "react-router-dom";
+import { completeSprint, deleteSprint, setSprint } from "../../FireStore";
 import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import { deleteSprint, setSprint } from "../../FireStore";
-import { db } from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -35,14 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sprint({
-  list,
-  lists,
-  listIds,
-  tasks,
-  members,
-  currentSprint,
-}) {
+export default function Sprint({ list, tasks, members, currentSprint }) {
   const classes = useStyles();
   const { projectID } = useParams();
   const handleDeleteSprint = () => {
@@ -53,7 +45,7 @@ export default function Sprint({
     setSprint(list.id, projectID);
   };
   const handleCompleteSprint = () => {
-    setSprint("", projectID);
+    completeSprint(list.id, list.items, projectID);
   };
   return (
     <div>
@@ -86,7 +78,7 @@ export default function Sprint({
                     <TaskCard
                       key={taskId}
                       task={tasks[taskId]}
-                      listId={list.id}
+                      sprintID={list.id}
                       members={members}
                       index={index}
                     />

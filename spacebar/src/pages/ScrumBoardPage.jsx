@@ -43,7 +43,6 @@ export default function ScrumBoardPage() {
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
-  const [isSprintStarted, setIsSprintStarted] = useState(false);
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen,
@@ -162,7 +161,7 @@ export default function ScrumBoardPage() {
           {selectedTab === 0 && (
             <ScrumBoard
               tasks={tasks}
-              sprintIds={sprintIds}
+              sprintIDs={sprintIds}
               lists={lists}
               members={members}
               currentSprint={lists.backlog.currentSprint}
@@ -173,7 +172,7 @@ export default function ScrumBoardPage() {
               <SprintBoard
                 tasks={tasks}
                 members={members}
-                sprintId={lists.backlog.currentSprint}
+                sprintID={lists.backlog.currentSprint}
               />
             ) : (
               <h1>Start a sprint</h1>

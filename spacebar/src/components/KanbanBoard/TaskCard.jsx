@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ task, listId, members, index }) {
+export default function TaskCard({ task, sprintID, members, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -50,7 +50,7 @@ export default function TaskCard({ task, listId, members, index }) {
   };
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
-    deleteScrumBoardTask(task, listId, projectID);
+    deleteScrumBoardTask(task, sprintID, projectID);
     // deleteKanbanBoardItem(task, listId, projectID);
   };
 
@@ -85,6 +85,7 @@ export default function TaskCard({ task, listId, members, index }) {
       <TaskWindow
         task={task}
         members={members}
+        sprintID={sprintID}
         open={isWindowOpen}
         onClose={handleWindowClose}
       />

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import KanbanList from "../KanbanBoard/KanbanList.jsx";
 import { db, dndSprintBoardItems } from "../../FireStore";
 
-export default function SprintBoard({ tasks, sprintId, members }) {
+export default function SprintBoard({ tasks, sprintID, members }) {
   const { projectID } = useParams();
   const [lists, setLists] = useState({});
   const [listIds, setListIds] = useState([]);
@@ -14,7 +14,7 @@ export default function SprintBoard({ tasks, sprintId, members }) {
       .collection("Projects")
       .doc(projectID)
       .collection("scrum")
-      .doc(sprintId)
+      .doc(sprintID)
       .collection("board")
       .onSnapshot((querySnapshot) => {
         const sprintBoardIds = [];
@@ -51,7 +51,7 @@ export default function SprintBoard({ tasks, sprintId, members }) {
       sourceList,
       destinationList,
       draggableId,
-      sprintId,
+      sprintID,
       projectID
     );
   };
@@ -60,17 +60,16 @@ export default function SprintBoard({ tasks, sprintId, members }) {
     <DragDropContext onDragEnd={onDragEnd}>
       <div style={{ display: "flex" }}>
         {!loading &&
-          listIds.map((listId, index) => {
-            const list = lists[listId];
+          listIds.map((listID, index) => {
+            const list = lists[listID];
             return (
               <KanbanList
                 key={list.id}
                 list={list}
-                lists={lists}
-                listIds={listIds}
                 tasks={tasks}
                 members={members}
-                scrum
+                sprintID={sprintID}
+                sprint
                 index={index}
               />
             );

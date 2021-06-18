@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Backlog({ list, lists, listIds, tasks, members }) {
+export default function Backlog({ list, tasks, members }) {
   const classes = useStyles();
 
   return (
@@ -32,11 +32,10 @@ export default function Backlog({ list, lists, listIds, tasks, members }) {
               {list.items.map(
                 (taskId, index) =>
                   tasks[taskId] && (
-                    // console.log("hi")
                     <TaskCard
                       key={taskId}
                       task={tasks[taskId]}
-                      listId={list.id}
+                      sprintID={list.id}
                       members={members}
                       index={index}
                     />

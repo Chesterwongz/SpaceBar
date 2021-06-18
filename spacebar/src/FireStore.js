@@ -381,7 +381,36 @@ export function moveTask(task, srcList, destList, projectId) {
   );
   batch.commit();
 }
-
+export function moveScrumTask(task, srcList, destList, sprintID, projectID) {
+  const batch = db.batch();
+  const srcRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintID)
+    .collection("board")
+    .doc(srcList);
+  batch.update(srcRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task),
+  });
+  const destRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintID)
+    .collection("board")
+    .doc(destList);
+  batch.update(destRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(task),
+  });
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(task);
+  batch.update(taskRef, { status: destList });
+  batch.commit();
+}
 export function dndScrumBoardTasks(
   destination,
   source,
@@ -450,14 +479,14 @@ export function addScrumBoardTask(title, listId, currentUser, projectID) {
   batch.commit();
 }
 
-export function deleteScrumBoardTask(task, listId, projectID) {
+export function deleteScrumBoardTask(task, sprintID, projectID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
   // Remove from task collection
   const taskRef = projectRef.collection("tasks").doc(task.id);
   batch.delete(taskRef);
   // Remove from list array
-  const listRef = projectRef.collection("scrum").doc(listId);
+  const listRef = projectRef.collection("scrum").doc(sprintID);
   batch.update(listRef, {
     items: firebase.firestore.FieldValue.arrayRemove(task.id),
   });
@@ -516,7 +545,12 @@ export function deleteSprint(sprintId, taskArr, projectId) {
     .collection("scrum")
     .doc(sprintId);
   batch.delete(sprintRef);
-
+  const lists = ["list-1", "list-2", "list-3"];
+  lists.forEach((list) => {
+    const listRef = sprintRef.collection("board").doc(list);
+    batch.delete(listRef);
+  });
+  // Move sprint items to backlog
   const destRef = db
     .collection("Projects")
     .doc(projectId)
@@ -527,7 +561,22 @@ export function deleteSprint(sprintId, taskArr, projectId) {
   });
   batch.commit();
 }
-
+export function completeSprint(sprintId, taskArr, projectID) {
+  setSprint("", projectID);
+  const batch = db.batch();
+  const sprintRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintId);
+  batch.delete(sprintRef);
+  const lists = ["list-1", "list-2", "list-3"];
+  lists.forEach((list) => {
+    const listRef = sprintRef.collection("board").doc(list);
+    batch.delete(listRef);
+  });
+  batch.commit();
+}
 export function setSprint(sprintId, projectID) {
   db.collection("Projects")
     .doc(projectID)

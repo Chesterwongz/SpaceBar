@@ -22,14 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({
-  list,
-  lists,
-  listIds,
-  tasks,
-  members,
-  scrum,
-}) {
+export default function KanbanList({ list, tasks, members, sprintID, sprint }) {
   const classes = useStyles();
 
   return (
@@ -40,14 +33,13 @@ export default function KanbanList({
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {list.items.map(
-                (taskId, index) =>
-                  tasks[taskId] && (
+                (taskID, index) =>
+                  tasks[taskID] && (
                     <TaskCard
-                      key={taskId}
-                      task={tasks[taskId]}
-                      listId={list.id}
-                      lists={lists}
-                      listIds={listIds}
+                      key={taskID}
+                      task={tasks[taskID]}
+                      listID={list.id}
+                      sprintID={sprintID}
                       members={members}
                       index={index}
                     />
@@ -57,7 +49,7 @@ export default function KanbanList({
             </div>
           )}
         </Droppable>
-        {!scrum && (
+        {!sprint && (
           <InputContainer listId={list.id} listTitle={list.title} type="card" />
         )}
       </Paper>

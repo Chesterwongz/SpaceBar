@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ScrumBoard({
   tasks,
-  sprintIds,
+  sprintIDs,
   lists,
   members,
   currentSprint,
@@ -79,7 +79,7 @@ export default function ScrumBoard({
           />
         </div>
         <div className={classes.sprints}>
-          {sprintIds.map((sprintId, index) => {
+          {sprintIDs.map((sprintId, index) => {
             const sprint = lists[sprintId];
             count++;
             return (

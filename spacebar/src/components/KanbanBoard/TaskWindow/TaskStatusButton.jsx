@@ -9,7 +9,7 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { moveTask } from "../../../FireStore";
+import { moveScrumTask } from "../../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -23,12 +23,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskStatusButton({ task, lists, listIds }) {
+export default function TaskStatusButton({ task, sprintID }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const status = lists[task.status].title;
+  const listIDs = ["list-1", "list-2", "list-3"];
+  const lists = {
+    "list-1": "Todo",
+    "list-2": "Doing",
+    "list-3": "Done",
+  };
+  const status = lists[task.status];
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -62,7 +68,6 @@ export default function TaskStatusButton({ task, lists, listIds }) {
         aria-controls={open ? "menu-list-grow" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        disabled
       >
         <Typography variant="button" noWrap>
           &nbsp;
@@ -92,16 +97,22 @@ export default function TaskStatusButton({ task, lists, listIds }) {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {listIds.map((listId, index) => {
-                    if (listId !== task.status) {
-                      const status = lists[listId].title;
+                  {listIDs.map((listID, index) => {
+                    if (listID !== task.status) {
+                      const status = lists[listID];
                       return (
                         <MenuItem
                           key={index}
                           onClick={(event) => {
                             const from = task.status;
-                            const to = listId;
-                            moveTask(task.id, from, to, projectID);
+                            const to = listID;
+                            moveScrumTask(
+                              task.id,
+                              from,
+                              to,
+                              sprintID,
+                              projectID
+                            );
                             handleClose(event);
                           }}
                         >
