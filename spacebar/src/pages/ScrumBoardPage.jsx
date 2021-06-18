@@ -165,8 +165,7 @@ export default function ScrumBoardPage() {
               sprintIds={sprintIds}
               lists={lists}
               members={members}
-              isSprintStarted={isSprintStarted}
-              setIsSprintStarted={setIsSprintStarted}
+              currentSprint={lists.backlog.currentSprint}
             />
           )}
           {selectedTab === 1 &&

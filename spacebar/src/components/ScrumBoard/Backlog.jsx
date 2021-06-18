@@ -29,7 +29,7 @@ export default function Backlog({ list, lists, listIds, tasks, members }) {
         <Droppable droppableId={"backlog"}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.tasks.map(
+              {list.items.map(
                 (taskId, index) =>
                   tasks[taskId] && (
                     // console.log("hi")

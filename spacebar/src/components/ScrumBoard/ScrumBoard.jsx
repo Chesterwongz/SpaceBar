@@ -41,8 +41,7 @@ export default function ScrumBoard({
   sprintIds,
   lists,
   members,
-  isSprintStarted,
-  setIsSprintStarted,
+  currentSprint,
 }) {
   let count = 1;
   const classes = useStyles();
@@ -53,13 +52,15 @@ export default function ScrumBoard({
     if (!destination) return;
     const sourceList = lists[source.droppableId];
     const destinationList = lists[destination.droppableId];
-    sourceList.tasks.splice(source.index, 1);
-    destinationList.tasks.splice(destination.index, 0, draggableId);
+    sourceList.items.splice(source.index, 1);
+    destinationList.items.splice(destination.index, 0, draggableId);
+    const draggingCard = tasks[draggableId];
     dndScrumBoardTasks(
       destination,
       source,
       sourceList,
       destinationList,
+      draggingCard,
       projectID
     );
   };
@@ -88,8 +89,7 @@ export default function ScrumBoard({
                   list={sprint}
                   tasks={tasks}
                   members={members}
-                  isSprintStarted={isSprintStarted}
-                  setIsSprintStarted={setIsSprintStarted}
+                  currentSprint={currentSprint}
                   index={index}
                 />
               )

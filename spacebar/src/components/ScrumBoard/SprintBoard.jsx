@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanList from "../KanbanBoard/KanbanList.jsx";
-import { db, updateKanbanBoardItems } from "../../FireStore";
+import { db, dndSprintBoardItems } from "../../FireStore";
 
 export default function SprintBoard({ tasks, sprintId, members }) {
   const { projectID } = useParams();
@@ -45,14 +45,15 @@ export default function SprintBoard({ tasks, sprintId, members }) {
     const destinationList = lists[destination.droppableId];
     sourceList.items.splice(source.index, 1);
     destinationList.items.splice(destination.index, 0, draggableId);
-    // updateKanbanBoardItems(
-    //   destination,
-    //   source,
-    //   sourceList,
-    //   destinationList,
-    //   draggableId,
-    //   projectID
-    // );
+    dndSprintBoardItems(
+      destination,
+      source,
+      sourceList,
+      destinationList,
+      draggableId,
+      sprintId,
+      projectID
+    );
   };
 
   return (

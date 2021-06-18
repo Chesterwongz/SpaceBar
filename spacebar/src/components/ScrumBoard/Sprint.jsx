@@ -6,12 +6,13 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { deleteSprint, setSprint } from "../../FireStore";
+import { db } from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -40,31 +41,26 @@ export default function Sprint({
   listIds,
   tasks,
   members,
-  isSprintStarted,
-  setIsSprintStarted,
+  currentSprint,
 }) {
   const classes = useStyles();
   const { projectID } = useParams();
-  const [isCurrent, setIsCurrent] = useState(false);
   const handleDeleteSprint = () => {
-    deleteSprint(list.id, list.tasks, projectID);
+    if (currentSprint === list.id) setSprint("", projectID);
+    deleteSprint(list.id, list.items, projectID);
   };
   const handleStartSprint = () => {
     setSprint(list.id, projectID);
-    setIsCurrent(true);
-    setIsSprintStarted(true);
   };
   const handleCompleteSprint = () => {
     setSprint("", projectID);
-    setIsSprintStarted(false);
-    setIsCurrent(false);
   };
   return (
     <div>
       <Paper className={classes.paper}>
         <div className={classes.title}>
           <Typography variant="h6">{list.title}</Typography>
-          {isCurrent ? (
+          {currentSprint === list.id ? (
             <Button className={classes.button} onClick={handleCompleteSprint}>
               Complete Sprint
             </Button>
@@ -72,7 +68,7 @@ export default function Sprint({
             <Button
               className={classes.button}
               onClick={handleStartSprint}
-              disabled={isSprintStarted}
+              disabled={currentSprint ? true : false}
             >
               Start Sprint
             </Button>
@@ -84,7 +80,7 @@ export default function Sprint({
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.tasks.map(
+              {list.items.map(
                 (taskId, index) =>
                   tasks[taskId] && (
                     <TaskCard
