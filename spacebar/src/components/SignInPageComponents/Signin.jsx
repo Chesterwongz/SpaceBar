@@ -4,6 +4,8 @@ import Auth from "../../images/auth.svg";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { uiConfig, signInWithGoogle } from "../../FireStore";
+import SigninComponent from "./SigninComponent";
+import SignupComponent from "./SignupComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,10 +80,8 @@ const Signin = () => {
       <div className={classes.content}>
         <h1 className={classes.header}>Sign in here</h1>
         <div className={classes.forms}>
-          <StyledFirebaseAuth
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
+          <SigninComponent />
+          <SignupComponent />
           <button className={classes.button} onClick={signInWithGoogle}>
             Sign in with Google
           </button>
