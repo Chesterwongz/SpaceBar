@@ -18,6 +18,7 @@ firebase.analytics();
 //Handle Google Log in
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
 export const auth = firebase.auth();
@@ -56,7 +57,6 @@ export var uiConfig = {
   signInSuccessUrl: "/home",
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
   // tosUrl and privacyPolicyUrl accept either url string or a callback
