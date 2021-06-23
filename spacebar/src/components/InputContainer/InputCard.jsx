@@ -2,7 +2,11 @@ import { Button, IconButton, InputBase, Paper } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState, useContext } from "react";
-import { addProject, addKanbanBoardItem } from "../../FireStore";
+import {
+  addProject,
+  addScrumBoardTask,
+  addKanbanBoardItem,
+} from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
 
@@ -22,7 +26,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listId, listTitle, type }) {
+export default function InputCard({ setOpen, listId, type }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -37,8 +41,9 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
     if (type === "card") {
       addKanbanBoardItem(title, listId, currentUser, projectID);
     } else if (type === "project") {
-      console.log("Adding project", currentUser);
       addProject(title, currentUser);
+    } else if (type === "backlog") {
+      addScrumBoardTask(title, listId, currentUser, projectID);
     }
     setTitle("");
     setOpen(false);
@@ -58,7 +63,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
             }}
             value={title}
             placeholder={
-              type === "card"
+              type === "card" || type === "backlog"
                 ? "Enter a title of this card.."
                 : type === "project"
                 ? "Enter project title..."
@@ -70,7 +75,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
       <div className={classes.confirm}>
         {currentUser && (
           <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
-            {type === "card"
+            {type === "card" || "backlog"
               ? "Add Card"
               : type === "project"
               ? "Add Project"

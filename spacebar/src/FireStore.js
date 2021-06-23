@@ -381,7 +381,235 @@ export function moveTask(task, srcList, destList, projectId) {
   );
   batch.commit();
 }
+export function moveScrumTask(task, srcList, destList, sprintID, projectID) {
+  const batch = db.batch();
+  const srcRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintID)
+    .collection("board")
+    .doc(srcList);
+  batch.update(srcRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task),
+  });
+  const destRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintID)
+    .collection("board")
+    .doc(destList);
+  batch.update(destRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(task),
+  });
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(task);
+  batch.update(taskRef, { status: destList });
+  batch.commit();
+}
+export function dndScrumBoardTasks(
+  destination,
+  source,
+  sourceList,
+  destinationList,
+  draggingCard,
+  projectID
+) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Update scrum board state
+  const boardRef = projectRef.collection("scrum");
+  const srcRef = boardRef.doc(source.droppableId);
+  batch.update(srcRef, { items: sourceList.items });
+  const destRef = boardRef.doc(destination.droppableId);
+  batch.update(destRef, { items: destinationList.items });
+  if (source.droppableId !== destination.droppableId) {
+    // Update sprint board state
+    const srcBoardRef = srcRef.collection("board").doc(draggingCard.status);
+    batch.update(srcBoardRef, {
+      items: firebase.firestore.FieldValue.arrayRemove(draggingCard.id),
+    });
+    const destBoardRef = destRef.collection("board").doc(draggingCard.status);
+    batch.update(destBoardRef, {
+      items: firebase.firestore.FieldValue.arrayUnion(draggingCard.id),
+    });
+  }
+  batch.commit();
+}
 
+export function addScrumBoardTask(title, listId, currentUser, projectID) {
+  const batch = db.batch();
+  const taskRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc();
+  // Add task to task collection
+  const newTask = {
+    assignee: "Unassigned",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdBy: `${currentUser.displayName}`,
+    description: "",
+    id: taskRef.id,
+    originalEstimate: 0,
+    priority: "Medium",
+    status: "list-1",
+    timeLogged: 0,
+    title: title,
+  };
+  batch.set(taskRef, newTask);
+  // Add task key to list array
+  const listRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(listId);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
+  });
+  // Add task key to sprint todo list
+  const todoRef = listRef.collection("board").doc("list-1");
+  batch.update(todoRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
+  });
+  batch.commit();
+}
+
+export function deleteScrumBoardTask(task, sprintID, projectID) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Remove from task collection
+  const taskRef = projectRef.collection("tasks").doc(task.id);
+  batch.delete(taskRef);
+  // Remove from list array
+  const listRef = projectRef.collection("scrum").doc(sprintID);
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task.id),
+  });
+  // Remove from sprint list array
+  const sprintListRef = listRef.collection("board").doc(task.status);
+  batch.update(sprintListRef, {
+    items: firebase.firestore.FieldValue.arrayRemove(task.id),
+  });
+  batch.commit();
+}
+
+export function addSprint(projectId, count) {
+  const sprintRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("scrum")
+    .doc();
+  const newSprint = {
+    id: sprintRef.id,
+    title: "Sprint " + count,
+    items: [],
+    startDate: "",
+    endDate: "",
+  };
+  sprintRef.set(newSprint);
+  const batch = db.batch();
+  const lists = [
+    {
+      id: `list-1`,
+      title: "Todo",
+      items: [],
+    },
+    {
+      id: `list-2`,
+      title: "Doing",
+      items: [],
+    },
+    {
+      id: `list-3`,
+      title: "Done",
+      items: [],
+    },
+  ];
+  lists.forEach((doc) => {
+    const listRef = sprintRef.collection("board").doc(doc.id);
+    batch.set(listRef, doc);
+  });
+  batch.commit();
+}
+
+export function deleteSprint(sprintId, taskArr, projectId) {
+  const batch = db.batch();
+  const sprintRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("scrum")
+    .doc(sprintId);
+  batch.delete(sprintRef);
+  const lists = ["list-1", "list-2", "list-3"];
+  lists.forEach((list) => {
+    const listRef = sprintRef.collection("board").doc(list);
+    batch.delete(listRef);
+  });
+  // Move sprint items to backlog
+  const destRef = db
+    .collection("Projects")
+    .doc(projectId)
+    .collection("scrum")
+    .doc("backlog");
+  batch.update(destRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(...taskArr),
+  });
+  batch.commit();
+}
+export function completeSprint(sprintId, taskArr, projectID) {
+  setSprint("", projectID);
+  const batch = db.batch();
+  const sprintRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintId);
+  batch.delete(sprintRef);
+  const lists = ["list-1", "list-2", "list-3"];
+  lists.forEach((list) => {
+    const listRef = sprintRef.collection("board").doc(list);
+    batch.delete(listRef);
+  });
+  batch.commit();
+}
+export function setSprint(sprintId, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc("backlog")
+    .update({ currentSprint: sprintId });
+}
+export function dndSprintBoardItems(
+  destination,
+  source,
+  sourceList,
+  destinationList,
+  draggableID,
+  sprintID,
+  projectID
+) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Update task status
+  const taskRef = projectRef.collection("tasks").doc(draggableID);
+  batch.update(taskRef, { status: destinationList.id });
+  // Update kanbanboard state
+  const boardRef = projectRef
+    .collection("scrum")
+    .doc(sprintID)
+    .collection("board");
+  const srcRef = boardRef.doc(source.droppableId);
+  batch.update(srcRef, { items: sourceList.items });
+  const destRef = boardRef.doc(destination.droppableId);
+  batch.update(destRef, { items: destinationList.items });
+
+  batch.commit();
+}
 //Convert date.now() to format in cumulativeflow database
 export function formatDate(date) {
   var d = new Date(date),
