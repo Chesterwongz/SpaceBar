@@ -4,6 +4,8 @@ import Auth from "../../images/auth.svg";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { uiConfig, signInWithGoogle } from "../../FireStore";
+import SigninComponent from "./SigninComponent";
+import SignupComponent from "./SignupComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,14 +15,23 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 30px",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "space-around",
     "@media screen and (max-width: 768px)": {
       flexDirection: "column",
+      height: "170vh",
+    },
+  },
+  imageContainer: {
+    marginTop: "150px",
+    display: "flex",
+    justifyContent: "center",
+    "@media screen and (max-width: 768px)": {
+      display: "none",
     },
   },
   image: {
-    height: "400px",
-    width: "400px",
+    height: "500px",
+    width: "500px",
     "@media screen and (max-width: 768px)": {
       height: "300",
       width: "300px",
@@ -31,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   content: {
-    maxWidth: "500px",
+    maxWidth: "1500px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -66,25 +77,25 @@ const useStyles = makeStyles((theme) => ({
   },
   forms: {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
+    "@media screen and (max-width: 768px)": {
+      flexDirection: "column",
+    },
   },
 }));
 const Signin = () => {
   const classes = useStyles();
   return (
     <div className={classes.root} id="signIn">
-      <img src={Auth} alt="spaceship" className={classes.image} />
+      <div className={classes.imageContainer}>
+        <img src={Auth} alt="spaceship" className={classes.image} />
+      </div>
+
       <div className={classes.content}>
         <h1 className={classes.header}>Sign in here</h1>
         <div className={classes.forms}>
-          <StyledFirebaseAuth
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
-          <button className={classes.button} onClick={signInWithGoogle}>
-            Sign in with Google
-          </button>
+          <SigninComponent />
+          <SignupComponent />
         </div>
       </div>
     </div>

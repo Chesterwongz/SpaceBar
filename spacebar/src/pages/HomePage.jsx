@@ -57,11 +57,15 @@ export default function HomePage() {
             <InputContainer type="project" />
           </div>
         </div>
-        <div className={classes.projects}>
-          {projects.map((project, index) => {
-            return <MediaCard projectRef={project} key={index} />;
-          })}
-        </div>
+        {projects ? (
+          <div className={classes.projects}>
+            {projects.map((project, index) => {
+              return <MediaCard projectRef={project} key={index} />;
+            })}
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
