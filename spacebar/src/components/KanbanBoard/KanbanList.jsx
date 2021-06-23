@@ -49,9 +49,7 @@ export default function KanbanList({ list, tasks, members, sprintID, sprint }) {
             </div>
           )}
         </Droppable>
-        {!sprint && (
-          <InputContainer listId={list.id} listTitle={list.title} type="card" />
-        )}
+        {!sprint && <InputContainer listId={list.id} type="card" />}
       </Paper>
     </div>
   );

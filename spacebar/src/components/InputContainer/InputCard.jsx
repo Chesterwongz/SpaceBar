@@ -26,7 +26,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listId, listTitle, type }) {
+export default function InputCard({ setOpen, listId, type }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -63,7 +63,7 @@ export default function InputCard({ setOpen, listId, listTitle, type }) {
             }}
             value={title}
             placeholder={
-              type === "card" || "backlog"
+              type === "card" || type === "backlog"
                 ? "Enter a title of this card.."
                 : type === "project"
                 ? "Enter project title..."
