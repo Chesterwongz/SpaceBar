@@ -31,7 +31,13 @@ function App() {
       <Router>
         <CurrentUserContext.Provider value={currentUser}>
           <Switch>
-            <Route exact path="/" component={SignInPage} />
+            <Route
+              exact
+              path="/"
+              render={() =>
+                currentUser ? <Redirect to="/home" /> : <SignInPage />
+              }
+            />
             <Route exact path="/home" component={HomePage} />
             <Route path="/:projectID">
               <Layout>

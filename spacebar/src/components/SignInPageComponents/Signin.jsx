@@ -3,12 +3,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Auth from "../../images/auth.svg";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { uiConfig } from "../../FireStore";
+import { uiConfig, signInWithGoogle } from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    height: "100vh",
+    height: "120vh",
     backgroundColor: theme.palette.primary.main,
     padding: "0 30px",
     display: "flex",
@@ -47,6 +47,28 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "32px",
     },
   },
+  button: {
+    marginTop: "30px",
+    minWidth: "165px",
+    width: "auto",
+    height: "50px",
+    backgroundColor: "#4285f4",
+    color: "white",
+    border: "none",
+    letterSpacing: "0.5px",
+    lineHeight: "50px",
+    padding: "0 35px 0 35px",
+    fontSize: "15px",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#357ae8",
+    },
+  },
+  forms: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 }));
 const Signin = () => {
   const classes = useStyles();
@@ -55,10 +77,15 @@ const Signin = () => {
       <img src={Auth} alt="spaceship" className={classes.image} />
       <div className={classes.content}>
         <h1 className={classes.header}>Sign in here</h1>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
+        <div className={classes.forms}>
+          <StyledFirebaseAuth
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+          <button className={classes.button} onClick={signInWithGoogle}>
+            Sign in with Google
+          </button>
+        </div>
       </div>
     </div>
   );
