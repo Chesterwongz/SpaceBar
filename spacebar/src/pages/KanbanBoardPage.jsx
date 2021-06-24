@@ -25,10 +25,7 @@ export default function KanbanBoardPage() {
   const [listsLoading, setListsLoading] = useState(true);
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
-  //Cache kanban board data for cumulative flow diagram
-  useEffect(() => {
-    updateCumulativeFlowDate(projectID);
-  }, []);
+
   // Get tasks
   useEffect(() => {
     let unsubscribe = db
