@@ -62,8 +62,12 @@ export default function MediaCard({ projectRef }) {
         <Button size="small" color="primary" href={link}>
           View Project
         </Button>
-        <IconButton className={classes.deleteBtn} onClick={handleDelete}>
-          <DeleteForeverIcon size="small" color="primary" />
+        <IconButton
+          className={classes.deleteBtn}
+          size="small"
+          onClick={handleDelete}
+        >
+          <DeleteForeverIcon color="primary" />
         </IconButton>
       </CardActions>
     </Card>

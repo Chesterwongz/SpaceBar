@@ -40,23 +40,29 @@ export default function InputCard({ setOpen, listId, type }) {
     setTitle(event.target.value);
   };
 
+  const resetInput = () => {
+    setTitle("");
+    setOpen(false);
+  };
   const handleCardBtnConfirm = () => {
-    !currentUser && console.log("Error! CurrentUser empty!", currentUser);
+    if (title.length < 1) return;
     if (type === "card") {
       addKanbanBoardItem(title, listId, currentUser, projectID);
     } else if (type === "backlog") {
       addScrumBoardTask(title, listId, currentUser, projectID);
     }
-    setTitle("");
-    setOpen(false);
+    resetInput();
   };
   const handleKanbanBtnConfirm = () => {
+    if (title.length < 1) return;
     addProject(title, currentUser);
+    resetInput();
   };
   const handleScrumBtnConfirm = () => {
+    if (title.length < 1) return;
     addScrumProject(title, currentUser);
+    resetInput();
   };
-
   return (
     <>
       <div>

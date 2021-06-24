@@ -14,6 +14,7 @@ import { deleteScrumBoardTask, deleteKanbanBoardItem } from "../../FireStore";
 import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -71,7 +72,7 @@ export default function TaskCard({ task, sprintID, listID, members, index }) {
                 className={classes.cardHeader}
                 action={
                   <IconButton size="small" onClick={handleMoreMenuClick}>
-                    <MoreHorizIcon />
+                    <DeleteForeverIcon />
                   </IconButton>
                 }
                 title={task.title}
