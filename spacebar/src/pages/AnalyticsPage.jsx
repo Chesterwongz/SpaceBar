@@ -8,7 +8,7 @@ const AnalyticsPage = () => {
     <div>
       <h1>Analytics </h1>
       <div>
-        <h3>Average age of unresolved issues in hours</h3>
+        <h3>Average age of backlog issues in hours</h3>
         <ToDoBarChart />
       </div>
       <div>

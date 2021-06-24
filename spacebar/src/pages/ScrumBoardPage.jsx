@@ -74,7 +74,18 @@ export default function ScrumBoardPage() {
 
   //Cache kanban board data for cumulative flow diagram
   useEffect(() => {
-    updateCumulativeFlowDate(projectID);
+    //get current sprint ID
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("scrum")
+      .doc("backlog")
+      .get()
+      .then((doc) => {
+        return doc.data().currentSprint;
+      })
+      .then((sprintID) => {
+        updateCumulativeFlowDate(projectID, sprintID);
+      });
   }, []);
   // Get tasks
   useEffect(() => {

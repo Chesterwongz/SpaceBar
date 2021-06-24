@@ -5,31 +5,43 @@ import { BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip } from "recharts";
 
 const ToDoBarChart = () => {
   let { projectID } = useParams();
-  const [toDoItems, setToDoItems] = useState([]);
+  const [backlogItems, setBacklogItems] = useState([]);
 
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
-      .collection("tasks")
-      .where("status", "==", "list-1")
+      .collection("scrum")
+      .doc("backlog")
       .get()
-      .then((querySnapshot) => {
+      .then((doc) => {
+        const backlogItemRef = doc.data().items;
+        return backlogItemRef;
+      })
+      .then((backlogItemRef) => {
         const items = [];
-        querySnapshot.forEach((doc) => {
-          items.push(doc.data());
-        });
-        setToDoItems(items);
+        db.collection("Projects")
+          .doc(projectID)
+          .collection("tasks")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              if (backlogItemRef.includes(doc.data().id)) {
+                items.push(doc.data());
+              }
+            });
+            setBacklogItems(items);
+          });
       });
   }, [projectID]);
 
-  const getItemTimes = (toDoItems) => {
-    return toDoItems.map(
+  const getItemTimes = (backlogItems) => {
+    return backlogItems.map(
       (item) => (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
     );
   };
 
-  const getItemNames = (toDoItems) => {
-    return toDoItems.map((item) => item.title);
+  const getItemNames = (backlogItems) => {
+    return backlogItems.map((item) => item.title);
   };
 
   const formatData = (xArray, yArray) => {
@@ -47,7 +59,10 @@ const ToDoBarChart = () => {
       <BarChart
         width={730}
         height={250}
-        data={formatData(getItemNames(toDoItems), getItemTimes(toDoItems))}
+        data={formatData(
+          getItemNames(backlogItems),
+          getItemTimes(backlogItems)
+        )}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
