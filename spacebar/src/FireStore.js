@@ -89,6 +89,7 @@ export function addProject(title, currentUser) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc();
   batch.set(projectRef, {
+    isScrum: false,
     projectInfo: { title: title },
   });
   const drawingBoardref = projectRef.collection("drawingboard").doc();
@@ -122,6 +123,75 @@ export function addProject(title, currentUser) {
     projectRef: firebase.firestore.FieldValue.arrayUnion(projectRef.id),
   });
   batch.commit();
+}
+export function addScrumProject(title, currentUser) {
+  const batch = db.batch();
+  // Create project
+  const projectRef = db.collection("Projects").doc();
+  batch.set(projectRef, {
+    isScrum: true,
+    projectInfo: { title: title },
+  });
+  // Create hangouts
+  const drawingBoardref = projectRef.collection("drawingboard").doc();
+  batch.set(drawingBoardref, {
+    title: "Be the first to initiate a discussion!",
+    userID: `${currentUser.id}`,
+  });
+  // Create backlog
+  const backlogRef = projectRef.collection("scrum").doc("backlog");
+  batch.set(backlogRef, {
+    title: "Backlog",
+    id: "backlog",
+    items: [],
+    currentSprint: "",
+  });
+  // Create backlog board
+  const lists = [
+    {
+      id: `list-1`,
+      title: "Todo",
+      items: [],
+    },
+    {
+      id: `list-2`,
+      title: "Doing",
+      items: [],
+    },
+    {
+      id: `list-3`,
+      title: "Done",
+      items: [],
+    },
+  ];
+  lists.forEach((doc) => {
+    const listRef = backlogRef.collection("board").doc(doc.id);
+    batch.set(listRef, doc);
+  });
+  // Add project to user
+  const userRef = db.collection("users").doc(currentUser.id);
+  batch.update(userRef, {
+    projectRef: firebase.firestore.FieldValue.arrayUnion(projectRef.id),
+  });
+  batch.commit();
+}
+export async function deleteProject(projectID) {
+  const batch = db.batch();
+  // const projectRef = db.collection("Projects").doc(projectID);
+  // batch.delete(projectRef);
+  // need to delete the collections somehow idk how
+  await db
+    .collection("users")
+    .where("projectRef", "array-contains", projectID)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((user) => {
+        batch.update(user.ref, {
+          projectRef: firebase.firestore.FieldValue.arrayRemove(projectID),
+        });
+      });
+    });
+  await batch.commit();
 }
 
 export function addDrawingBoardItem(userID, title, projectID) {
