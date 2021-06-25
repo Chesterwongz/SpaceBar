@@ -60,7 +60,7 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
             <Button
               className={classes.button}
               onClick={handleStartSprint}
-              disabled={currentSprint ? true : false}
+              disabled={list.items.length < 1 || (currentSprint ? true : false)}
             >
               Start Sprint
             </Button>
