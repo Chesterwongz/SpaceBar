@@ -480,6 +480,7 @@ export function moveScrumTask(task, srcList, destList, sprintID, projectID) {
     .doc(task);
   batch.update(taskRef, { status: destList });
   batch.commit();
+  updateCumulativeFlowDate(projectID, sprintID);
 }
 export function dndScrumBoardTasks(
   destination,
@@ -788,7 +789,6 @@ export function updateCumulativeFlowDate(projectID, scrumID) {
           });
         } else {
           getKanbanStatus(projectID, scrumID).then((status) => {
-            console.log(status);
             db.collection("Projects")
               .doc(projectID)
               .collection("cumulativeflow")

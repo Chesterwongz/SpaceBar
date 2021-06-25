@@ -11,7 +11,7 @@ const AnalyticsPage = () => {
     <div>
       <h1>Analytics </h1>
       <div>
-        <h3>Average age of backlog issues in hours</h3>
+        <h3>Average age of tasks in hours</h3>
         <ToDoBarChart />
       </div>
       <div>
@@ -19,7 +19,7 @@ const AnalyticsPage = () => {
         <CumulativeFlowChart />
       </div>
       <div>
-        <h3>Priority breakdown of unresolved tasks</h3>
+        <h3>Priority breakdown of tasks</h3>
         <KanbanPieChart />
       </div>
     </div>

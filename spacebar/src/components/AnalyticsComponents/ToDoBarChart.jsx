@@ -7,30 +7,44 @@ const ToDoBarChart = () => {
   let { projectID } = useParams();
   const [backlogItems, setBacklogItems] = useState([]);
 
+  // useEffect(() => {
+  //   db.collection("Projects")
+  //     .doc(projectID)
+  //     .collection("scrum")
+  //     .doc("backlog")
+  //     .get()
+  //     .then((doc) => {
+  //       const backlogItemRef = doc.data().items;
+  //       return backlogItemRef;
+  //     })
+  //     .then((backlogItemRef) => {
+  //       const items = [];
+  //       db.collection("Projects")
+  //         .doc(projectID)
+  //         .collection("tasks")
+  //         .get()
+  //         .then((querySnapshot) => {
+  //           querySnapshot.forEach((doc) => {
+  //             if (backlogItemRef.includes(doc.data().id)) {
+  //               items.push(doc.data());
+  //             }
+  //           });
+  //           setBacklogItems(items);
+  //         });
+  //     });
+  // }, [projectID]);
+
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
-      .collection("scrum")
-      .doc("backlog")
+      .collection("tasks")
       .get()
-      .then((doc) => {
-        const backlogItemRef = doc.data().items;
-        return backlogItemRef;
-      })
-      .then((backlogItemRef) => {
+      .then((querySnapshot) => {
         const items = [];
-        db.collection("Projects")
-          .doc(projectID)
-          .collection("tasks")
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              if (backlogItemRef.includes(doc.data().id)) {
-                items.push(doc.data());
-              }
-            });
-            setBacklogItems(items);
-          });
+        querySnapshot.forEach((doc) => {
+          items.push(doc.data());
+        });
+        setBacklogItems(items);
       });
   }, [projectID]);
 
