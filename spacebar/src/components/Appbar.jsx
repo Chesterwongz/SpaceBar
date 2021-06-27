@@ -31,9 +31,9 @@ export default function Appbar({ project }) {
             SPACEBAR
           </Typography>
           <Button color="inherit" href="/home">
-            Home
+            Your Projects
           </Button>
-          <Button color="inherit">Account</Button>
+          {/* <Button color="inherit">Account</Button> */}
           <Button color="inherit" href="/" onClick={() => auth.signOut()}>
             Sign Out
           </Button>

@@ -9,7 +9,7 @@ import {
 import Layout from "./components/Layout.jsx";
 import { onAuthStateChange } from "./FireStore";
 import AnalyticsPage from "./pages/AnalyticsPage";
-import DrawingBoardPage from "./pages/DrawingBoardPage.jsx";
+import HangoutPage from "./pages/HangoutPage.jsx";
 import BoardPage from "./pages/BoardPage.jsx";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
@@ -44,10 +44,7 @@ function App() {
                 <Switch>
                   <Route path="/:projectID/board" component={BoardPage} />
                   <Route path="/:projectID/team" component={TeamPage} />
-                  <Route
-                    path="/:projectID/drawingboard"
-                    component={DrawingBoardPage}
-                  />
+                  <Route path="/:projectID/hangout" component={HangoutPage} />
                   <Route
                     path="/:projectID/analytics"
                     component={AnalyticsPage}
