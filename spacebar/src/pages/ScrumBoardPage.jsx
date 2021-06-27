@@ -220,6 +220,11 @@ export default function ScrumBoardPage() {
                   started a sprint yet. Go to the backlog to plan and start a
                   sprint.
                 </h2>
+                <br />
+                <h3>
+                  Click on the button on the bottom right of the page to
+                  nagivate to the backlog.
+                </h3>
               </>
             ))}
           {fabs.map((fab, index) => (
