@@ -3,6 +3,8 @@ import {
   IconButton,
   makeStyles,
   Paper,
+  Card,
+  CardContent,
   Typography,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -25,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     padding: theme.spacing(1, 1, 1, 1),
     margin: theme.spacing(1),
+  },
+  infoCard: {
+    backgroundColor: theme.palette.primary.main,
+    padding: theme.spacing(0, 1),
+    margin: theme.spacing(0, 1, -2),
+    textAlign: "center",
   },
   item: {
     margin: theme.spacing(1, 0),
@@ -72,17 +80,27 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.items.map(
-                (taskId, index) =>
-                  tasks[taskId] && (
-                    <TaskCard
-                      key={taskId}
-                      task={tasks[taskId]}
-                      sprintID={list.id}
-                      members={members}
-                      index={index}
-                    />
-                  )
+              {list.items.length < 1 ? (
+                <Card elevation={0} className={classes.infoCard}>
+                  <CardContent>
+                    <Typography variant="body2" color="textSecondary">
+                      Plan a sprint by dragging a task from the backlog
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ) : (
+                list.items.map(
+                  (taskId, index) =>
+                    tasks[taskId] && (
+                      <TaskCard
+                        key={taskId}
+                        task={tasks[taskId]}
+                        sprintID={list.id}
+                        members={members}
+                        index={index}
+                      />
+                    )
+                )
               )}
               <div className={classes.item}>{provided.placeholder}</div>
             </div>
