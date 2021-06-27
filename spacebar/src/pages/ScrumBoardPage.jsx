@@ -5,8 +5,8 @@ import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ScrumBoard from "../components/ScrumBoard";
-import { db, updateCumulativeFlowDate } from "../FireStore";
 import SprintBoard from "../components/ScrumBoard/SprintBoard";
+import { db, updateCumulativeFlowDate } from "../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {},
@@ -14,9 +14,33 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     bottom: theme.spacing(2),
     right: theme.spacing(2),
+    cursor: "pointer",
+    border: "none",
+  },
+  fabAnimated: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+    animation: "$pulse 1.5s infinite",
+    boxShadow: "0 0 0 0 #80ced680",
+    cursor: "pointer",
+    border: "none",
   },
   indicator: {
     color: theme.palette.primary.light,
+  },
+  "@keyframes pulse": {
+    "0%": {
+      transform: "scale(.9)",
+    },
+    "50%": {
+      transform: "scale(1)",
+      boxShadow: "0 0 0 25px #80ced600",
+    },
+    "100%": {
+      transform: "scale(.9)",
+      boxShadow: "0 0 0 0 #80ced600",
+    },
   },
 }));
 const stringToColour = (str) => {
@@ -32,8 +56,8 @@ const stringToColour = (str) => {
   return colour;
 }; // TODO: Move this somewhere else
 export default function ScrumBoardPage() {
-  const classes = useStyles();
   const theme = useTheme();
+  const classes = useStyles();
   const { projectID } = useParams();
   const [tasks, setTasks] = useState({});
   const [tasksLoading, setTasksLoading] = useState(true);
@@ -43,6 +67,7 @@ export default function ScrumBoardPage() {
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
+  const [noSprint, setNoSprint] = useState(true);
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen,
@@ -56,7 +81,7 @@ export default function ScrumBoardPage() {
   const fabs = [
     {
       color: "primary",
-      className: classes.fab,
+      className: !noSprint ? classes.fabAnimated : classes.fab,
       icon: <ArrowRightIcon />,
       onClick: handleGoToSprint,
       children: "Go To Sprint",
@@ -64,7 +89,7 @@ export default function ScrumBoardPage() {
     },
     {
       color: "primary",
-      className: classes.fab,
+      className: noSprint ? classes.fabAnimated : classes.fab,
       icon: <ArrowLeftIcon />,
       onClick: handleGoToBacklog,
       children: "Go To Backlog",
@@ -135,6 +160,7 @@ export default function ScrumBoardPage() {
         setLists(scrumLists);
         setSprintIds(scrumSprintIds);
         setSprintsLoading(false);
+        setNoSprint(scrumLists.backlog.currentSprint ? false : true);
       });
     return () => {
       unsubscribe();
@@ -186,7 +212,15 @@ export default function ScrumBoardPage() {
                 sprintID={lists.backlog.currentSprint}
               />
             ) : (
-              <h1>Start a sprint</h1>
+              <>
+                <h1>You haven't started a sprint</h1>
+                <br />
+                <h2>
+                  You can't do anything on your board because you haven't
+                  started a sprint yet. Go to the backlog to plan and start a
+                  sprint.
+                </h2>
+              </>
             ))}
           {fabs.map((fab, index) => (
             <Zoom
