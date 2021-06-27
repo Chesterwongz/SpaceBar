@@ -69,9 +69,7 @@ const SignupComponent = () => {
             .updateProfile({
               displayName: displayName,
             })
-            .then(() => {
-              console.log("success");
-            })
+            .then(() => {})
             .catch((error) => {
               console.log(error);
             });

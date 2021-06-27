@@ -3,7 +3,12 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { db, dndScrumBoardTasks, addSprint } from "../../FireStore";
+import {
+  db,
+  dndScrumBoardTasks,
+  addSprint,
+  updateCumulativeFlowDate,
+} from "../../FireStore";
 import Backlog from "./Backlog";
 import Sprint from "./Sprint";
 import { Typography, Button } from "@material-ui/core";

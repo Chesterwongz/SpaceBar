@@ -52,7 +52,7 @@ export default function TaskCard({ task, sprintID, listID, members, index }) {
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
     if (sprintID) {
-      deleteScrumBoardTask(task, sprintID, projectID);
+      deleteScrumBoardTask(task, sprintID, projectID, listID);
     } else {
       deleteKanbanBoardItem(task, listID, projectID);
     }

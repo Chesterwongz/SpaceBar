@@ -480,6 +480,7 @@ export function moveScrumTask(task, srcList, destList, sprintID, projectID) {
     .doc(task);
   batch.update(taskRef, { status: destList });
   batch.commit();
+  updateCumulativeFlowDate(projectID, sprintID);
 }
 export function dndScrumBoardTasks(
   destination,
@@ -489,6 +490,21 @@ export function dndScrumBoardTasks(
   draggingCard,
   projectID
 ) {
+  //Updates cumulative flow whenever task moves from backlog to sprint list and vice versa
+  if (destinationList.id !== "backlog") {
+    updateCumulativeFlowDate(projectID, destinationList.id);
+  } else {
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("scrum")
+      .doc("backlog")
+      .get()
+      .then((doc) => {
+        const currentSprintID = doc.data().currentSprint;
+        updateCumulativeFlowDate(projectID, currentSprintID);
+      });
+  }
+
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
   // Update scrum board state
@@ -547,9 +563,13 @@ export function addScrumBoardTask(title, listId, currentUser, projectID) {
     items: firebase.firestore.FieldValue.arrayUnion(taskRef.id),
   });
   batch.commit();
+  //update cumulative flow
+  if (listId !== "backlog") {
+    updateCumulativeFlowDate(projectID, listId);
+  }
 }
 
-export function deleteScrumBoardTask(task, sprintID, projectID) {
+export function deleteScrumBoardTask(task, sprintID, projectID, listID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
   // Remove from task collection
@@ -565,7 +585,24 @@ export function deleteScrumBoardTask(task, sprintID, projectID) {
   batch.update(sprintListRef, {
     items: firebase.firestore.FieldValue.arrayRemove(task.id),
   });
+  //Edit cumulative flow diagram by decrementing list by 1
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .doc(formatDate(Date.now()));
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [listID]: firebase.firestore.FieldValue.increment(-1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
+  //Updates cumulative flow whenever task moves from backlog to sprint list and vice versa
+  updateCumulativeFlowDate(projectID, sprintID);
 }
 
 export function addSprint(projectId, count) {
@@ -677,7 +714,22 @@ export function dndSprintBoardItems(
   batch.update(srcRef, { items: sourceList.items });
   const destRef = boardRef.doc(destination.droppableId);
   batch.update(destRef, { items: destinationList.items });
-
+  //Edit cumulative flow diagram by editing source and destination list
+  const cumulativeFlowRef = db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("cumulativeflow")
+    .doc(formatDate(Date.now()));
+  batch.set(
+    cumulativeFlowRef,
+    {
+      statuses: {
+        [sourceList.id]: firebase.firestore.FieldValue.increment(-1),
+        [destinationList.id]: firebase.firestore.FieldValue.increment(1),
+      },
+    },
+    { merge: true }
+  );
   batch.commit();
 }
 //Convert date.now() to format in cumulativeflow database
@@ -694,14 +746,17 @@ export function formatDate(date) {
 }
 
 //function that returns object containing status of kanban board
-export function getKanbanStatus(projectID) {
+export function getKanbanStatus(projectID, scrumID) {
   return db
     .collection("Projects")
     .doc(projectID)
-    .collection("kanbanboard")
+    .collection("scrum")
+    .doc(scrumID)
+    .collection("board")
     .get()
     .then((querySnapshot) => {
       const status = {};
+
       querySnapshot.forEach((doc) => {
         status[doc.data().id] = doc.data().items.length;
       });
@@ -709,28 +764,40 @@ export function getKanbanStatus(projectID) {
     });
 }
 
-export function updateCumulativeFlowDate(projectID) {
-  //Check if it is a new day and new data update is needed
-  const dateToday = formatDate(Date.now());
-  db.collection("Projects")
-    .doc(projectID)
-    .collection("cumulativeflow")
-    .where("id", "==", dateToday)
-    .get()
-    .then((snapshot) => {
-      if (snapshot.empty) {
-        // today is not yet recorded in database
-        //update new document
-        getKanbanStatus(projectID).then((status) => {
-          db.collection("Projects")
-            .doc(projectID)
-            .collection("cumulativeflow")
-            .doc(dateToday)
-            .set({
-              id: dateToday,
-              statuses: status,
-            });
-        });
-      }
-    });
+export function updateCumulativeFlowDate(projectID, scrumID) {
+  if (scrumID) {
+    //Check if it is a new day and new data update is needed
+    const dateToday = formatDate(Date.now());
+    db.collection("Projects")
+      .doc(projectID)
+      .collection("cumulativeflow")
+      .where("id", "==", dateToday)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          // today is not yet recorded in database
+          //update new document
+          getKanbanStatus(projectID, scrumID).then((status) => {
+            db.collection("Projects")
+              .doc(projectID)
+              .collection("cumulativeflow")
+              .doc(dateToday)
+              .set({
+                id: dateToday,
+                statuses: status,
+              });
+          });
+        } else {
+          getKanbanStatus(projectID, scrumID).then((status) => {
+            db.collection("Projects")
+              .doc(projectID)
+              .collection("cumulativeflow")
+              .doc(dateToday)
+              .update({
+                statuses: status,
+              });
+          });
+        }
+      });
+  }
 }
