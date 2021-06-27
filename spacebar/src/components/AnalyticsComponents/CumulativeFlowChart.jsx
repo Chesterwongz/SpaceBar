@@ -14,6 +14,7 @@ import {
 const CumulativeFlowChart = () => {
   let { projectID } = useParams();
   const [kanbanData, setKanbanData] = useState([]);
+
   useEffect(() => {
     //query
     db.collection("Projects")

@@ -1,10 +1,10 @@
 import {
+  Button,
   IconButton,
   List,
   ListItem,
   ListItemText,
   Paper,
-  TextField,
   Tooltip,
 } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -12,13 +12,13 @@ import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import React, { useState } from "react";
+import React from "react";
 import EditableTitle from "../../CardWindow/EditableTitle";
 import TaskAssigneeButton from "./TaskAssigneeButton";
 import TaskComments from "./TaskComments";
+import TaskDescription from "./TaskDescription";
 import TaskPriorityButton from "./TaskPriorityButton";
 import TaskStatusButton from "./TaskStatusButton";
-import TaskDescription from "./TaskDescription";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -55,14 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({
-  task,
-  members,
-  lists,
-  listIds,
-  open,
-  onClose,
-}) {
+export default function TaskWindow({ task, members, sprintID, open, onClose }) {
   const classes = useStyles();
 
   const handleDelete = (event) => {
@@ -102,11 +95,7 @@ export default function TaskWindow({
               <List>
                 <ListItem key={"status"} style={{ display: "flex" }}>
                   <ListItemText>Status:</ListItemText>
-                  <TaskStatusButton
-                    task={task}
-                    lists={lists}
-                    listIds={listIds}
-                  />
+                  <TaskStatusButton task={task} sprintID={sprintID} />
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>

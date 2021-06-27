@@ -33,7 +33,7 @@ export default function EditableTitle({ title, docID, type }) {
   const [value, setValue] = useState(title);
   const [initialValue, setInitialValue] = useState("");
   let { projectID } = useParams();
-
+  // TODO: Change to use MUI clicklistener
   useEffect(() => {
     if (editing) {
       document.addEventListener("mousedown", handleClick);
@@ -72,6 +72,7 @@ export default function EditableTitle({ title, docID, type }) {
     setValue(event.target.value);
   };
   const handleSubmit = () => {
+    if (value.length < 1) return;
     if (value !== initialValue) {
       if (type === "task") {
         updateTaskTitle(docID, value, projectID);

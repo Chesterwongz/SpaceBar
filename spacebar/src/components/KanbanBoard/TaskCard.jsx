@@ -10,10 +10,11 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { deleteKanbanBoardItem } from "../../FireStore";
+import { deleteScrumBoardTask, deleteKanbanBoardItem } from "../../FireStore";
 import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -37,14 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({
-  task,
-  listId,
-  lists,
-  listIds,
-  members,
-  index,
-}) {
+export default function TaskCard({ task, sprintID, listID, members, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -57,7 +51,11 @@ export default function TaskCard({
   };
   const handleMoreMenuClick = () => {
     // Supposed to open a more menu, but now its just a delete.
-    deleteKanbanBoardItem(task, listId, projectID);
+    if (sprintID) {
+      deleteScrumBoardTask(task, sprintID, projectID, listID);
+    } else {
+      deleteKanbanBoardItem(task, listID, projectID);
+    }
   };
 
   return (
@@ -74,7 +72,7 @@ export default function TaskCard({
                 className={classes.cardHeader}
                 action={
                   <IconButton size="small" onClick={handleMoreMenuClick}>
-                    <MoreHorizIcon />
+                    <DeleteForeverIcon />
                   </IconButton>
                 }
                 title={task.title}
@@ -90,9 +88,8 @@ export default function TaskCard({
       </Draggable>
       <TaskWindow
         task={task}
-        lists={lists}
-        listIds={listIds}
         members={members}
+        sprintID={sprintID}
         open={isWindowOpen}
         onClose={handleWindowClose}
       />

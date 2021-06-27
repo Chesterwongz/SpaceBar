@@ -18,6 +18,11 @@ const theme = createMuiTheme({
     fontWeightMedium: "600",
     fontWeigthBold: "700",
   },
+  mixins: {
+    denseToolbar: {
+      minHeight: 40,
+    },
+  },
 });
 
 // Use this to customise MUI component prop default values (globally)
