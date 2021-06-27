@@ -1,4 +1,10 @@
-import { Button, IconButton, InputBase, Paper } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  InputBase,
+  Paper,
+  Tooltip,
+} from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState, useContext } from "react";
@@ -97,18 +103,28 @@ export default function InputCard({ setOpen, listId, type }) {
             </Button>
           ) : (
             <>
-              <Button
-                className={classes.btnConfirm}
-                onClick={handleKanbanBtnConfirm}
+              <Tooltip
+                title="Visualize and advance your project forward using issues on a powerful board."
+                arrow
               >
-                Add Kanban Project
-              </Button>
-              <Button
-                className={classes.btnConfirm}
-                onClick={handleScrumBtnConfirm}
+                <Button
+                  className={classes.btnConfirm}
+                  onClick={handleKanbanBtnConfirm}
+                >
+                  Add Kanban Project
+                </Button>
+              </Tooltip>
+              <Tooltip
+                title="Sprint toward your project goals with a board, backlog, and roadmap."
+                arrow
               >
-                Add Scrum Project
-              </Button>
+                <Button
+                  className={classes.btnConfirm}
+                  onClick={handleScrumBtnConfirm}
+                >
+                  Add Scrum Project
+                </Button>
+              </Tooltip>
             </>
           ))}
         <IconButton onClick={() => setOpen(false)}>
