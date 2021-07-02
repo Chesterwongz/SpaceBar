@@ -271,6 +271,10 @@ export function updateListTitle(newTitle, listID, projectID) {
     .update({ title: newTitle });
 }
 
+export function dndKanbanList(newListIDs, projectID) {
+  db.collection("Projects").doc(projectID).update({ listIDs: newListIDs });
+}
+
 export function updateKanbanBoardItems(
   destination,
   source,

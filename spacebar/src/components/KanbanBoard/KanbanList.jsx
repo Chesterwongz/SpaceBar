@@ -1,6 +1,6 @@
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { makeStyles, Paper } from "@material-ui/core";
 import React from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
 import TaskCard from "./TaskCard.jsx";
 import TitleField from "./TitleField";
@@ -31,37 +31,46 @@ export default function KanbanList({
   members,
   sprintID,
   sprint,
+  index,
 }) {
   const classes = useStyles();
 
   return (
-    <div>
-      <Paper className={classes.paper}>
-        <TitleField title={list.title} listID={list.id} />
-        <Droppable droppableId={list.id}>
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {list.items.map(
-                (taskID, index) =>
-                  tasks[taskID] && (
-                    <TaskCard
-                      key={taskID}
-                      task={tasks[taskID]}
-                      listID={list.id}
-                      lists={lists}
-                      listIDs={listIDs}
-                      sprintID={sprintID}
-                      members={members}
-                      index={index}
-                    />
-                  )
+    <Draggable draggableId={list.id} index={index}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+        >
+          <Paper className={classes.paper}>
+            <TitleField title={list.title} listID={list.id} />
+            <Droppable droppableId={list.id}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {list.items.map(
+                    (taskID, index) =>
+                      tasks[taskID] && (
+                        <TaskCard
+                          key={taskID}
+                          task={tasks[taskID]}
+                          listID={list.id}
+                          lists={lists}
+                          listIDs={listIDs}
+                          sprintID={sprintID}
+                          members={members}
+                          index={index}
+                        />
+                      )
+                  )}
+                  <div className={classes.item}>{provided.placeholder}</div>
+                </div>
               )}
-              <div className={classes.item}>{provided.placeholder}</div>
-            </div>
-          )}
-        </Droppable>
-        {!sprint && <InputContainer listID={list.id} type="card" />}
-      </Paper>
-    </div>
+            </Droppable>
+            {!sprint && <InputContainer listID={list.id} type="card" />}
+          </Paper>
+        </div>
+      )}
+    </Draggable>
   );
 }
