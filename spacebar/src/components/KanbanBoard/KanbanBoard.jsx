@@ -34,6 +34,8 @@ export default function KanbanBoard({ tasks, lists, listIDs, members }) {
               <KanbanList
                 key={list.id}
                 list={list}
+                lists={lists}
+                listIDs={listIDs}
                 tasks={tasks}
                 members={members}
                 index={index}

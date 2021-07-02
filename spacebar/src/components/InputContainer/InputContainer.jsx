@@ -12,14 +12,14 @@ const useStyle = makeStyles((theme) => ({
     padding: theme.spacing(1),
     backgroundColor: theme.palette.primary.main,
     "&:hover": {
-      backgroundColor: fade("#000", 0.25),
+      backgroundColor: fade("#000", 0.1),
     },
   },
   addProject: {
     padding: theme.spacing(1),
     backgroundColor: theme.palette.primary.light,
     "&:hover": {
-      backgroundColor: fade("#000", 0.25),
+      backgroundColor: fade("#000", 0.1),
     },
   },
 }));

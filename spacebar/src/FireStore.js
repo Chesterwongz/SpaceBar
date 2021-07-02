@@ -252,6 +252,14 @@ export function addComment(projectID, docID, value, author) {
     });
 }
 
+export function updateListTitle(newTitle, listID, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("kanbanboard")
+    .doc(listID)
+    .update({ title: newTitle });
+}
+
 export function updateKanbanBoardItems(
   destination,
   source,

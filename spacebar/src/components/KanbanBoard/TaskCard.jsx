@@ -6,15 +6,14 @@ import {
   IconButton,
   makeStyles,
 } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { deleteScrumBoardTask, deleteKanbanBoardItem } from "../../FireStore";
+import { deleteKanbanBoardItem, deleteScrumBoardTask } from "../../FireStore";
 import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -38,7 +37,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({ task, sprintID, listID, members, index }) {
+export default function TaskCard({
+  task,
+  lists,
+  listIDs,
+  sprintID,
+  listID,
+  members,
+  index,
+}) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -89,6 +96,8 @@ export default function TaskCard({ task, sprintID, listID, members, index }) {
       <TaskWindow
         task={task}
         members={members}
+        lists={lists}
+        listIDs={listIDs}
         sprintID={sprintID}
         open={isWindowOpen}
         onClose={handleWindowClose}

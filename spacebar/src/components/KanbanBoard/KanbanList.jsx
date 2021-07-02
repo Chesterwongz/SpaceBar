@@ -3,6 +3,7 @@ import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import InputContainer from "../InputContainer";
 import TaskCard from "./TaskCard.jsx";
+import TitleField from "./TitleField";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,13 +23,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KanbanList({ list, tasks, members, sprintID, sprint }) {
+export default function KanbanList({
+  list,
+  lists,
+  listIDs,
+  tasks,
+  members,
+  sprintID,
+  sprint,
+}) {
   const classes = useStyles();
 
   return (
     <div>
       <Paper className={classes.paper}>
-        <Typography variant="h6">{list.title}</Typography>
+        <TitleField title={list.title} listID={list.id} />
         <Droppable droppableId={list.id}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -39,6 +48,8 @@ export default function KanbanList({ list, tasks, members, sprintID, sprint }) {
                       key={taskID}
                       task={tasks[taskID]}
                       listID={list.id}
+                      lists={lists}
+                      listIDs={listIDs}
                       sprintID={sprintID}
                       members={members}
                       index={index}

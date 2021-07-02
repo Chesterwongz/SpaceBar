@@ -23,18 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskStatusButton({ task, sprintID }) {
+export default function TaskStatusButton({ task, lists, listIDs, sprintID }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const listIDs = ["list-1", "list-2", "list-3"];
-  const lists = {
-    "list-1": "Todo",
-    "list-2": "Doing",
-    "list-3": "Done",
-  };
-  const status = lists[task.status];
+  const currentStatus = lists[task.status].title;
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -71,7 +65,7 @@ export default function TaskStatusButton({ task, sprintID }) {
       >
         <Typography variant="button" noWrap>
           &nbsp;
-          {status}
+          {currentStatus}
         </Typography>
       </Button>
       <Popper
@@ -99,7 +93,7 @@ export default function TaskStatusButton({ task, sprintID }) {
                 >
                   {listIDs.map((listID, index) => {
                     if (listID !== task.status) {
-                      const status = lists[listID];
+                      const status = lists[listID].title;
                       return (
                         <MenuItem
                           key={index}

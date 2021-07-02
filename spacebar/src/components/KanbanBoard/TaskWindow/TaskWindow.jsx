@@ -55,7 +55,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskWindow({ task, members, sprintID, open, onClose }) {
+export default function TaskWindow({
+  task,
+  members,
+  lists,
+  listIDs,
+  sprintID,
+  open,
+  onClose,
+}) {
   const classes = useStyles();
 
   const handleDelete = (event) => {
@@ -95,7 +103,12 @@ export default function TaskWindow({ task, members, sprintID, open, onClose }) {
               <List>
                 <ListItem key={"status"} style={{ display: "flex" }}>
                   <ListItemText>Status:</ListItemText>
-                  <TaskStatusButton task={task} sprintID={sprintID} />
+                  <TaskStatusButton
+                    task={task}
+                    lists={lists}
+                    listIDs={listIDs}
+                    sprintID={sprintID}
+                  />
                 </ListItem>
                 <ListItem key={"assignee"}>
                   <ListItemText>Assignee:</ListItemText>
