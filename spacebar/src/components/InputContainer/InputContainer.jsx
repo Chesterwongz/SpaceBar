@@ -16,6 +16,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   addProject: {
+    margin: theme.spacing(1),
     padding: theme.spacing(1),
     backgroundColor: theme.palette.primary.light,
     "&:hover": {
@@ -24,7 +25,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputContainer({ listId, type }) {
+export default function InputContainer({ listID, type }) {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
   return (
@@ -36,7 +37,7 @@ export default function InputContainer({ listId, type }) {
       }
     >
       <Collapse in={open}>
-        <InputCard setOpen={setOpen} listId={listId} type={type} />
+        <InputCard setOpen={setOpen} listID={listID} type={type} />
       </Collapse>
       <Collapse in={!open}>
         <Paper
@@ -51,6 +52,8 @@ export default function InputContainer({ listId, type }) {
           <Typography>
             {type === "card" || type === "backlog"
               ? "+ Add a Card"
+              : type === "list"
+              ? "+ Add another List"
               : type === "project"
               ? "+ Add a Project"
               : "Wrong Type"}

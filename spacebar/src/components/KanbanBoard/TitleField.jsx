@@ -15,6 +15,7 @@ const useStyle = makeStyles((theme) => ({
     flexGrow: 1,
     fontSize: "1.2rem",
     fontWeight: "bold",
+    textTransform: "uppercase",
     "&:hover": {
       backgroundColor: fade("#000", 0.1),
     },

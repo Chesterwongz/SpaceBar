@@ -252,6 +252,17 @@ export function addComment(projectID, docID, value, author) {
     });
 }
 
+export function addList(title, projectID) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  const listRef = projectRef.collection("kanbanboard").doc();
+  batch.update(projectRef, {
+    listIDs: firebase.firestore.FieldValue.arrayUnion(listRef.id),
+  });
+  batch.set(listRef, { title: title, items: [], id: listRef.id });
+  batch.commit();
+}
+
 export function updateListTitle(newTitle, listID, projectID) {
   db.collection("Projects")
     .doc(projectID)

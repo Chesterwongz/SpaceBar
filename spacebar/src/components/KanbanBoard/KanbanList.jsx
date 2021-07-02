@@ -60,7 +60,7 @@ export default function KanbanList({
             </div>
           )}
         </Droppable>
-        {!sprint && <InputContainer listId={list.id} type="card" />}
+        {!sprint && <InputContainer listID={list.id} type="card" />}
       </Paper>
     </div>
   );

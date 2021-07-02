@@ -12,12 +12,16 @@ import {
   addProject,
   addScrumProject,
   addScrumBoardTask,
+  addList,
   addKanbanBoardItem,
 } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
 
 const useStyle = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(1),
+  },
   input: {
     margin: theme.spacing(1),
   },
@@ -36,7 +40,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listId, type }) {
+export default function InputCard({ setOpen, listID, type }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -53,10 +57,16 @@ export default function InputCard({ setOpen, listId, type }) {
   const handleCardBtnConfirm = () => {
     if (title.length < 1) return;
     if (type === "card") {
-      addKanbanBoardItem(title, listId, currentUser, projectID);
+      console.log(title, listID, currentUser, projectID);
+      addKanbanBoardItem(title, listID, currentUser, projectID);
     } else if (type === "backlog") {
-      addScrumBoardTask(title, listId, currentUser, projectID);
+      addScrumBoardTask(title, listID, currentUser, projectID);
     }
+    resetInput();
+  };
+  const handleListBtnConfirm = () => {
+    if (title.length < 1) return;
+    addList(title, projectID);
     resetInput();
   };
   const handleKanbanBtnConfirm = () => {
@@ -70,28 +80,28 @@ export default function InputCard({ setOpen, listId, type }) {
     resetInput();
   };
   return (
-    <>
-      <div>
-        <Paper>
-          <InputBase
-            onChange={handleOnChange}
-            multiline
-            onBlur={() => setOpen(false)}
-            fullWidth
-            inputProps={{
-              className: classes.input,
-            }}
-            value={title}
-            placeholder={
-              type === "card" || type === "backlog"
-                ? "Enter a title of this card.."
-                : type === "project"
-                ? "Enter project title..."
-                : "wrong type"
-            }
-          />
-        </Paper>
-      </div>
+    <div className={classes.root}>
+      <Paper>
+        <InputBase
+          onChange={handleOnChange}
+          multiline
+          onBlur={() => setOpen(false)}
+          fullWidth
+          inputProps={{
+            className: classes.input,
+          }}
+          value={title}
+          placeholder={
+            type === "card" || type === "backlog"
+              ? "Enter a title of this card.."
+              : type === "list"
+              ? "Enter list title..."
+              : type === "project"
+              ? "Enter project title..."
+              : "wrong type"
+          }
+        />
+      </Paper>
       <div className={classes.confirm}>
         {currentUser &&
           (type === "card" || type === "backlog" ? (
@@ -100,6 +110,13 @@ export default function InputCard({ setOpen, listId, type }) {
               onClick={handleCardBtnConfirm}
             >
               Add Card
+            </Button>
+          ) : type === "list" ? (
+            <Button
+              className={classes.btnConfirm}
+              onClick={handleListBtnConfirm}
+            >
+              Add List
             </Button>
           ) : (
             <>
@@ -131,6 +148,6 @@ export default function InputCard({ setOpen, listId, type }) {
           <ClearIcon />
         </IconButton>
       </div>
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanList from "./KanbanList.jsx";
 import { updateKanbanBoardItems } from "../../FireStore";
+import InputContainer from "../InputContainer/InputContainer.jsx";
 
 export default function KanbanBoard({ tasks, lists, listIDs, members }) {
   const { projectID } = useParams();
@@ -42,6 +43,7 @@ export default function KanbanBoard({ tasks, lists, listIDs, members }) {
               />
             );
           })}
+        <InputContainer type="list" />
       </div>
     </DragDropContext>
   );
