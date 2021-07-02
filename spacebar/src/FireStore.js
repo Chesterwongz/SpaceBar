@@ -90,6 +90,7 @@ export function addProject(title, currentUser) {
   const projectRef = db.collection("Projects").doc();
   batch.set(projectRef, {
     isScrum: false,
+    listIDs: ["list-1", "list-2", "list-3"],
     projectInfo: { title: title },
   });
   const drawingBoardref = projectRef.collection("drawingboard").doc();

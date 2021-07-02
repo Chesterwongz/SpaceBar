@@ -21,8 +21,9 @@ export default function KanbanBoardPage() {
   const [tasks, setTasks] = useState({});
   const [tasksLoading, setTasksLoading] = useState(true);
   const [lists, setLists] = useState({});
-  const [listIDs, setListIDs] = useState([]);
   const [listsLoading, setListsLoading] = useState(true);
+  const [listIDs, setListIDs] = useState([]);
+  const [listIDsLoading, setListIDsLoading] = useState(true);
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
 
@@ -57,11 +58,8 @@ export default function KanbanBoardPage() {
       .doc(projectID)
       .collection("kanbanboard")
       .onSnapshot((querySnapshot) => {
-        const boardListIDs = [];
         const boardLists = querySnapshot.docs
           .map((doc) => {
-            boardListIDs.push(doc.id);
-            // array of lists in order of doc
             return doc.data();
           })
           .reduce((rest, list) => {
@@ -71,8 +69,20 @@ export default function KanbanBoardPage() {
             };
           }, {});
         setLists(boardLists);
-        setListIDs(boardListIDs);
         setListsLoading(false);
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  // Get kanbanboard list order
+  useEffect(() => {
+    let unsubscribe = db
+      .collection("Projects")
+      .doc(projectID)
+      .onSnapshot((doc) => {
+        setListIDs(doc.data().listIDs);
+        setListIDsLoading(false);
       });
     return () => {
       unsubscribe();
@@ -103,7 +113,7 @@ export default function KanbanBoardPage() {
 
   return (
     <>
-      {tasksLoading || listsLoading || membersLoading ? (
+      {tasksLoading || listsLoading || listIDsLoading || membersLoading ? (
         <CircularProgress />
       ) : (
         <KanbanBoard
