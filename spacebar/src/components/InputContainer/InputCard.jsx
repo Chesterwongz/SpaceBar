@@ -57,7 +57,6 @@ export default function InputCard({ setOpen, listID, type }) {
   const handleCardBtnConfirm = () => {
     if (title.length < 1) return;
     if (type === "card") {
-      console.log(title, listID, currentUser, projectID);
       addKanbanBoardItem(title, listID, currentUser, projectID);
     } else if (type === "backlog") {
       addScrumBoardTask(title, listID, currentUser, projectID);
