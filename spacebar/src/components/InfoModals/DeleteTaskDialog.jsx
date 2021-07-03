@@ -13,19 +13,21 @@ import { red } from "@material-ui/core/colors";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import WarningIcon from "@material-ui/icons/Warning";
 
-export default function DeleteTaskDialog() {
+export default function DeleteTaskDialog({ onDelete }) {
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (e) => {
+    e.stopPropagation();
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.stopPropagation();
     setOpen(false);
   };
 
   return (
     <div>
-      <IconButton size="small" onClick={handleClickOpen}>
+      <IconButton size="small" onMouseDown={handleClickOpen}>
         <DeleteForeverIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
@@ -42,7 +44,7 @@ export default function DeleteTaskDialog() {
           <Button onClick={handleClose} color="primary">
             Delete
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onMouseDown={handleClose} color="primary" autoFocus>
             Cancel
           </Button>
         </DialogActions>
