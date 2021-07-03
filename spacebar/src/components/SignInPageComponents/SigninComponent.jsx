@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { auth, signInWithGoogle } from "../../FireStore";
 import TextField from "@material-ui/core/TextField";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import LockIcon from "@material-ui/icons/Lock";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   signIn: {
@@ -87,7 +82,6 @@ const SigninComponent = () => {
         // ...
       })
       .catch((error) => {
-        var errorCode = error.code;
         var errorMessage = error.message;
         alert(errorMessage);
       });
