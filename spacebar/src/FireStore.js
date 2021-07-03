@@ -263,6 +263,17 @@ export function addList(title, projectID) {
   batch.commit();
 }
 
+export function deleteList(listID, projectID) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  const listRef = projectRef.collection("kanbanboard").doc(listID);
+  batch.update(projectRef, {
+    listIDs: firebase.firestore.FieldValue.arrayRemove(listID),
+  });
+  batch.delete(listRef);
+  batch.commit();
+}
+
 export function updateListTitle(newTitle, listID, projectID) {
   db.collection("Projects")
     .doc(projectID)

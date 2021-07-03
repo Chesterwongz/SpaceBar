@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Button,
   IconButton,
@@ -11,9 +12,10 @@ import {
   DialogTitle,
   Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import { red } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/styles";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { deleteList, moveTask } from "../../FireStore";
 
 const useStyle = makeStyles((theme) => ({
   uppercase: {
@@ -27,6 +29,7 @@ const useStyle = makeStyles((theme) => ({
 
 export default function DeleteListDialog({ listID, listIDs, lists }) {
   const classes = useStyle();
+  const { projectID } = useParams();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [newList, setNewList] = useState("");
@@ -34,19 +37,23 @@ export default function DeleteListDialog({ listID, listIDs, lists }) {
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
+    setNewList("");
     setOpen(false);
   };
   const handleDelete = () => {
+    if (newList) {
+      lists[listID].items.forEach((task) => {
+        moveTask(task, listID, newList, projectID);
+      });
+      deleteList(listID, projectID);
+    }
     setOpen(false);
   };
   return (
@@ -81,7 +88,7 @@ export default function DeleteListDialog({ listID, listIDs, lists }) {
               onClose={handleMenuClose}
             >
               {listIDs.map((listId, index) => {
-                if (listId !== listID) {
+                if (listId !== listID && lists[listId]) {
                   return (
                     <MenuItem
                       key={index}

@@ -53,15 +53,17 @@ export default function KanbanBoard({ tasks, lists, listIDs, members }) {
               listIDs.map((listId, index) => {
                 const list = lists[listId];
                 return (
-                  <KanbanList
-                    key={list.id}
-                    list={list}
-                    lists={lists}
-                    listIDs={listIDs}
-                    tasks={tasks}
-                    members={members}
-                    index={index}
-                  />
+                  list && (
+                    <KanbanList
+                      key={list.id}
+                      list={list}
+                      lists={lists}
+                      listIDs={listIDs}
+                      tasks={tasks}
+                      members={members}
+                      index={index}
+                    />
+                  )
                 );
               })}
             {provided.placeholder}
