@@ -1,9 +1,9 @@
+import { InputBase, Paper, Typography } from "@material-ui/core";
+import { fade, makeStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { updateListTitle } from "../../FireStore";
-import { Typography, InputBase, Paper, IconButton } from "@material-ui/core";
-import { makeStyles, fade } from "@material-ui/core/styles";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import DeleteListDialog from "../InfoModals/DeleteListDialog";
 
 const useStyle = makeStyles((theme) => ({
   editableTitleContainer: {
@@ -29,7 +29,8 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-export default function TitleField({ title, listID }) {
+
+export default function TitleField({ title, listID, listIDs, lists }) {
   const { projectID } = useParams();
   const [open, setOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -65,9 +66,7 @@ export default function TitleField({ title, listID }) {
           >
             {title}
           </Typography>
-          <IconButton size="small">
-            <MoreHorizIcon />
-          </IconButton>
+          <DeleteListDialog listID={listID} listIDs={listIDs} lists={lists} />
         </Paper>
       )}
     </div>

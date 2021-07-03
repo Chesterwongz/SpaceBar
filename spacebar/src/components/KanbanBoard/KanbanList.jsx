@@ -44,7 +44,12 @@ export default function KanbanList({
           {...provided.draggableProps}
         >
           <Paper className={classes.paper}>
-            <TitleField title={list.title} listID={list.id} />
+            <TitleField
+              title={list.title}
+              listID={list.id}
+              listIDs={listIDs}
+              lists={lists}
+            />
             <Droppable droppableId={list.id}>
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
