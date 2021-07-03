@@ -37,7 +37,7 @@ export default function InputContainer({ listID, type }) {
       }
     >
       <Collapse in={open}>
-        <InputCard setOpen={setOpen} listID={listID} type={type} />
+        {open && <InputCard setOpen={setOpen} listID={listID} type={type} />}
       </Collapse>
       <Collapse in={!open}>
         <Paper

@@ -49,23 +49,29 @@ export default function InputCard({ setOpen, listID, type }) {
   const handleOnChange = (event) => {
     setTitle(event.target.value);
   };
-
+  const keyPress = (event) => {
+    if (event.key === "Enter") {
+      handleBtnConfirm();
+      event.preventDefault();
+      resetInput();
+      return false;
+    }
+  };
   const resetInput = () => {
     setTitle("");
     setOpen(false);
   };
-  const handleCardBtnConfirm = () => {
+  const handleBtnConfirm = () => {
     if (title.length < 1) return;
     if (type === "card") {
       addKanbanBoardItem(title, listID, currentUser, projectID);
     } else if (type === "backlog") {
       addScrumBoardTask(title, listID, currentUser, projectID);
+    } else if (type === "list") {
+      addList(title, projectID);
+    } else {
+      return;
     }
-    resetInput();
-  };
-  const handleListBtnConfirm = () => {
-    if (title.length < 1) return;
-    addList(title, projectID);
     resetInput();
   };
   const handleKanbanBtnConfirm = () => {
@@ -83,9 +89,11 @@ export default function InputCard({ setOpen, listID, type }) {
       <Paper>
         <InputBase
           onChange={handleOnChange}
-          multiline
+          onKeyPress={keyPress}
           onBlur={() => setOpen(false)}
+          multiline
           fullWidth
+          autoFocus
           inputProps={{
             className: classes.input,
           }}
@@ -104,17 +112,11 @@ export default function InputCard({ setOpen, listID, type }) {
       <div className={classes.confirm}>
         {currentUser &&
           (type === "card" || type === "backlog" ? (
-            <Button
-              className={classes.btnConfirm}
-              onClick={handleCardBtnConfirm}
-            >
+            <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
               Add Card
             </Button>
           ) : type === "list" ? (
-            <Button
-              className={classes.btnConfirm}
-              onClick={handleListBtnConfirm}
-            >
+            <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
               Add List
             </Button>
           ) : (

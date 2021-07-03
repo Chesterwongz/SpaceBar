@@ -38,9 +38,16 @@ export default function TitleField({ title, listID, listIDs, lists }) {
   const handleOnChange = (e) => {
     setNewTitle(e.target.value);
   };
-
+  const keyPress = (event) => {
+    if (event.key === "Enter") {
+      handleOnBlur();
+    }
+  };
   const handleOnBlur = () => {
-    updateListTitle(newTitle, listID, projectID);
+    if (newTitle.length > 1) {
+      updateListTitle(newTitle, listID, projectID);
+    }
+    setNewTitle(title);
     setOpen(false);
   };
   return (
@@ -56,6 +63,7 @@ export default function TitleField({ title, listID, listIDs, lists }) {
             }}
             fullWidth
             onBlur={handleOnBlur}
+            onKeyPress={keyPress}
           />
         </Paper>
       ) : (
