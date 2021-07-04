@@ -22,10 +22,9 @@ const Roadmapboard = () => {
       .doc(projectID)
       .collection("epics")
       .orderBy("startDate")
-      .get()
-      .then((query) => {
+      .onSnapshot((querySnapshot) => {
         const data = [];
-        query.forEach((doc) => {
+        querySnapshot.forEach((doc) => {
           data.push({ ...doc.data(), id: doc.id });
         });
         setEpicData(data);
