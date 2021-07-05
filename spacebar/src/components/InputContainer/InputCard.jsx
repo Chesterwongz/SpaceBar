@@ -11,9 +11,10 @@ import React, { useState, useContext } from "react";
 import {
   addProject,
   addScrumProject,
-  addScrumBoardTask,
   addList,
+  addScrumList,
   addKanbanBoardItem,
+  addScrumBoardTask,
 } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
@@ -40,7 +41,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listID, type }) {
+export default function InputCard({ setOpen, listID, type, sprint }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -68,7 +69,11 @@ export default function InputCard({ setOpen, listID, type }) {
     } else if (type === "backlog") {
       addScrumBoardTask(title, listID, currentUser, projectID);
     } else if (type === "list") {
-      addList(title, projectID);
+      if (sprint) {
+        addScrumList(title, projectID);
+      } else {
+        addList(title, projectID);
+      }
     } else {
       return;
     }
@@ -90,7 +95,6 @@ export default function InputCard({ setOpen, listID, type }) {
         <InputBase
           onChange={handleOnChange}
           onKeyPress={keyPress}
-          onBlur={() => setOpen(false)}
           multiline
           fullWidth
           autoFocus

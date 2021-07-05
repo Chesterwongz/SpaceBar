@@ -30,7 +30,6 @@ export default function KanbanList({
   tasks,
   members,
   sprintID,
-  sprint,
   index,
 }) {
   const classes = useStyles();
@@ -49,6 +48,7 @@ export default function KanbanList({
               listID={list.id}
               listIDs={listIDs}
               lists={lists}
+              sprintID={sprintID}
             />
             <Droppable droppableId={list.id}>
               {(provided) => (
@@ -60,8 +60,6 @@ export default function KanbanList({
                           key={taskID}
                           task={tasks[taskID]}
                           listID={list.id}
-                          lists={lists}
-                          listIDs={listIDs}
                           sprintID={sprintID}
                           members={members}
                           index={index}
@@ -72,7 +70,7 @@ export default function KanbanList({
                 </div>
               )}
             </Droppable>
-            {!sprint && <InputContainer listID={list.id} type="card" />}
+            {!sprintID && <InputContainer listID={list.id} type="card" />}
           </Paper>
         </div>
       )}

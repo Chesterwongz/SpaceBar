@@ -25,7 +25,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputContainer({ listID, type }) {
+export default function InputContainer({ listID, type, sprint }) {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
   return (
@@ -37,7 +37,14 @@ export default function InputContainer({ listID, type }) {
       }
     >
       <Collapse in={open}>
-        {open && <InputCard setOpen={setOpen} listID={listID} type={type} />}
+        {open && (
+          <InputCard
+            setOpen={setOpen}
+            listID={listID}
+            type={type}
+            sprint={sprint}
+          />
+        )}
       </Collapse>
       <Collapse in={!open}>
         <Paper

@@ -9,7 +9,7 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { moveTask, moveScrumTask } from "../../../FireStore";
+import { db, moveTask, moveScrumTask } from "../../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,14 +21,19 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     zIndex: theme.zIndex.modal + 1,
   },
+  menuItem: {
+    textTransform: "uppercase",
+  },
 }));
 
-export default function TaskStatusButton({ task, lists, listIDs, sprintID }) {
+export default function TaskStatusButton({ task, sprintID }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [lists, setLists] = useState({});
+  const [listIDs, setListIDs] = useState([]);
   const anchorRef = useRef(null);
-  const currentStatus = lists[task.status].title;
+  // const currentStatus = lists[task.status].title;
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -47,12 +52,57 @@ export default function TaskStatusButton({ task, lists, listIDs, sprintID }) {
   }
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(open);
+
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
     prevOpen.current = open;
   }, [open]);
+
+  useEffect(() => {
+    const projectRef = db.collection("Projects").doc(projectID);
+    projectRef.get().then((doc) => {
+      setListIDs(doc.data().listIDs);
+    });
+    if (sprintID) {
+      projectRef
+        .collection("scrum")
+        .doc("backlog")
+        .collection("board")
+        .get()
+        .then((querySnapshot) => {
+          const statusLists = querySnapshot.docs
+            .map((doc) => {
+              return doc.data();
+            })
+            .reduce((rest, list) => {
+              return {
+                ...rest,
+                [list.id]: list.title, // list.id needs to be equal to doc.id!!!
+              };
+            }, {});
+          setLists(statusLists);
+        });
+    } else {
+      projectRef
+        .collection("kanbanboard")
+        .get()
+        .then((querySnapshot) => {
+          const boardLists = querySnapshot.docs
+            .map((doc) => {
+              return doc.data();
+            })
+            .reduce((rest, list) => {
+              return {
+                ...rest,
+                [list.id]: list.title, // sprint.id needs to be equal to doc.id!!!
+              };
+            }, {});
+          setLists(boardLists);
+        });
+    }
+  }, []);
 
   return (
     <div>
@@ -65,7 +115,8 @@ export default function TaskStatusButton({ task, lists, listIDs, sprintID }) {
       >
         <Typography variant="button" noWrap>
           &nbsp;
-          {currentStatus}
+          {/* {console.log(lists)} */}
+          {lists[task.status]}
         </Typography>
       </Button>
       <Popper
@@ -93,10 +144,11 @@ export default function TaskStatusButton({ task, lists, listIDs, sprintID }) {
                 >
                   {listIDs.map((listID, index) => {
                     if (listID !== task.status) {
-                      const status = lists[listID].title;
+                      const status = lists[listID];
                       return (
                         <MenuItem
                           key={index}
+                          className={classes.menuItem}
                           onClick={(event) => {
                             const from = task.status;
                             const to = listID;

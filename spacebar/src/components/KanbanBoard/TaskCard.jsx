@@ -37,15 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskCard({
-  task,
-  lists,
-  listIDs,
-  sprintID,
-  listID,
-  members,
-  index,
-}) {
+export default function TaskCard({ task, sprintID, listID, members, index }) {
   const { projectID } = useParams();
   const classes = useStyles();
   const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -96,8 +88,6 @@ export default function TaskCard({
       <TaskWindow
         task={task}
         members={members}
-        lists={lists}
-        listIDs={listIDs}
         sprintID={sprintID}
         open={isWindowOpen}
         onClose={handleWindowClose}

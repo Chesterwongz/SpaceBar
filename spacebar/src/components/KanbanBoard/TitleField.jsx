@@ -2,7 +2,7 @@ import { InputBase, Paper, Typography } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { updateListTitle } from "../../FireStore";
+import { updateListTitle, updateScrumListTitle } from "../../FireStore";
 import DeleteListDialog from "../InfoModals/DeleteListDialog";
 
 const useStyle = makeStyles((theme) => ({
@@ -30,7 +30,13 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function TitleField({ title, listID, listIDs, lists }) {
+export default function TitleField({
+  title,
+  listID,
+  lists,
+  listIDs,
+  sprintID,
+}) {
   const { projectID } = useParams();
   const [open, setOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -45,11 +51,16 @@ export default function TitleField({ title, listID, listIDs, lists }) {
   };
   const handleOnBlur = () => {
     if (newTitle.length > 1) {
-      updateListTitle(newTitle, listID, projectID);
+      if (sprintID) {
+        updateScrumListTitle(newTitle, listID, projectID);
+      } else {
+        updateListTitle(newTitle, listID, projectID);
+      }
     }
-    setNewTitle(title);
+    setNewTitle(newTitle);
     setOpen(false);
   };
+
   return (
     <div>
       {open ? (
@@ -74,7 +85,12 @@ export default function TitleField({ title, listID, listIDs, lists }) {
           >
             {title}
           </Typography>
-          <DeleteListDialog listID={listID} listIDs={listIDs} lists={lists} />
+          <DeleteListDialog
+            listID={listID}
+            listIDs={listIDs}
+            lists={lists}
+            sprintID={sprintID}
+          />
         </Paper>
       )}
     </div>

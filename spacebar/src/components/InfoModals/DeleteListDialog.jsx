@@ -15,7 +15,12 @@ import {
 import { red } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/styles";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import { deleteList, moveTask } from "../../FireStore";
+import {
+  deleteList,
+  deleteScrumList,
+  moveTask,
+  moveScrumTask,
+} from "../../FireStore";
 
 const useStyle = makeStyles((theme) => ({
   uppercase: {
@@ -27,7 +32,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function DeleteListDialog({ listID, listIDs, lists }) {
+export default function DeleteListDialog({ listID, listIDs, lists, sprintID }) {
   const classes = useStyle();
   const { projectID } = useParams();
   const [open, setOpen] = useState(false);
@@ -49,10 +54,17 @@ export default function DeleteListDialog({ listID, listIDs, lists }) {
   };
   const handleDelete = () => {
     if (newList) {
-      lists[listID].items.forEach((task) => {
-        moveTask(task, listID, newList, projectID);
-      });
-      deleteList(listID, projectID);
+      if (sprintID) {
+        lists[listID].items.forEach((task) => {
+          moveScrumTask(task, listID, newList, sprintID, projectID);
+        });
+        deleteScrumList(listID, projectID);
+      } else {
+        lists[listID].items.forEach((task) => {
+          moveTask(task, listID, newList, projectID);
+        });
+        deleteList(listID, projectID);
+      }
     }
     setOpen(false);
   };

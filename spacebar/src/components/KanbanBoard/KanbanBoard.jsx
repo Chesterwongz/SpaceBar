@@ -2,7 +2,7 @@ import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import KanbanList from "./KanbanList.jsx";
-import { dndKanbanList, updateKanbanBoardItems } from "../../FireStore";
+import { dndList, updateKanbanBoardItems } from "../../FireStore";
 import { makeStyles } from "@material-ui/styles";
 import InputContainer from "../InputContainer/InputContainer.jsx";
 
@@ -23,7 +23,7 @@ export default function KanbanBoard({ tasks, lists, listIDs, members }) {
       const newListIDs = listIDs;
       newListIDs.splice(source.index, 1);
       newListIDs.splice(destination.index, 0, draggableId);
-      dndKanbanList(newListIDs, projectID);
+      dndList(newListIDs, projectID);
       return;
     }
     const sourceList = lists[source.droppableId];
