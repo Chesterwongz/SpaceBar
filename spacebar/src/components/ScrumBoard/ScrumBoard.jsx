@@ -1,22 +1,16 @@
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import {
-  db,
-  dndScrumBoardTasks,
-  addSprint,
-  updateCumulativeFlowDate,
-} from "../../FireStore";
+import { addSprint, dndScrumBoardTasks } from "../../FireStore";
 import Backlog from "./Backlog";
 import Sprint from "./Sprint";
-import { Typography, Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    width: "80vw",
+    width: "77vw",
   },
   backlog: {
     flex: "0 0 50%",
