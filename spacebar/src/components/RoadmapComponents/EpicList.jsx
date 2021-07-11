@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    width: "200px",
     height: "50px",
     backgroundColor: theme.palette.secondary.main,
     cursor: "pointer",

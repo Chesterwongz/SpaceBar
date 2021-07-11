@@ -10,25 +10,20 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#999594",
     height: "800px",
   },
-  EmptyDiv: {
-    width: "300px",
-    display: "flex",
-    justifyContent: "center",
-  },
 }));
 const EpicCalender = ({ epicData }) => {
   const classes = useStyles();
   return (
-    <div className={classes.epicCalendar}>
+    <div>
       {epicData[0] ? (
-        <div>
-          <Months startDate={epicData[0].startDate.toDate()} />
-          <Progress epicData={epicData} />
+        <div className={classes.epicCalendar}>
+          <div>
+            <Months startDate={epicData[0].startDate.toDate()} />
+            <Progress epicData={epicData} />
+          </div>
         </div>
       ) : (
-        <div className={classes.EmptyDiv}>
-          <h3>Create an Epic first</h3>
-        </div>
+        <div></div>
       )}
     </div>
   );
