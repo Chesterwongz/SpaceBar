@@ -9,6 +9,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import { CurrentUserContext } from "../utils/Context";
 import { Alert } from "@material-ui/lab";
 import MemberList from "../components/MemberList";
+import TeamInvite from "../components/TeamInvite/TeamInvite";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -133,6 +134,7 @@ export default function TeamPage() {
           {errorMessage}
         </Alert>
       ) : null}
+      <TeamInvite />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
+import MemberAvatar from "./MemberAvatar";
 
 const useStyles = makeStyles({
   card: {
@@ -20,7 +21,6 @@ const useStyles = makeStyles({
   avatar: {
     width: 100,
     height: 100,
-    fontSize: 60,
   },
 
   content: {
@@ -60,7 +60,7 @@ export default function MemberList({ projectID }) {
           <Card key={index} className={classes.card}>
             <CardContent className={classes.content}>
               <Avatar className={classes.avatar}>
-                {member.displayName.slice(0, 1)}
+                <MemberAvatar assignee={member} />
               </Avatar>
               <Typography variant="body2" component="p">
                 {member.displayName}
