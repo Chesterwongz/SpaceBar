@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import LockIcon from "@material-ui/icons/Lock";
+import PasswordReset from "./PasswordReset";
 
 const useStyles = makeStyles((theme) => ({
   signIn: {
@@ -61,12 +62,28 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  passwordResetContainer: {
+    textAlign: "center",
+  },
+  passwordReset: {
+    color: "#35baf6",
+    cursor: "pointer",
+  },
 }));
 
 const SigninComponent = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     auth
@@ -95,6 +112,7 @@ const SigninComponent = () => {
       setPassword(value);
     }
   };
+
   return (
     <div className={classes.signIn}>
       <h2>Sign in </h2>
@@ -146,6 +164,13 @@ const SigninComponent = () => {
           <button className={classes.googleButton} onClick={signInWithGoogle}>
             Sign in with Google
           </button>
+        </div>
+        <div className={classes.passwordResetContainer}>
+          <PasswordReset
+            handleClickOpen={handleClickOpen}
+            handleClose={handleClose}
+            open={open}
+          />
         </div>
       </form>
     </div>

@@ -49,7 +49,6 @@ export default function HomePage() {
   return (
     <div>
       <Appbar />
-      {console.log(currentUser)}
       <div className={classes.root}>
         <div className={classes.header}>
           <FolderIcon className={classes.icon} />
