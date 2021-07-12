@@ -7,6 +7,10 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import ForumIcon from "@material-ui/icons/Forum";
+import PeopleIcon from "@material-ui/icons/People";
+import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useParams } from "react-router-dom";
 import Appbar from "./Appbar";
@@ -18,7 +22,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   page: {
+    flexGrow: 1,
     padding: theme.spacing(2),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  pageShift: {
+    padding: theme.spacing(2),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
   },
   drawer: {
     width: drawerWidth,
@@ -46,10 +64,11 @@ export default function Layout({ children }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const menuItems = [
     {
       text: "Hangout",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <ForumIcon color="primary" />,
       path: `/${projectID}/hangout`,
     },
     {
@@ -59,12 +78,12 @@ export default function Layout({ children }) {
     },
     {
       text: "Team",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <PeopleIcon color="primary" />,
       path: `/${projectID}/team`,
     },
     {
       text: "Analytics",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <BarChartIcon color="primary" />,
       path: `/${projectID}/analytics`,
     },
   ];
@@ -74,9 +93,10 @@ export default function Layout({ children }) {
       <Appbar />
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant="persistent"
         anchor="left"
         classes={{ paper: classes.drawerPaper }}
+        open={drawerOpen}
       >
         <List>
           {menuItems.map((item) => (
@@ -88,15 +108,17 @@ export default function Layout({ children }) {
                 location.pathname === item.path ? classes.active : null
               }
             >
-              <ListItemText>{item.text}</ListItemText>
               <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText>{item.text}</ListItemText>
             </ListItem>
           ))}
         </List>
       </Drawer>
       <div>
         <div className={classes.toolbar}></div>
-        <div className={classes.page}>{children}</div>
+        <div className={drawerOpen ? classes.pageShift : classes.page}>
+          {children}
+        </div>
       </div>
     </div>
   );
