@@ -48,6 +48,11 @@ export default function Layout({ children }) {
   const location = useLocation();
   const menuItems = [
     {
+      text: "Roadmap",
+      icon: <SubjectOutlined color="primary" />,
+      path: `/${projectID}/roadmap`,
+    },
+    {
       text: "Hangout",
       icon: <SubjectOutlined color="primary" />,
       path: `/${projectID}/hangout`,
