@@ -16,6 +16,7 @@ import SignInPage from "./pages/SignInPage";
 import TeamPage from "./pages/TeamPage";
 import { CurrentUserContext } from "./utils/Context";
 import theme from "./utils/theme";
+import RoadmapPage from "./pages/RoadmapPage.jsx";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -49,6 +50,7 @@ function App() {
                     path="/:projectID/analytics"
                     component={AnalyticsPage}
                   />
+                  <Route path="/:projectID/roadmap" component={RoadmapPage} />
                   <Redirect from="/:projectID" to="/:projectID/board" />
                 </Switch>
               </Layout>

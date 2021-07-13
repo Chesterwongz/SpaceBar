@@ -230,6 +230,19 @@ export function updatePostTitle(docID, newTitle, projectID) {
       console.log("Error updating drawing board title", error);
     });
 }
+export function updateEpicTitle(docID, newTitle, projectID) {
+  return db
+    .collection("Projects")
+    .doc(projectID)
+    .collection("epics")
+    .doc(docID)
+    .update({
+      title: newTitle,
+    })
+    .catch((error) => {
+      console.log("Error updating drawing board title", error);
+    });
+}
 
 export function getProjectInfo(projectref) {
   const docRef = db.collection("Projects").doc(projectref);

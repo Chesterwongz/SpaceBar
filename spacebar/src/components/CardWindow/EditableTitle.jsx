@@ -6,7 +6,11 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { updatePostTitle, updateTaskTitle } from "../../FireStore";
+import {
+  updatePostTitle,
+  updateTaskTitle,
+  updateEpicTitle,
+} from "../../FireStore";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -25,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EditableTitle({ title, docID, type }) {
+export default function EditableTitle({ title, docID, type, epicId }) {
   const classes = useStyles();
   const inputArea = useRef();
   const buttonArea = useRef();
@@ -78,6 +82,8 @@ export default function EditableTitle({ title, docID, type }) {
         updateTaskTitle(docID, value, projectID);
       } else if (type === "post") {
         updatePostTitle(docID, value, projectID);
+      } else if (type == "epic") {
+        updateEpicTitle(epicId, value, projectID);
       }
     }
     setEditing(false);

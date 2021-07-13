@@ -1,9 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Auth from "../../images/auth.svg";
-import firebase from "firebase";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { uiConfig, signInWithGoogle } from "../../FireStore";
 import SigninComponent from "./SigninComponent";
 import SignupComponent from "./SignupComponent";
 
