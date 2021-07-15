@@ -69,6 +69,7 @@ export default function TeamPage() {
         } else {
           //Success
           setErrorMessage("");
+          alert("Please wait for the user to accept your invitation");
           db.collection("users")
             .where("email", "==", value)
             .get()
@@ -81,7 +82,7 @@ export default function TeamPage() {
                 db.collection("users")
                   .doc(doc.id)
                   .update({
-                    projectRef:
+                    pending:
                       firebase.firestore.FieldValue.arrayUnion(projectID),
                   });
               });
@@ -121,7 +122,7 @@ export default function TeamPage() {
         endIcon={<PeopleIcon />}
         onClick={handleSubmit}
       >
-        Add member
+        Invite member
       </Button>
       {errorMessage !== "" ? (
         <Alert

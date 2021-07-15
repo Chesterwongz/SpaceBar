@@ -75,7 +75,7 @@ export default function DeleteListDialog({ listID, listIDs, lists, sprintID }) {
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle id="alert-dialog-title">
-          Move work from{" "}
+          Move work from&nbsp;
           <span className={classes.uppercase}>{lists[listID].title}</span>
         </DialogTitle>
         <DialogContent>

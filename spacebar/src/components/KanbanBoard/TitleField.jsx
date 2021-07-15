@@ -1,4 +1,9 @@
-import { InputBase, Paper, Typography } from "@material-ui/core";
+import {
+  InputBase,
+  Paper,
+  Typography,
+  ClickAwayListener,
+} from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -65,17 +70,19 @@ export default function TitleField({
     <div>
       {open ? (
         <Paper elevation={0}>
-          <InputBase
-            onChange={handleOnChange}
-            autoFocus
-            value={newTitle}
-            inputProps={{
-              className: classes.input,
-            }}
-            fullWidth
-            onBlur={handleOnBlur}
-            onKeyPress={keyPress}
-          />
+          <ClickAwayListener onClickAway={handleOnBlur}>
+            <InputBase
+              onChange={handleOnChange}
+              autoFocus
+              value={newTitle}
+              inputProps={{
+                className: classes.input,
+              }}
+              fullWidth
+              onBlur={handleOnBlur}
+              onKeyPress={keyPress}
+            />
+          </ClickAwayListener>
         </Paper>
       ) : (
         <Paper elevation={0} className={classes.editableTitleContainer}>
