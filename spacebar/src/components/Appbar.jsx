@@ -33,6 +33,9 @@ export default function Appbar({ project }) {
           <Button color="inherit" href="/home">
             Your Projects
           </Button>
+          <Button color="inherit" href="/account">
+            Account
+          </Button>
           {/* <Button color="inherit">Account</Button> */}
           <Button color="inherit" href="/" onClick={() => auth.signOut()}>
             Sign Out

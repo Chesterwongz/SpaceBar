@@ -75,6 +75,9 @@ const SignupComponent = () => {
             });
         })
         .then(() => {
+          auth.signOut();
+        })
+        .then(() => {
           setDisplayName("");
           setEmail("");
           setPassword("");
