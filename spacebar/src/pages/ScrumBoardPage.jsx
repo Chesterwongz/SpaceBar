@@ -11,14 +11,14 @@ import { db, updateCumulativeFlowDate } from "../FireStore";
 const useStyles = makeStyles((theme) => ({
   appBar: {},
   fab: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(2),
     right: theme.spacing(2),
     cursor: "pointer",
     border: "none",
   },
   fabAnimated: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(2),
     right: theme.spacing(2),
     animation: "$pulse 1.5s infinite",

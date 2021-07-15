@@ -106,7 +106,7 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
             </div>
           )}
         </Droppable>
-        <InputContainer listId={list.id} type="backlog" />
+        <InputContainer listID={list.id} type="backlog" />
       </Paper>
     </div>
   );

@@ -11,13 +11,18 @@ import React, { useState, useContext } from "react";
 import {
   addProject,
   addScrumProject,
-  addScrumBoardTask,
+  addList,
+  addScrumList,
   addKanbanBoardItem,
+  addScrumBoardTask,
 } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { CurrentUserContext } from "../../utils/Context";
 
 const useStyle = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(1),
+  },
   input: {
     margin: theme.spacing(1),
   },
@@ -36,7 +41,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function InputCard({ setOpen, listId, type }) {
+export default function InputCard({ setOpen, listID, type, sprint }) {
   const currentUser = useContext(CurrentUserContext);
   const { projectID } = useParams();
   const classes = useStyle();
@@ -45,17 +50,32 @@ export default function InputCard({ setOpen, listId, type }) {
   const handleOnChange = (event) => {
     setTitle(event.target.value);
   };
-
+  const keyPress = (event) => {
+    if (event.key === "Enter") {
+      handleBtnConfirm();
+      event.preventDefault();
+      resetInput();
+      return false;
+    }
+  };
   const resetInput = () => {
     setTitle("");
     setOpen(false);
   };
-  const handleCardBtnConfirm = () => {
+  const handleBtnConfirm = () => {
     if (title.length < 1) return;
     if (type === "card") {
-      addKanbanBoardItem(title, listId, currentUser, projectID);
+      addKanbanBoardItem(title, listID, currentUser, projectID);
     } else if (type === "backlog") {
-      addScrumBoardTask(title, listId, currentUser, projectID);
+      addScrumBoardTask(title, listID, currentUser, projectID);
+    } else if (type === "list") {
+      if (sprint) {
+        addScrumList(title, projectID);
+      } else {
+        addList(title, projectID);
+      }
+    } else {
+      return;
     }
     resetInput();
   };
@@ -70,36 +90,38 @@ export default function InputCard({ setOpen, listId, type }) {
     resetInput();
   };
   return (
-    <>
-      <div>
-        <Paper>
-          <InputBase
-            onChange={handleOnChange}
-            multiline
-            onBlur={() => setOpen(false)}
-            fullWidth
-            inputProps={{
-              className: classes.input,
-            }}
-            value={title}
-            placeholder={
-              type === "card" || type === "backlog"
-                ? "Enter a title of this card.."
-                : type === "project"
-                ? "Enter project title..."
-                : "wrong type"
-            }
-          />
-        </Paper>
-      </div>
+    <div className={classes.root}>
+      <Paper>
+        <InputBase
+          onChange={handleOnChange}
+          onKeyPress={keyPress}
+          multiline
+          fullWidth
+          autoFocus
+          inputProps={{
+            className: classes.input,
+          }}
+          value={title}
+          placeholder={
+            type === "card" || type === "backlog"
+              ? "Enter a title of this card.."
+              : type === "list"
+              ? "Enter list title..."
+              : type === "project"
+              ? "Enter project title..."
+              : "wrong type"
+          }
+        />
+      </Paper>
       <div className={classes.confirm}>
         {currentUser &&
           (type === "card" || type === "backlog" ? (
-            <Button
-              className={classes.btnConfirm}
-              onClick={handleCardBtnConfirm}
-            >
+            <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
               Add Card
+            </Button>
+          ) : type === "list" ? (
+            <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
+              Add List
             </Button>
           ) : (
             <>
@@ -131,6 +153,6 @@ export default function InputCard({ setOpen, listId, type }) {
           <ClearIcon />
         </IconButton>
       </div>
-    </>
+    </div>
   );
 }
