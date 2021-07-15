@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     height: "120vh",
+    overflow: "hidden",
     backgroundColor: theme.palette.primary.main,
     padding: "0 30px",
     display: "flex",
@@ -15,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "space-around",
     "@media screen and (max-width: 768px)": {
       flexDirection: "column",
-      height: "170vh",
+      height: "200vh",
     },
   },
   imageContainer: {
     marginTop: "150px",
     display: "flex",
     justifyContent: "center",
-    "@media screen and (max-width: 768px)": {
+    "@media screen and (max-width: 1500px)": {
       display: "none",
     },
   },
