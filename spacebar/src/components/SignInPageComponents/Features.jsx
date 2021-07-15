@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     height: "100vh",
+    overflow: "hidden",
     backgroundColor: theme.palette.secondary.main,
     padding: "0 30px",
     display: "flex",
@@ -26,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontSize: "50px",
     textAlign: "center",
-    marginBottom: "100px",
     "@media screen and (max-width: 768px)": {
       fontSize: "40px",
     },
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cards: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     "@media screen and (max-width: 768px)": {
       flexDirection: "column",
       marginBottom: "0px",
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     width: "300px",
     height: "300px",
     display: "flex",
-    margin: "50px",
+    margin: "30px",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
@@ -59,9 +59,6 @@ const useStyles = makeStyles((theme) => ({
       transform: "scale(1.1)",
       transition: "all 0.2s ease-in-out",
       cursor: "pointer",
-    },
-    "@media screen and (max-width: 768px)": {
-      margin: "30px",
     },
   },
   cardTitle: {
