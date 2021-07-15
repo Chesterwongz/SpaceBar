@@ -2,46 +2,19 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip } from "recharts";
+import { ListItemSecondaryAction } from "@material-ui/core";
 
-const ToDoBarChart = () => {
+const ToDoBarChart = ({ currentSprint }) => {
   let { projectID } = useParams();
   const [backlogItems, setBacklogItems] = useState([]);
-
-  // useEffect(() => {
-  //   db.collection("Projects")
-  //     .doc(projectID)
-  //     .collection("scrum")
-  //     .doc("backlog")
-  //     .get()
-  //     .then((doc) => {
-  //       const backlogItemRef = doc.data().items;
-  //       return backlogItemRef;
-  //     })
-  //     .then((backlogItemRef) => {
-  //       const items = [];
-  //       db.collection("Projects")
-  //         .doc(projectID)
-  //         .collection("tasks")
-  //         .get()
-  //         .then((querySnapshot) => {
-  //           querySnapshot.forEach((doc) => {
-  //             if (backlogItemRef.includes(doc.data().id)) {
-  //               items.push(doc.data());
-  //             }
-  //           });
-  //           setBacklogItems(items);
-  //         });
-  //     });
-  // }, [projectID]);
-
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
       .collection("tasks")
       .get()
-      .then((querySnapshot) => {
+      .then((snapshot) => {
         const items = [];
-        querySnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
           items.push(doc.data());
         });
         setBacklogItems(items);

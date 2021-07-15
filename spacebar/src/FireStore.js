@@ -776,6 +776,7 @@ export function setSprint(sprintId, projectID) {
     .collection("scrum")
     .doc("backlog")
     .update({ currentSprint: sprintId });
+  updateCumulativeFlowDate(projectID, sprintId);
 }
 export function dndSprintBoardItems(
   destination,
