@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../FireStore";
 import { useParams } from "react-router-dom";
 import { BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip } from "recharts";
-import { ListItemSecondaryAction } from "@material-ui/core";
 
-const ToDoBarChart = ({ currentSprint }) => {
+const ToDoBarChart = () => {
   let { projectID } = useParams();
   const [backlogItems, setBacklogItems] = useState([]);
   useEffect(() => {
