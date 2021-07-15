@@ -75,13 +75,15 @@ const SignupComponent = () => {
             });
         })
         .then(() => {
+          auth.signOut();
+        })
+        .then(() => {
           setDisplayName("");
           setEmail("");
           setPassword("");
           setConfirmPassword("");
         })
         .catch((error) => {
-          var errorCode = error.code;
           var errorMessage = error.message;
           alert(errorMessage);
           // ..

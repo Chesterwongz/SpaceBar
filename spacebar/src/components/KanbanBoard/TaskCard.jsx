@@ -6,15 +6,14 @@ import {
   IconButton,
   makeStyles,
 } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { deleteScrumBoardTask, deleteKanbanBoardItem } from "../../FireStore";
+import { deleteKanbanBoardItem, deleteScrumBoardTask } from "../../FireStore";
 import MemberAvatar from "../MemberAvatar";
 import PriorityIcon from "./PriorityIcon";
 import TaskWindow from "./TaskWindow";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
   card: {

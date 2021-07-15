@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
 import MediaCard from "../components/MediaCard";
 import InputContainer from "../components/InputContainer";
+import PendingProjects from "../components/PendingProjects";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 80,
@@ -25,15 +26,21 @@ const useStyles = makeStyles((theme) => ({
   projects: {
     display: "flex",
     justifyContent: "space-evenly",
+    width: "80vw",
   },
   InputContainer: {
     marginLeft: 50,
+    cursor: "pointer",
+  },
+  main: {
+    display: "flex",
   },
 }));
 
 export default function HomePage() {
   const currentUser = useContext(CurrentUserContext);
   const [projects, setProjects] = useState([]);
+  const [pendingProjects, setPendingProjects] = useState([]);
   const classes = useStyles();
 
   useEffect(() => {
@@ -42,6 +49,9 @@ export default function HomePage() {
         .doc(currentUser.id)
         .onSnapshot((doc) => {
           setProjects(doc.data().projectRef);
+          if (doc.data().pending) {
+            setPendingProjects(doc.data().pending);
+          }
         });
     }
   }, [currentUser]);
@@ -49,7 +59,6 @@ export default function HomePage() {
   return (
     <div>
       <Appbar />
-      {console.log(currentUser)}
       <div className={classes.root}>
         <div className={classes.header}>
           <FolderIcon className={classes.icon} />
@@ -58,15 +67,31 @@ export default function HomePage() {
             <InputContainer type="project" />
           </div>
         </div>
-        {projects ? (
-          <div className={classes.projects}>
-            {projects.map((project, index) => {
-              return <MediaCard projectRef={project} key={index} />;
-            })}
+        <div className={classes.main}>
+          <div>
+            {currentUser ? (
+              <div>
+                <PendingProjects
+                  pendingProjects={pendingProjects}
+                  currentUserID={currentUser.id}
+                />
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
-        ) : (
-          <div></div>
-        )}
+          <div>
+            {projects ? (
+              <div className={classes.projects}>
+                {projects.map((project, index) => {
+                  return <MediaCard projectRef={project} key={index} />;
+                })}
+              </div>
+            ) : (
+              <div></div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

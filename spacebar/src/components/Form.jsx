@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
       width: "70%", // 70% of card in drawing board
     },
   },
+  container: {
+    display: "flex",
+  },
 }));
 
 export default function Form({ onSubmit, placeHolder }) {
@@ -31,7 +34,7 @@ export default function Form({ onSubmit, placeHolder }) {
 
   return (
     <form className={classes.form} noValidate autoComplete="off">
-      <div>
+      <div className={classes.container}>
         <TextField
           id="standard-textarea"
           placeholder={`${placeHolder}`}

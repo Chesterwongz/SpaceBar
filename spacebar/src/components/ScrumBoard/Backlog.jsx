@@ -45,7 +45,7 @@ export default function Backlog({ list, tasks, members }) {
             </div>
           )}
         </Droppable>
-        <InputContainer listId={"backlog"} type="backlog" />
+        <InputContainer listID={"backlog"} type="backlog" />
       </Paper>
     </div>
   );

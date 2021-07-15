@@ -11,6 +11,7 @@ import { IconButton } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { db, deleteProject } from "../FireStore";
 import { useState, useEffect } from "react";
+import AlertDialog from "./InfoModals/AlertDialog";
 import Rocket from "../images/rocket.jpg";
 
 const useStyles = makeStyles({
@@ -32,9 +33,13 @@ const useStyles = makeStyles({
 export default function MediaCard({ projectRef }) {
   const classes = useStyles();
   const [projectInfo, setProjectInfo] = useState({});
+  const [alertOpen, setAlertOpen] = useState(false);
   const link = `/${projectRef}/board`;
   const handleDelete = () => {
     deleteProject(projectRef);
+  };
+  const handleClick = () => {
+    setAlertOpen(true);
   };
   useEffect(() => {
     db.collection("Projects")
@@ -65,11 +70,18 @@ export default function MediaCard({ projectRef }) {
         <IconButton
           className={classes.deleteBtn}
           size="small"
-          onClick={handleDelete}
+          onClick={handleClick}
         >
           <DeleteForeverIcon color="primary" />
         </IconButton>
       </CardActions>
+      <AlertDialog
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        title={`Delete ${projectInfo.title}?`}
+        content="The project along with its issues, discussions, and components will be permanently deleted."
+        onDelete={handleDelete}
+      />
     </Card>
   );
 }
