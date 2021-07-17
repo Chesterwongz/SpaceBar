@@ -5,8 +5,11 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
+  Tooltip,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import ForumIcon from "@material-ui/icons/Forum";
 import PeopleIcon from "@material-ui/icons/People";
@@ -15,7 +18,8 @@ import { useHistory, useLocation } from "react-router";
 import { useParams } from "react-router-dom";
 import Appbar from "./Appbar";
 
-const drawerWidth = 240;
+const openDrawerWidth = 240;
+const closeDrawerWidth = 60;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,30 +28,26 @@ const useStyles = makeStyles((theme) => ({
   page: {
     flexGrow: 1,
     padding: theme.spacing(2),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  pageShift: {
-    padding: theme.spacing(2),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
   },
   drawer: {
-    width: drawerWidth,
+    width: openDrawerWidth,
   },
   drawerPaper: {
-    width: drawerWidth,
+    width: openDrawerWidth,
     background: theme.palette.primary.light,
     paddingTop: 40,
   },
+  closedDrawer: {
+    width: closeDrawerWidth,
+  },
+  closedDrawerPaper: {
+    width: closeDrawerWidth,
+    background: theme.palette.primary.light,
+    paddingTop: 40,
+    overflow: "hidden",
+  },
   active: {
-    background: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
   },
   appbar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -97,11 +97,12 @@ export default function Layout({ children }) {
     <div className={classes.root}>
       <Appbar />
       <Drawer
-        className={classes.drawer}
-        variant="persistent"
+        className={drawerOpen ? classes.drawer : classes.closedDrawer}
+        variant="permanent"
         anchor="left"
-        classes={{ paper: classes.drawerPaper }}
-        open={drawerOpen}
+        classes={{
+          paper: drawerOpen ? classes.drawerPaper : classes.closedDrawerPaper,
+        }}
       >
         <List>
           {menuItems.map((item) => (
@@ -113,17 +114,26 @@ export default function Layout({ children }) {
                 location.pathname === item.path ? classes.active : null
               }
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText>{item.text}</ListItemText>
+              <Tooltip title={item.text}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+              </Tooltip>
+              {drawerOpen && <ListItemText>{item.text}</ListItemText>}
             </ListItem>
           ))}
+          <ListItem
+            button
+            key="close"
+            onClick={() => setDrawerOpen(!drawerOpen)}
+          >
+            <ListItemIcon>
+              {drawerOpen ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />}
+            </ListItemIcon>
+          </ListItem>
         </List>
       </Drawer>
       <div>
         <div className={classes.toolbar}></div>
-        <div className={drawerOpen ? classes.pageShift : classes.page}>
-          {children}
-        </div>
+        <div className={classes.page}>{children}</div>
       </div>
     </div>
   );
