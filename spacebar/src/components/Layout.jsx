@@ -67,6 +67,11 @@ export default function Layout({ children }) {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const menuItems = [
     {
+      text: "Roadmap",
+      icon: <SubjectOutlined color="primary" />,
+      path: `/${projectID}/roadmap`,
+    },
+    {
       text: "Hangout",
       icon: <ForumIcon color="primary" />,
       path: `/${projectID}/hangout`,
