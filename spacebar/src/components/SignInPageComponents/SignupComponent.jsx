@@ -54,42 +54,50 @@ const SignupComponent = () => {
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
-    }
-    try {
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Signed in
-          userCredential.user.sendEmailVerification();
-          alert("An email verification code has been sent to your account");
-        })
-        .then(() => {
-          const user = auth.currentUser;
-          user
-            .updateProfile({
-              displayName: displayName,
-            })
-            .then(() => {})
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .then(() => {
-          auth.signOut();
-        })
-        .then(() => {
-          setDisplayName("");
-          setEmail("");
-          setPassword("");
-          setConfirmPassword("");
-        })
-        .catch((error) => {
-          var errorMessage = error.message;
-          alert(errorMessage);
-          // ..
-        });
-    } catch (error) {
-      console.log(error);
+    } else if (
+      displayName.length === 0 ||
+      email.length === 0 ||
+      password.length === 0 ||
+      confirmPassword.length === 0
+    ) {
+      alert("Please fill in all required fields");
+    } else {
+      try {
+        auth
+          .createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // Signed in
+            userCredential.user.sendEmailVerification();
+            alert("An email verification code has been sent to your account");
+          })
+          .then(() => {
+            const user = auth.currentUser;
+            user
+              .updateProfile({
+                displayName: displayName,
+              })
+              .then(() => {})
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .then(() => {
+            auth.signOut();
+          })
+          .then(() => {
+            setDisplayName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+          })
+          .catch((error) => {
+            var errorMessage = error.message;
+            alert(errorMessage);
+            // ..
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   const handleChange = (event) => {
