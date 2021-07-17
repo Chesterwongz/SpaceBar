@@ -14,11 +14,11 @@ import BoardPage from "./pages/BoardPage.jsx";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import TeamPage from "./pages/TeamPage";
+import ArchivePage from "./pages/ArchivePage";
 import { CurrentUserContext } from "./utils/Context";
 import theme from "./utils/theme";
 import RoadmapPage from "./pages/RoadmapPage.jsx";
 import AccountPage from "./pages/AccountPage.jsx";
-
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -49,6 +49,7 @@ function App() {
                   <Route path="/:projectID/board" component={BoardPage} />
                   <Route path="/:projectID/team" component={TeamPage} />
                   <Route path="/:projectID/hangout" component={HangoutPage} />
+                  <Route path="/:projectID/archive" component={ArchivePage} />
                   <Route
                     path="/:projectID/analytics"
                     component={AnalyticsPage}

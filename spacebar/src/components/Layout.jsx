@@ -13,6 +13,7 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import ForumIcon from "@material-ui/icons/Forum";
 import PeopleIcon from "@material-ui/icons/People";
+import ArchiveIcon from "@material-ui/icons/Archive";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useParams } from "react-router-dom";
@@ -90,6 +91,11 @@ export default function Layout({ children }) {
       text: "Analytics",
       icon: <BarChartIcon color="primary" />,
       path: `/${projectID}/analytics`,
+    },
+    {
+      text: "Archive",
+      icon: <ArchiveIcon color="primary" />,
+      path: `/${projectID}/archive`,
     },
   ];
 
