@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { db } from "../FireStore";
 import TaskCard from "../components/KanbanBoard/TaskCard.jsx";
 import { CircularProgress } from "@material-ui/core";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const stringToColour = (str) => {
   let hash = 0;
@@ -19,7 +18,9 @@ const stringToColour = (str) => {
   return colour;
 };
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    textAlign: "center",
+  },
   paper: {
     width: "480px",
     backgroundColor: theme.palette.primary.main,
@@ -38,19 +39,32 @@ export default function ArchivePage() {
   const [tasksLoading, setTasksLoading] = useState(true);
   const [members, setMembers] = useState({});
   const [membersLoading, setMembersLoading] = useState(true);
-  // Get archived tasks
+  const [isScrum, setIsScrum] = useState(null);
+  // Check if scrum project
   useEffect(() => {
     db.collection("Projects")
       .doc(projectID)
+      .get()
+      .then((doc) => {
+        setIsScrum(doc.data().isScrum);
+      });
+  }, []);
+  // Get archived tasks
+  useEffect(() => {
+    let unsubscribe = db
+      .collection("Projects")
+      .doc(projectID)
       .collection("tasks")
       .where("status", "==", "Archived")
-      .get()
-      .then((querySnapshot) => {
+      .onSnapshot((querySnapshot) => {
         const archivedTasks = [];
         querySnapshot.forEach((doc) => archivedTasks.push(doc.data()));
         setTasks(archivedTasks);
         setTasksLoading(false);
       });
+    return () => {
+      unsubscribe();
+    };
   }, []);
   // Get board members
   useEffect(() => {
@@ -79,29 +93,22 @@ export default function ArchivePage() {
       {tasksLoading || membersLoading ? (
         <CircularProgress />
       ) : (
-        <DragDropContext>
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6">Archive</Typography>
-              <Droppable droppableId="archive">
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task, index) => (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        members={members}
-                        index={index}
-                      />
-                    ))}
-                    <div className={classes.item}>{provided.placeholder}</div>
-                  </div>
-                )}
-              </Droppable>
-            </Paper>
-          </div>
-        </DragDropContext>
+        <Paper className={classes.paper}>
+          <Typography variant="h6">Archive</Typography>
+          {tasks.map((task, index) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              members={members}
+              index={index}
+              isScrum={isScrum}
+            />
+          ))}
+        </Paper>
       )}
+      <Typography className={classes.root}>
+        Archived tasks will be deleted permanently
+      </Typography>
     </>
   );
 }

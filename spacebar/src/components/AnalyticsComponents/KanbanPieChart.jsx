@@ -40,6 +40,7 @@ const KanbanPieChart = () => {
     db.collection("Projects")
       .doc(projectID)
       .collection("tasks")
+      .where("status", "!=", "Archived")
       .get()
       .then((querySnapshot) => {
         const data = [];

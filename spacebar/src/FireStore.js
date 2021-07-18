@@ -195,6 +195,31 @@ export async function deleteProject(projectID) {
     });
   await batch.commit();
 }
+export function deleteTask(taskID, projectID) {
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("tasks")
+    .doc(taskID)
+    .delete()
+    .catch((error) => {
+      console.log("Error when deleting document" + error);
+    });
+}
+export function unarchiveTask(taskID, projectID, isScrumProject) {
+  const batch = db.batch();
+  const projectRef = db.collection("Projects").doc(projectID);
+  // Update task status to todo
+  const taskRef = projectRef.collection("tasks").doc(taskID);
+  batch.update(taskRef, { status: "list-1" });
+  // Add task to todo list
+  const listRef = isScrumProject
+    ? projectRef.collection("scrum").doc("backlog")
+    : projectRef.collection("kanbanboard").doc("list-1");
+  batch.update(listRef, {
+    items: firebase.firestore.FieldValue.arrayUnion(taskID),
+  });
+  batch.commit();
+}
 
 export function addDrawingBoardItem(userID, title, projectID) {
   return db
@@ -338,12 +363,12 @@ export function updateKanbanBoardItems(
   batch.commit();
 }
 
-export function deleteKanbanBoardItem(task, listId, projectID) {
+export function archiveKanbanBoardTask(task, listId, projectID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
-  // Remove from task collection
+  // Update Task status to Archived
   const taskRef = projectRef.collection("tasks").doc(task.id);
-  batch.delete(taskRef);
+  batch.update(taskRef, { status: "Archived" });
   // Remove from list array
   const listRef = projectRef.collection("kanbanboard").doc(listId);
   batch.update(listRef, {
@@ -663,12 +688,12 @@ export function addScrumBoardTask(title, listID, currentUser, projectID) {
   }
 }
 
-export function deleteScrumBoardTask(task, sprintID, projectID, listID) {
+export function archiveScrumBoardTask(task, sprintID, projectID) {
   const batch = db.batch();
   const projectRef = db.collection("Projects").doc(projectID);
-  // Remove from task collection
+  // Change status to ARCHIVED in task collection
   const taskRef = projectRef.collection("tasks").doc(task.id);
-  batch.delete(taskRef);
+  batch.update(taskRef, { status: "Archived" });
   // Remove from list array
   const listRef = projectRef.collection("scrum").doc(sprintID);
   batch.update(listRef, {
@@ -679,21 +704,6 @@ export function deleteScrumBoardTask(task, sprintID, projectID, listID) {
   batch.update(sprintListRef, {
     items: firebase.firestore.FieldValue.arrayRemove(task.id),
   });
-  //Edit cumulative flow diagram by decrementing list by 1
-  const cumulativeFlowRef = db
-    .collection("Projects")
-    .doc(projectID)
-    .collection("cumulativeflow")
-    .doc(formatDate(Date.now()));
-  batch.set(
-    cumulativeFlowRef,
-    {
-      statuses: {
-        [listID]: firebase.firestore.FieldValue.increment(-1),
-      },
-    },
-    { merge: true }
-  );
   batch.commit();
   //Updates cumulative flow whenever task moves from backlog to sprint list and vice versa
   updateCumulativeFlowDate(projectID, sprintID);
@@ -751,15 +761,18 @@ export async function deleteSprint(sprintId, taskArr, projectId) {
   });
   batch.commit();
 }
-export async function completeSprint(sprintId, taskArr, projectID) {
+export async function completeSprint(sprintID, taskArr, tasks, projectID) {
   setSprint("", projectID);
   const batch = db.batch();
   const sprintRef = db
     .collection("Projects")
     .doc(projectID)
     .collection("scrum")
-    .doc(sprintId);
+    .doc(sprintID);
   batch.delete(sprintRef);
+  taskArr.forEach((taskID) => {
+    archiveScrumBoardTask(tasks[taskID], sprintID, projectID);
+  });
   await sprintRef
     .collection("boards")
     .get()

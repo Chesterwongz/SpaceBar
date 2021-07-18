@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  btn: {
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export default function ScrumBoard({
@@ -81,7 +84,7 @@ export default function ScrumBoard({
               )
             );
           })}
-          <Button fullWidth onClick={handleClick}>
+          <Button className={classes.btn} fullWidth onClick={handleClick}>
             <Typography>+ Add Sprint</Typography>
           </Button>
         </div>

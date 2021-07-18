@@ -105,7 +105,7 @@ export default function TaskStatusButton({ task, sprintID }) {
   }, []);
 
   return (
-    <div>
+    <>
       {task.status === "Archived" ? (
         <Button className={classes.button} disabled>
           <Typography variant="button" noWrap>
@@ -187,6 +187,6 @@ export default function TaskStatusButton({ task, sprintID }) {
           </Popper>{" "}
         </>
       )}
-    </div>
+    </>
   );
 }

@@ -53,7 +53,7 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
     setSprint(list.id, projectID);
   };
   const handleCompleteSprint = () => {
-    completeSprint(list.id, list.items, projectID);
+    completeSprint(list.id, list.items, tasks, projectID);
   };
   return (
     <div>
