@@ -105,78 +105,88 @@ export default function TaskStatusButton({ task, sprintID }) {
   }, []);
 
   return (
-    <div>
-      <Button
-        className={classes.button}
-        ref={anchorRef}
-        aria-controls={open ? "menu-list-grow" : undefined}
-        aria-haspopup="true"
-        onClick={handleToggle}
-      >
-        <Typography variant="button" noWrap>
-          &nbsp;
-          {/* {console.log(lists)} */}
-          {lists[task.status]}
-        </Typography>
-      </Button>
-      <Popper
-        className={classes.popout}
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
-            }}
+    <>
+      {task.status === "Archived" ? (
+        <Button className={classes.button} disabled>
+          <Typography variant="button" noWrap>
+            Archived
+          </Typography>
+        </Button>
+      ) : (
+        <>
+          <Button
+            className={classes.button}
+            ref={anchorRef}
+            aria-controls={open ? "menu-list-grow" : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
           >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList
-                  autoFocusItem={open}
-                  id="menu-list-grow"
-                  onKeyDown={handleListKeyDown}
-                >
-                  {listIDs.map((listID, index) => {
-                    if (listID !== task.status) {
-                      const status = lists[listID];
-                      return (
-                        <MenuItem
-                          key={index}
-                          className={classes.menuItem}
-                          onClick={(event) => {
-                            const from = task.status;
-                            const to = listID;
-                            if (sprintID) {
-                              moveScrumTask(
-                                task.id,
-                                from,
-                                to,
-                                sprintID,
-                                projectID
-                              );
-                            } else {
-                              moveTask(task.id, from, to, projectID);
-                            }
-                            handleClose(event);
-                          }}
-                        >
-                          {status}
-                        </MenuItem>
-                      );
-                    }
-                  })}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </div>
+            <Typography variant="button" noWrap>
+              &nbsp;
+              {/* {console.log(lists)} */}
+              {lists[task.status]}
+            </Typography>
+          </Button>
+          <Popper
+            className={classes.popout}
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            disablePortal
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList
+                      autoFocusItem={open}
+                      id="menu-list-grow"
+                      onKeyDown={handleListKeyDown}
+                    >
+                      {listIDs.map((listID, index) => {
+                        if (listID !== task.status) {
+                          const status = lists[listID];
+                          return (
+                            <MenuItem
+                              key={index}
+                              className={classes.menuItem}
+                              onClick={(event) => {
+                                const from = task.status;
+                                const to = listID;
+                                if (sprintID) {
+                                  moveScrumTask(
+                                    task.id,
+                                    from,
+                                    to,
+                                    sprintID,
+                                    projectID
+                                  );
+                                } else {
+                                  moveTask(task.id, from, to, projectID);
+                                }
+                                handleClose(event);
+                              }}
+                            >
+                              {status}
+                            </MenuItem>
+                          );
+                        }
+                      })}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>{" "}
+        </>
+      )}
+    </>
   );
 }

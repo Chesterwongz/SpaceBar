@@ -92,12 +92,16 @@ export default function TitleField({
           >
             {title}
           </Typography>
-          <DeleteListDialog
-            listID={listID}
-            listIDs={listIDs}
-            lists={lists}
-            sprintID={sprintID}
-          />
+          {listID !== "list-1" &&
+            listID !== "list-2" &&
+            listID !== "list-3" && (
+              <DeleteListDialog
+                listID={listID}
+                listIDs={listIDs}
+                lists={lists}
+                sprintID={sprintID}
+              />
+            )}
         </Paper>
       )}
     </div>

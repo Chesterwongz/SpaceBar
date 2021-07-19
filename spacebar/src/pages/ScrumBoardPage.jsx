@@ -142,7 +142,7 @@ export default function ScrumBoardPage() {
       .collection("Projects")
       .doc(projectID)
       .collection("scrum")
-      .orderBy("title")
+      .orderBy("startDate")
       .onSnapshot((querySnapshot) => {
         const scrumSprintIds = [];
         const scrumLists = querySnapshot.docs

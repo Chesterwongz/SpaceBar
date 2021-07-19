@@ -8,10 +8,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import React from "react";
+import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import { completeSprint, deleteSprint, setSprint } from "../../FireStore";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import {
+  completeSprint,
+  deleteSprint,
+  setSprint,
+  updateSprintDate,
+} from "../../FireStore";
 import InputContainer from "../InputContainer";
 import TaskCard from "../KanbanBoard/TaskCard.jsx";
 
@@ -45,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Sprint({ list, tasks, members, currentSprint }) {
   const classes = useStyles();
   const { projectID } = useParams();
+  const dateRange = [
+    list.startDate ? list.startDate.toDate() : null,
+    list.endDate ? list.endDate.toDate() : null,
+  ];
   const handleDeleteSprint = () => {
     if (currentSprint === list.id) setSprint("", projectID);
     deleteSprint(list.id, list.items, projectID);
@@ -53,13 +63,19 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
     setSprint(list.id, projectID);
   };
   const handleCompleteSprint = () => {
-    completeSprint(list.id, list.items, projectID);
+    completeSprint(list.id, list.items, tasks, projectID);
   };
   return (
-    <div>
+    <>
       <Paper className={classes.paper}>
         <div className={classes.title}>
-          <Typography variant="h6">{list.title}</Typography>
+          <DateRangePicker
+            onChange={(newDate) =>
+              updateSprintDate(newDate, list.id, projectID)
+            }
+            value={dateRange}
+            format="dd/M/y"
+          />
           {currentSprint === list.id ? (
             <Button className={classes.button} onClick={handleCompleteSprint}>
               Complete Sprint
@@ -108,6 +124,6 @@ export default function Sprint({ list, tasks, members, currentSprint }) {
         </Droppable>
         <InputContainer listID={list.id} type="backlog" />
       </Paper>
-    </div>
+    </>
   );
 }

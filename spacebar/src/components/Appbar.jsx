@@ -25,7 +25,7 @@ export default function Appbar({ project }) {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} elevation={0}>
+      <AppBar className={classes.appbar} elevation={0} position="fixed">
         <Toolbar variant="dense">
           <Typography className={classes.title} variant="h6">
             SPACEBAR

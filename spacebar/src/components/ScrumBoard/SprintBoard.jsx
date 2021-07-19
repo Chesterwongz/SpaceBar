@@ -104,7 +104,6 @@ export default function SprintBoard({ tasks, sprintID, members }) {
                       tasks={tasks}
                       members={members}
                       sprintID={sprintID}
-                      sprint
                       index={index}
                     />
                   )

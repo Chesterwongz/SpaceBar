@@ -5,31 +5,50 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
+  Tooltip,
 } from "@material-ui/core";
 import { SubjectOutlined } from "@material-ui/icons";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import ForumIcon from "@material-ui/icons/Forum";
+import PeopleIcon from "@material-ui/icons/People";
+import ArchiveIcon from "@material-ui/icons/Archive";
+import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useParams } from "react-router-dom";
 import Appbar from "./Appbar";
 
-const drawerWidth = 240;
+const openDrawerWidth = 240;
+const closeDrawerWidth = 60;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
   page: {
+    flexGrow: 1,
     padding: theme.spacing(2),
   },
   drawer: {
-    width: drawerWidth,
+    width: openDrawerWidth,
   },
   drawerPaper: {
-    width: drawerWidth,
+    width: openDrawerWidth,
     background: theme.palette.primary.light,
     paddingTop: 40,
   },
+  closedDrawer: {
+    width: closeDrawerWidth,
+  },
+  closedDrawerPaper: {
+    width: closeDrawerWidth,
+    background: theme.palette.primary.light,
+    paddingTop: 40,
+    overflow: "hidden",
+  },
   active: {
-    background: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
   },
   appbar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -46,6 +65,7 @@ export default function Layout({ children }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const menuItems = [
     {
       text: "Roadmap",
@@ -54,7 +74,7 @@ export default function Layout({ children }) {
     },
     {
       text: "Hangout",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <ForumIcon color="primary" />,
       path: `/${projectID}/hangout`,
     },
     {
@@ -64,13 +84,18 @@ export default function Layout({ children }) {
     },
     {
       text: "Team",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <PeopleIcon color="primary" />,
       path: `/${projectID}/team`,
     },
     {
       text: "Analytics",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <BarChartIcon color="primary" />,
       path: `/${projectID}/analytics`,
+    },
+    {
+      text: "Archive",
+      icon: <ArchiveIcon color="primary" />,
+      path: `/${projectID}/archive`,
     },
   ];
 
@@ -78,10 +103,12 @@ export default function Layout({ children }) {
     <div className={classes.root}>
       <Appbar />
       <Drawer
-        className={classes.drawer}
+        className={drawerOpen ? classes.drawer : classes.closedDrawer}
         variant="permanent"
         anchor="left"
-        classes={{ paper: classes.drawerPaper }}
+        classes={{
+          paper: drawerOpen ? classes.drawerPaper : classes.closedDrawerPaper,
+        }}
       >
         <List>
           {menuItems.map((item) => (
@@ -93,10 +120,21 @@ export default function Layout({ children }) {
                 location.pathname === item.path ? classes.active : null
               }
             >
-              <ListItemText>{item.text}</ListItemText>
-              <ListItemIcon>{item.icon}</ListItemIcon>
+              <Tooltip title={item.text}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+              </Tooltip>
+              {drawerOpen && <ListItemText>{item.text}</ListItemText>}
             </ListItem>
           ))}
+          <ListItem
+            button
+            key="close"
+            onClick={() => setDrawerOpen(!drawerOpen)}
+          >
+            <ListItemIcon>
+              {drawerOpen ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />}
+            </ListItemIcon>
+          </ListItem>
         </List>
       </Drawer>
       <div>
