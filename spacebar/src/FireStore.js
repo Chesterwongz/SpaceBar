@@ -716,8 +716,8 @@ export async function addSprint(projectId, count) {
     id: sprintRef.id,
     title: "Sprint " + count,
     items: [],
-    startDate: "",
-    endDate: "",
+    startDate: new Date(),
+    endDate: new Date(),
   };
   sprintRef.set(newSprint);
   const batch = db.batch();
@@ -732,6 +732,16 @@ export async function addSprint(projectId, count) {
       });
     });
   batch.commit();
+}
+
+export function updateSprintDate(dateRange, sprintID, projectID) {
+  const startDate = dateRange !== null ? dateRange[0] : null;
+  const endDate = dateRange !== null ? dateRange[1] : null;
+  db.collection("Projects")
+    .doc(projectID)
+    .collection("scrum")
+    .doc(sprintID)
+    .update({ startDate: startDate, endDate: endDate });
 }
 
 export async function deleteSprint(sprintId, taskArr, projectId) {
