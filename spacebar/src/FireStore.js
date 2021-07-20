@@ -147,6 +147,7 @@ export function addScrumProject(title, currentUser) {
     id: "backlog",
     items: [],
     currentSprint: "",
+    startDate: new Date(),
   });
   // Create backlog board
   const lists = [
