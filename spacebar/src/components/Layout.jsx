@@ -132,7 +132,11 @@ export default function Layout({ children }) {
             onClick={() => setDrawerOpen(!drawerOpen)}
           >
             <ListItemIcon>
-              {drawerOpen ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />}
+              {drawerOpen ? (
+                <ArrowBackIosIcon color="primary" />
+              ) : (
+                <ArrowForwardIosIcon color="primary" />
+              )}
             </ListItemIcon>
           </ListItem>
         </List>
