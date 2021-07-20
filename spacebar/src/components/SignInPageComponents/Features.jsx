@@ -84,17 +84,18 @@ const Features = () => {
         <div className={classes.cards}>
           <div className={classes.card}>
             <img src={List} alt="list" className={classes.image} />
-            <h2 className={classes.cardTitle}>Kanban Board</h2>
+            <h2 className={classes.cardTitle}>Project Management</h2>
             <p className={classes.cardDescription}>
-              Organize your tasks and track team progress with our kanban board
+              Organize your tasks and track team progress with our scrum boards,
+              kanban boards and roadmaps.
             </p>
           </div>
           <div className={classes.card}>
             <img src={Ideas} alt="ideas" className={classes.image} />
-            <h2 className={classes.cardTitle}>Drawing Board</h2>
+            <h2 className={classes.cardTitle}>Hangouts</h2>
             <p className={classes.cardDescription}>
-              Generate ideas here using Reddit style threads before adding them
-              to the Kanban Board
+              Ask questions, get caught up, and share updates with the team to
+              stay aligned and make decisions more quickly.
             </p>
           </div>
           <div className={classes.card}>
