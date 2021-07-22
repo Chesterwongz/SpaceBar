@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
   projects: {
     display: "flex",
     justifyContent: "space-evenly",
-    width: "80vw",
+    flexWrap: "wrap",
+    width: "70vw",
   },
   InputContainer: {
     marginLeft: 50,

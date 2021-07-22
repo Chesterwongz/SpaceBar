@@ -16,7 +16,8 @@ import Rocket from "../images/rocket.jpg";
 
 const useStyles = makeStyles({
   root: {
-    width: 310,
+    width: 300,
+    marginBottom: 16,
   },
   media: {
     height: 160,
