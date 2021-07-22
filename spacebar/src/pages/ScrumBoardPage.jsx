@@ -72,12 +72,6 @@ export default function ScrumBoardPage() {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen,
   };
-  const handleGoToBacklog = () => {
-    setSelectedTab(0);
-  };
-  const handleGoToSprint = () => {
-    setSelectedTab(1);
-  };
   const fabs = [
     {
       color: "primary",
@@ -96,7 +90,12 @@ export default function ScrumBoardPage() {
       variant: "extended",
     },
   ];
-
+  const handleGoToBacklog = () => {
+    setSelectedTab(0);
+  };
+  const handleGoToSprint = () => {
+    setSelectedTab(1);
+  };
   //Cache kanban board data for cumulative flow diagram
   useEffect(() => {
     //get current sprint ID

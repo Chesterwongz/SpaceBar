@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
     margin: theme.spacing(1, 0, 2.5),
   },
+  header: {
+    wordBreak: "break-word",
+  },
 }));
 
 export default function Note({ item, form, onSubmit, onDelete }) {
@@ -18,6 +21,7 @@ export default function Note({ item, form, onSubmit, onDelete }) {
         <Form onSubmit={onSubmit} placeHolder="Add item" />
       ) : (
         <CardHeader
+          className={classes.header}
           action={
             <CardWindow
               docID={item.id}
