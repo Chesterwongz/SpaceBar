@@ -160,7 +160,6 @@ export default function ScrumBoardPage() {
         setSprintIds(scrumSprintIds);
         setSprintsLoading(false);
         setNoSprint(scrumLists.backlog.currentSprint ? false : true);
-        setSelectedTab(scrumLists.backlog.currentSprint ? 1 : 0);
       });
     return () => {
       unsubscribe();
