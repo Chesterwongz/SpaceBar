@@ -6,7 +6,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { CurrentUserContext } from "../utils/Context";
 import { makeStyles } from "@material-ui/core/styles";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 import Astronaut from "../images/amongUs.png";
 import Button from "@material-ui/core/Button";
 import green from "@material-ui/core/colors/green";
@@ -84,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: green[700],
     },
   },
+  displayName: {
+    width: "300px",
+  },
 }));
 const AccountPage = () => {
   const currentUser = useContext(CurrentUserContext);
@@ -131,16 +134,16 @@ const AccountPage = () => {
   return (
     <div>
       <Appbar />
-      {currentUser ? (
+      {currentUser && currentUser.displayName ? (
         <div className={classes.profileContainer}>
           <div className={classes.profileCard}>
             <div>
               <img className={classes.profilePic} src={Astronaut} />
             </div>
             <div className={classes.profileDetails}>
-              <div className={classes.displayName}>
+              <Typography className={classes.displayName} noWrap>
                 <h1>{currentUser.displayName}</h1>
-              </div>
+              </Typography>
               <div className={classes.email}>
                 <h4>Email: {currentUser.email}</h4>
               </div>
