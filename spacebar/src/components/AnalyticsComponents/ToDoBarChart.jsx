@@ -22,9 +22,12 @@ const ToDoBarChart = () => {
   }, [projectID]);
 
   const getItemTimes = (backlogItems) => {
-    return backlogItems.map(
-      (item) => (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
-    );
+    return backlogItems
+      .map(
+        (item) =>
+          (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
+      )
+      .map((hour) => Math.round(hour));
   };
 
   const getItemNames = (backlogItems) => {
