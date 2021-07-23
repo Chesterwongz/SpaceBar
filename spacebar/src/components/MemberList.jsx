@@ -22,12 +22,14 @@ const useStyles = makeStyles({
     height: 100,
     fontSize: 60,
   },
-
   content: {
     display: "flex",
     justifyContent: "space-evenly",
     flexDirection: "column",
     alignItems: "center",
+  },
+  typography: {
+    width: 150,
   },
 });
 
@@ -62,7 +64,12 @@ export default function MemberList({ projectID }) {
               <Avatar className={classes.avatar}>
                 {member.displayName.slice(0, 1)}
               </Avatar>
-              <Typography variant="body2" component="p">
+              <Typography
+                className={classes.typography}
+                variant="body2"
+                component="p"
+                noWrap
+              >
                 {member.displayName}
               </Typography>
             </CardContent>
