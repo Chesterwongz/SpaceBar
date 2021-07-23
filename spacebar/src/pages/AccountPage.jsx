@@ -86,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
   displayName: {
     width: "300px",
+    textAlign: "center",
   },
 }));
 const AccountPage = () => {
@@ -119,16 +120,21 @@ const AccountPage = () => {
 
   const saveChanges = () => {
     //update firebase auth data
-    const user = auth.currentUser;
-    user.updateProfile({
-      displayName: name,
-    });
-    //update firestore
-    db.collection("users").doc(currentUser.id).update({
-      displayName: name,
-    });
-    setName(currentUser.displayName);
-    setOpen(false);
+    if (name === "") {
+      alert("Display name cannot be empty");
+      setName(currentUser.displayName);
+    } else {
+      const user = auth.currentUser;
+      user.updateProfile({
+        displayName: name,
+      });
+      //update firestore
+      db.collection("users").doc(currentUser.id).update({
+        displayName: name,
+      });
+      setName(currentUser.displayName);
+      setOpen(false);
+    }
   };
 
   return (

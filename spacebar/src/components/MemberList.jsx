@@ -30,6 +30,7 @@ const useStyles = makeStyles({
   },
   typography: {
     width: 150,
+    textAlign: "center",
   },
 });
 
