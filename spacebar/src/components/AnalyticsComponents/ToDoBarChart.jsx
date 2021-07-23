@@ -52,6 +52,7 @@ const ToDoBarChart = () => {
         )}
       >
         <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" hide="true" />
         <YAxis />
         <Tooltip />
         <Bar dataKey="hours" fill="#8884d8" />
