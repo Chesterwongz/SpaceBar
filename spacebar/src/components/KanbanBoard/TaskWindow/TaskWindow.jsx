@@ -58,11 +58,6 @@ const useStyles = makeStyles((theme) => ({
 export default function TaskWindow({ task, members, sprintID, open, onClose }) {
   const classes = useStyles();
 
-  const handleDelete = (event) => {
-    event.preventDefault();
-    // onDelete(docID);
-  };
-
   return (
     <div>
       <Modal

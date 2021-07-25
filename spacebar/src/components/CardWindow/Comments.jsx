@@ -5,31 +5,12 @@ import { useParams } from "react-router-dom";
 import { addComment, db } from "../../FireStore";
 import { CurrentUserContext } from "../../utils/Context";
 import Form from "../Form";
+import Comment from "./Comment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     marginTop: "30px",
-  },
-  commentBox: {
-    display: "flex",
-    flexDirection: "row",
-    position: "relative",
-    backgroundColor: theme.palette.secondary.main,
-    marginTop: "10px",
-    alignItems: "center",
-    borderRadius: "20px",
-    wordBreak: "break-all",
-  },
-  comment: {
-    fontSize: "1.5rem",
-    paddingLeft: "30px",
-    paddingRight: "30px",
-  },
-  author: {
-    position: "absolute",
-    right: 10,
-    bottom: -10,
   },
 }));
 
@@ -41,7 +22,13 @@ const Comments = ({ docID }) => {
   const classes = useStyles();
 
   const handleSubmit = (value) => {
-    addComment(projectID, docID, value, currentUser.displayName);
+    addComment(
+      projectID,
+      docID,
+      value,
+      currentUser.displayName,
+      currentUser.id
+    );
   };
 
   useEffect(() => {
@@ -74,10 +61,15 @@ const Comments = ({ docID }) => {
       {loading === false ? (
         <div>
           {comments.map((commentObj, index) => (
-            <div className={classes.commentBox} key={index}>
-              <p className={classes.comment}>{commentObj.comment}</p>
-              <p className={classes.author}>Posted by: {commentObj.author}</p>
-            </div>
+            <Comment
+              key={index}
+              comment={commentObj.comment}
+              author={commentObj.author}
+              authorID={commentObj.authorID}
+              currentUserID={currentUser.id}
+              commentID={commentObj.id}
+              docID={docID}
+            />
           ))}
         </div>
       ) : (

@@ -34,6 +34,16 @@ const useStyles = makeStyles({
   },
 });
 
+const getInitials = (displayName) => {
+  const names = displayName.split(" ");
+  let initials = names[0].substring(0, 1).toUpperCase();
+
+  if (names.length > 1) {
+    initials += names[names.length - 1].substring(0, 1).toUpperCase();
+  }
+  return initials;
+};
+
 export default function MemberList({ projectID }) {
   const classes = useStyles();
   const [members, setMembers] = useState([]);
@@ -63,7 +73,7 @@ export default function MemberList({ projectID }) {
           <Card key={index} className={classes.card}>
             <CardContent className={classes.content}>
               <Avatar className={classes.avatar}>
-                {member.displayName.slice(0, 1)}
+                {getInitials(member.displayName)}
               </Avatar>
               <Typography
                 className={classes.typography}
