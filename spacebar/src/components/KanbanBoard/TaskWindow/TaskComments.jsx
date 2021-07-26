@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CurrentUserContext } from "../../../utils/Context";
 import { makeStyles } from "@material-ui/core/styles";
+import Comment from "../../CardWindow/Comment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,13 @@ const TaskComments = ({ taskId }) => {
   const classes = useStyles();
 
   const handleSubmit = (value) => {
-    addTaskComment(projectID, taskId, value, currentUser.displayName);
+    addTaskComment(
+      projectID,
+      taskId,
+      value,
+      currentUser.displayName,
+      currentUser.id
+    );
   };
 
   useEffect(() => {
@@ -74,10 +81,16 @@ const TaskComments = ({ taskId }) => {
       {loading === false ? (
         <div>
           {comments.map((commentObj, index) => (
-            <div className={classes.commentBox} key={index}>
-              <p className={classes.comment}>{commentObj.comment}</p>
-              <p className={classes.author}>Posted by: {commentObj.author}</p>
-            </div>
+            <Comment
+              task={true}
+              key={index}
+              comment={commentObj.comment}
+              author={commentObj.author}
+              authorID={commentObj.authorID}
+              currentUserID={currentUser.id}
+              commentID={commentObj.id}
+              taskID={taskId}
+            />
           ))}
         </div>
       ) : (

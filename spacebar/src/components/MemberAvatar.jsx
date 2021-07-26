@@ -30,14 +30,25 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(3),
     backgroundColor: (props) => props.backgroundColor,
   },
+  avatarLarge: {
+    width: 100,
+    height: 100,
+    fontSize: 60,
+    backgroundColor: (props) => props.backgroundColor,
+  },
   avatarName: {
     fontSize: "0.7rem",
     fontWeight: theme.typography.fontWeightMedium,
     color: (props) => getContrastYIQ(props.backgroundColor),
   },
+  avatarNameLarge: {
+    fontSize: "4rem",
+    fontWeight: theme.typography.fontWeightMedium,
+    color: (props) => getContrastYIQ(props.backgroundColor),
+  },
 }));
 
-export default function MemberAvatar({ assignee }) {
+export default function MemberAvatar({ assignee, size }) {
   const classes = useStyles(assignee || { backgroundColor: "" });
   const assigneeInitials = getInitials(assignee);
 
@@ -46,9 +57,16 @@ export default function MemberAvatar({ assignee }) {
       <Tooltip
         title={isAssigned(assignee) ? assignee.displayName : "Unassigned"}
       >
-        <Avatar className={classes.avatar} src="/linktouserprofilepic">
+        <Avatar
+          className={size === "large" ? classes.avatarLarge : classes.avatar}
+          src="/linktouserprofilepic"
+        >
           {isAssigned(assignee) && (
-            <Typography className={classes.avatarName}>
+            <Typography
+              className={
+                size === "large" ? classes.avatarNameLarge : classes.avatarName
+              }
+            >
               {assigneeInitials}
             </Typography>
           )}

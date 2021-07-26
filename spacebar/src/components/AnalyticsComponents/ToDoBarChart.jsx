@@ -22,9 +22,12 @@ const ToDoBarChart = () => {
   }, [projectID]);
 
   const getItemTimes = (backlogItems) => {
-    return backlogItems.map(
-      (item) => (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
-    );
+    return backlogItems
+      .map(
+        (item) =>
+          (Date.now() - item.createdAt.seconds * 1000) / (1000 * 60 * 60)
+      )
+      .map((hour) => Math.round(hour));
   };
 
   const getItemNames = (backlogItems) => {
@@ -52,7 +55,7 @@ const ToDoBarChart = () => {
         )}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name" hide="true" />
         <YAxis />
         <Tooltip />
         <Bar dataKey="hours" fill="#8884d8" />

@@ -18,7 +18,10 @@ firebase.analytics();
 //Handle Google Log in
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const signInWithGoogle = () =>
+  auth.signInWithPopup(provider).catch((error) => {
+    console.log(error);
+  });
 
 export default firebase;
 export const auth = firebase.auth();
@@ -279,7 +282,7 @@ export function getProjectInfo(projectref) {
   });
 }
 
-export function addComment(projectID, docID, value, author) {
+export function addComment(projectID, docID, value, author, authorID) {
   db.collection("Projects")
     .doc(projectID)
     .collection("drawingboard")
@@ -289,6 +292,7 @@ export function addComment(projectID, docID, value, author) {
       comment: value,
       created: Date.now(),
       author: author,
+      authorID: authorID,
     });
 }
 
@@ -440,7 +444,7 @@ export function addKanbanBoardItem(title, listId, currentUser, projectID) {
   );
   batch.commit();
 }
-export function addTaskComment(projectID, taskId, value, author) {
+export function addTaskComment(projectID, taskId, value, author, authorID) {
   db.collection("Projects")
     .doc(projectID)
     .collection("tasks")
@@ -450,6 +454,7 @@ export function addTaskComment(projectID, taskId, value, author) {
       comment: value,
       created: firebase.firestore.FieldValue.serverTimestamp(),
       author: author,
+      authorID: authorID,
     });
 }
 export function updateTaskDesc(taskId, desc, projectID) {

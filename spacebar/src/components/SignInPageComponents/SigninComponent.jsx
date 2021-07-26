@@ -91,7 +91,6 @@ const SigninComponent = () => {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        console.log(user.emailVerified);
         if (!user.emailVerified) {
           auth.signOut();
           alert("Verify your email before signing in");
@@ -161,18 +160,21 @@ const SigninComponent = () => {
             Sign in
           </button>
 
-          <button className={classes.googleButton} onClick={signInWithGoogle}>
+          {/* <button className={classes.googleButton} onClick={signInWithGoogle}>
             Sign in with Google
-          </button>
-        </div>
-        <div className={classes.passwordResetContainer}>
-          <PasswordReset
-            handleClickOpen={handleClickOpen}
-            handleClose={handleClose}
-            open={open}
-          />
+          </button> */}
         </div>
       </form>
+      <button className={classes.googleButton} onClick={signInWithGoogle}>
+        Sign in with Google
+      </button>
+      <div className={classes.passwordResetContainer}>
+        <PasswordReset
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          open={open}
+        />
+      </div>
     </div>
   );
 };

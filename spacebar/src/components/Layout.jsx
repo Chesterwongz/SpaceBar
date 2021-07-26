@@ -7,7 +7,7 @@ import {
   makeStyles,
   Tooltip,
 } from "@material-ui/core";
-import { SubjectOutlined } from "@material-ui/icons";
+import { SubjectOutlined, CalendarToday } from "@material-ui/icons";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import BarChartIcon from "@material-ui/icons/BarChart";
@@ -69,7 +69,7 @@ export default function Layout({ children }) {
   const menuItems = [
     {
       text: "Roadmap",
-      icon: <SubjectOutlined color="primary" />,
+      icon: <CalendarToday color="primary" />,
       path: `/${projectID}/roadmap`,
     },
     {
