@@ -10,8 +10,8 @@ To facilitate remote teamwork by developing an online visual collaboration tool 
 
 - [Website Link](http://spacebar-1a6ff.web.app)
 - [Promotional Video](https://www.youtube.com/watch?v=-NASZJ89Pg0)
-- [Summary Poster](https://user-images.githubusercontent.com/70138507/150623588-65c7f19a-56bd-401f-9561-d61d5ec05db8.jpg)
-- [Project Documentation](https://s3.amazonaws.com/symp.csm.usprod/nus/files/cc5/cc58b5181c4cb5fc4c6fbb09c26e032b.pdf?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAID3RBESXBCESHUGA%2F20220122%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220122T034939Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=a0dccd20dff593bfdec8c2e807e8058b00c2e08f21c8e468296d66d464d8feeb)
+- [Summary Poster](docs/SpaceBar_Poster.jpg)
+- [Project Documentation](docs/Documentation.pdf)
 
 ## Table of Contents
 
