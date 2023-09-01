@@ -3,13 +3,13 @@ import "firebase/auth";
 import "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBZVzhpyToko-9GU1uU-tj1pIWYKmwCxNY",
-  authDomain: "spacebar-1a6ff.firebaseapp.com",
-  projectId: "spacebar-1a6ff",
-  storageBucket: "spacebar-1a6ff.appspot.com",
-  messagingSenderId: "763570786151",
-  appId: "1:763570786151:web:6274bc91a65b746111a9c2",
-  measurementId: "G-CHC7V7LZJ2",
+  apiKey: "AIzaSyDVXn1Uj5ogR_NHGpoY-WAkma2bECXs35o",
+  authDomain: "spaceba-r.firebaseapp.com",
+  projectId: "spaceba-r",
+  storageBucket: "spaceba-r.appspot.com",
+  messagingSenderId: "116383418235",
+  appId: "1:116383418235:web:c23e6a1c18e4f183035fde",
+  measurementId: "G-EQ9JMYW6WW",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -74,6 +74,7 @@ export var uiConfig = {
 
 export function onAuthStateChange(callback) {
   return auth.onAuthStateChanged(async (userAuth) => {
+    console.log("auth state changed", userAuth);
     if (userAuth) {
       const userRef = await createUserDocument(userAuth);
       userRef.onSnapshot((snapShot) => {
