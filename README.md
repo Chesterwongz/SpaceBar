@@ -8,7 +8,7 @@ Due to the COVID-19, workers who never thought of working from home have now fou
 
 To facilitate remote teamwork by developing an online visual collaboration tool that enables users to organize projects in an easy, flexible, and efficient manner. Furthermore, we hope to foster a workplace culture online which encourages creativity and promotes productivity through innovative features, informative analytics, and a fun and inclusive UX/UI. This is our own take on a project management application, inspired by the success of applications like Jira, Trello and ZenHub. No more excuses for overlooking deadlines and issues!
 
-- [Website Link](http://spacebar-1a6ff.web.app)
+- [Website Link](http://spaceba-r.web.app)
 - [Promotional Video](https://www.youtube.com/watch?v=-NASZJ89Pg0)
 - [Summary Poster](docs/SpaceBar_Poster.jpg)
 - [Project Documentation](docs/Documentation.pdf)
@@ -37,21 +37,23 @@ To run this repository, git clone it to your local environment.
 
 ## Deployment
 
-1. Download the Firebase CLI by keying in: 
-  'yarn global add firebase-tools' followed by 
-  ' export PATH="$(yarn global bin):$PATH" '  
+1. Download the Firebase CLI by keying in:
+   'yarn global add firebase-tools' followed by
+   ' export PATH="$(yarn global bin):$PATH" '
 2. Log into Firebase account by keying in:  
-  firebase login 
+   firebase login
 3. Initialise settings by keying in:
-  firebase init hosting 
-  - Select Firebase project to connect to 
-  - Specify public root directory as "build" instead of public 
-  - When prompted whether to overwrite index.html file, type "N"
-  - When prompted whether to make a Single-page app, type "Y" 
- 4. Build optimized React app by keying in: 
-  yarn run build 
- 5. Deploy app by keying in: 
-  firebase deploy 
+   firebase init hosting
+
+- Select Firebase project to connect to
+- Specify public root directory as "build" instead of public
+- When prompted whether to overwrite index.html file, type "N"
+- When prompted whether to make a Single-page app, type "Y"
+
+4.  Build optimized React app by keying in:
+    yarn run build
+5.  Deploy app by keying in:
+    firebase deploy
 
 ## Contributors
 
